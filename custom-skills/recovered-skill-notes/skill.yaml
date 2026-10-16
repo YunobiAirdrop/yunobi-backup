@@ -1,8 +1,22 @@
-name: "recovered_skill_notes"
-title: "Recovered skill notes"
-description: "Local skill notes preserved from the previous layout and awaiting review."
-category: "Learning and customization"
+name: recovered_skill_notes
+title: Recovered skill notes
+description: Local skill notes preserved from the previous layout and awaiting review.
+category: Learning and customization
 include_in_prompt: true
 skill_improvement:
   managed: true
-  needs_review: true
+  needs_review: false
+  status: retired
+  evidence_handles:
+  - ~/workspace/custom-skills/recovered-skill-notes/SKILL.md
+  - ~/workspace/custom-skills/recovered-skill-notes/skill.yaml
+  - ~/workspace/custom-skills/recovered-skill-notes/references/recovered-bc6ce6d9109ede41.md
+  - ~/workspace/self_improvement/objectives/skill_improvement/CURRENT.md
+  measurement:
+    proxy_metric_id: skill_discovery_presence
+    success_criterion: recovered_skill_notes appears in 0% of sampled active skill-discovery listings during the window and no later run references it, with no task failure attributable to its absence
+    window_days: 14
+  rationale: 'The only managed learned file awaiting review, ~/workspace/custom-skills/recovered-skill-notes/SKILL.md (inventory revision 67adf91e7d153c68909ad2f7d166c1f6b24a86efdcfe476d9147f95c72298cf2), contains no reusable method: its body is a generic placeholder instructing the reader to move useful methods elsewhere, and its sole supporting reference (references/recovered-bc6ce6d9109ede41.md) is a duplicate of the 2026-10-03 skill_improvement run projection that itself states ''No skill/tool surface changed in this run.'' With include_in_prompt: true it is injected into every conversation''s skill list while teaching nothing, so it is pure prompt noise. Retiring it completes the pending review required by the recovered-notes rule, removes it from active discovery, and leaves the file on disk. No other proposal is warranted: the cron_worker and tool_call failure cluster in this window (workers ''finished with status running'', ''checkpointed work lost its restart checkpoint owner during daemon restart'', process.poll/exec failures) traces to VM/daemon restarts, which no skill fixes, and the deterministic suppressed-handoff counts are hypotheses without raw detail to act on.'
+  review_after: 2026-10-30T20:08:11.228731+00:00
+  reviewed_at: 2026-10-16T20:08:11.228731+00:00
+  run_id: sirun_0fae04934c164a63b91554df49868784
