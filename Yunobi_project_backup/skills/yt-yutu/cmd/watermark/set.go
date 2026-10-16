@@ -1,0 +1,112 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package watermark
+
+import (
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/eat-pray-ai/yutu/pkg/watermark"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	setTool    = "watermark-set"
+	setConfirm = "Set watermark %s for channel %s"
+	setShort   = "Set a channel watermark"
+	setLong    = "Set a channel watermark. Use this tool to set a channel watermark."
+	setExample = `# Set a watermark for a channel
+yutu watermark set --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw --file watermark.png
+# Set a watermark with position and offset
+yutu watermark set --channelId UC_x5X --file logo.png --inVideoPosition bottomRight --offsetType offsetFromEnd --offsetMs 1000
+# Set a watermark with duration
+yutu watermark set --channelId UC_x5X --file logo.png --durationMs 5000 --offsetMs 2000`
+)
+
+var setInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"channel_id", "file"},
+	Properties: map[string]*jsonschema.Schema{
+		"channel_id": {Type: "string", Description: cidUsage},
+		"file":       {Type: "string", Description: fileUsage},
+		"in_video_position": {
+			Type: "string", Description: ivpUsage,
+			Enum: []any{"topLeft", "topRight", "bottomLeft", "bottomRight"},
+		},
+		"duration_ms": {Type: "number", Description: dmUsage, Minimum: new(float64(0))},
+		"offset_ms":   {Type: "number", Description: omUsage, Minimum: new(float64(0))},
+		"offset_type": {
+			Type: "string", Description: otUsage,
+			Enum: []any{"offsetFromStart", "offsetFromEnd"},
+		},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: setTool, Title: setShort, Description: setLong,
+			InputSchema: setInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			setTool, cobramcp.ConfirmThen(
+				func(input watermark.Watermark) string {
+					return fmt.Sprintf(setConfirm, input.File, input.ChannelId)
+				},
+				func(input watermark.Watermark, w io.Writer) error {
+					return input.Set(w)
+				},
+			),
+		),
+	)
+	watermarkCmd.AddCommand(setCmd)
+
+	setCmd.Flags().StringVarP(&channelId, "channelId", "c", "", cidUsage)
+	setCmd.Flags().StringVarP(&file, "file", "f", "", fileUsage)
+	setCmd.Flags().StringVarP(
+		&inVideoPosition, "inVideoPosition", "p", "", ivpUsage,
+	)
+	setCmd.Flags().Uint64VarP(&durationMs, "durationMs", "d", 0, dmUsage)
+	setCmd.Flags().Uint64VarP(&offsetMs, "offsetMs", "m", 0, omUsage)
+	setCmd.Flags().StringVarP(&offsetType, "offsetType", "t", "", otUsage)
+	setCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	setCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = setCmd.MarkFlagRequired("channelId")
+	_ = setCmd.MarkFlagRequired("file")
+}
+
+var setCmd = &cobra.Command{
+	Use:     "set",
+	Short:   setShort,
+	Long:    setLong,
+	Example: setExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(setConfirm, file, channelId))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		input := watermark.NewWatermark(
+			watermark.WithChannelId(channelId),
+			watermark.WithFile(file),
+			watermark.WithInVideoPosition(inVideoPosition),
+			watermark.WithDurationMs(durationMs),
+			watermark.WithOffsetMs(offsetMs),
+			watermark.WithOffsetType(offsetType),
+			watermark.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+		)
+		return input.Set(c.OutOrStdout())
+	},
+}

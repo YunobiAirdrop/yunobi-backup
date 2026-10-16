@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "cut.json: the local route's cut. The cut builder writes it; the studio reads the ranges.",
+  "type": "object",
+  "required": ["fps", "width", "height", "sources", "ranges"],
+  "properties": {
+    "fps": { "type": "number", "minimum": 1 },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "sources": { "type": "object", "additionalProperties": { "type": "string" } },
+    "ranges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "start": { "type": "number", "minimum": 0 },
+          "end": { "type": "number", "minimum": 0 },
+          "beat": { "type": "string" },
+          "quote": { "type": "string" }
+        }
+      }
+    }
+  }
+}

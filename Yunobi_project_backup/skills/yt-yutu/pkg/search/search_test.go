@@ -1,0 +1,490 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package search
+
+import (
+	"fmt"
+	"io"
+	"math"
+	"net/http"
+	"reflect"
+	"strings"
+	"testing"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"google.golang.org/api/youtube/v3"
+)
+
+func TestNewSearch(t *testing.T) {
+	type args struct {
+		opts []Option
+	}
+
+	svc := &youtube.Service{}
+
+	tests := []struct {
+		name string
+		args args
+		want ISearch[youtube.SearchResult]
+	}{
+		{
+			name: "with all options",
+			args: args{
+				opts: []Option{
+					WithChannelId("channel123"),
+					WithChannelType("any"),
+					WithEventType("live"),
+					WithFor("mine"),
+					WithLocation("37.42307,-122.08427"),
+					WithLocationRadius("50km"),
+					WithMaxResults(50),
+					WithOnBehalfOfContentOwner("owner123"),
+					WithOrder("relevance"),
+					WithPublishedAfter("2024-01-01T00:00:00Z"),
+					WithPublishedBefore("2024-12-31T23:59:59Z"),
+					WithQ("test search query"),
+					WithRegionCode("US"),
+					WithRelevanceLanguage("en"),
+					WithSafeSearch("moderate"),
+					WithTopicId("/m/04rlf"),
+					WithTypes([]string{"video", "channel", "playlist"}),
+					WithVideoCaption("closedCaption"),
+					WithVideoCategoryId("10"),
+					WithVideoDefinition("high"),
+					WithVideoDimension("2d"),
+					WithVideoDuration("medium"),
+					WithVideoEmbeddable("true"),
+					WithVideoLicense("youtube"),
+					WithVideoPaidProductPlacement("true"),
+					WithVideoSyndicated("true"),
+					WithVideoType("movie"),
+					WithParts([]string{"snippet"}),
+					WithOutput("json"),
+					WithService(svc),
+				},
+			},
+			want: &Search{
+				Service:                   svc,
+				Parts:                     []string{"snippet"},
+				Output:                    "json",
+				MaxResults:                50,
+				ChannelId:                 "channel123",
+				OnBehalfOfContentOwner:    "owner123",
+				ChannelType:               "any",
+				EventType:                 "live",
+				For:                       "mine",
+				Location:                  "37.42307,-122.08427",
+				LocationRadius:            "50km",
+				Order:                     "relevance",
+				PublishedAfter:            "2024-01-01T00:00:00Z",
+				PublishedBefore:           "2024-12-31T23:59:59Z",
+				Q:                         "test search query",
+				RegionCode:                "US",
+				RelevanceLanguage:         "en",
+				SafeSearch:                "moderate",
+				TopicId:                   "/m/04rlf",
+				Types:                     []string{"video", "channel", "playlist"},
+				VideoCaption:              "closedCaption",
+				VideoCategoryId:           "10",
+				VideoDefinition:           "high",
+				VideoDimension:            "2d",
+				VideoDuration:             "medium",
+				VideoEmbeddable:           "true",
+				VideoLicense:              "youtube",
+				VideoPaidProductPlacement: "true",
+				VideoSyndicated:           "true",
+				VideoType:                 "movie",
+			},
+		},
+		{
+			name: "with no options",
+			args: args{
+				opts: []Option{},
+			},
+			want: &Search{Fields: common.Fields{}},
+		},
+		{
+			name: "with empty for option",
+			args: args{
+				opts: []Option{
+					WithFor(""),
+				},
+			},
+			want: &Search{Fields: common.Fields{}},
+		},
+		{
+			name: "with for developer",
+			args: args{
+				opts: []Option{
+					WithFor("developer"),
+				},
+			},
+			want: &Search{
+				Fields: common.Fields{},
+				For:    "developer",
+			},
+		},
+		{
+			name: "with zero max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(0),
+				},
+			},
+			want: &Search{
+				MaxResults: math.MaxInt64,
+			},
+		},
+		{
+			name: "with negative max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(-10),
+				},
+			},
+			want: &Search{
+				MaxResults: 1,
+			},
+		},
+		{
+			name: "with empty string values",
+			args: args{
+				opts: []Option{
+					WithChannelId(""),
+					WithChannelType(""),
+					WithEventType(""),
+					WithLocation(""),
+					WithLocationRadius(""),
+					WithOnBehalfOfContentOwner(""),
+					WithOrder(""),
+					WithPublishedAfter(""),
+					WithPublishedBefore(""),
+					WithQ(""),
+					WithRegionCode(""),
+					WithRelevanceLanguage(""),
+					WithSafeSearch(""),
+					WithTopicId(""),
+					WithVideoCaption(""),
+					WithVideoCategoryId(""),
+					WithVideoDefinition(""),
+					WithVideoDimension(""),
+					WithVideoDuration(""),
+					WithVideoEmbeddable(""),
+					WithVideoLicense(""),
+					WithVideoPaidProductPlacement(""),
+					WithVideoSyndicated(""),
+					WithVideoType(""),
+				},
+			},
+			want: &Search{
+				ChannelId:                 "",
+				OnBehalfOfContentOwner:    "",
+				ChannelType:               "",
+				EventType:                 "",
+				Location:                  "",
+				LocationRadius:            "",
+				Order:                     "",
+				PublishedAfter:            "",
+				PublishedBefore:           "",
+				Q:                         "",
+				RegionCode:                "",
+				RelevanceLanguage:         "",
+				SafeSearch:                "",
+				TopicId:                   "",
+				VideoCaption:              "",
+				VideoCategoryId:           "",
+				VideoDefinition:           "",
+				VideoDimension:            "",
+				VideoDuration:             "",
+				VideoEmbeddable:           "",
+				VideoLicense:              "",
+				VideoPaidProductPlacement: "",
+				VideoSyndicated:           "",
+				VideoType:                 "",
+			},
+		},
+		{
+			name: "with partial options",
+			args: args{
+				opts: []Option{
+					WithQ("golang tutorial"),
+					WithMaxResults(25),
+					WithOrder("date"),
+					WithRegionCode("UK"),
+					WithTypes([]string{"video"}),
+				},
+			},
+			want: &Search{
+				MaxResults: 25,
+				Q:          "golang tutorial",
+				Order:      "date",
+				RegionCode: "UK",
+				Types:      []string{"video"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				if got := NewSearch(tt.args.opts...); !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("%s\nNewSearch() = %v\nwant %v", tt.name, got, tt.want)
+				}
+			},
+		)
+	}
+}
+
+func TestSearch_Get(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantLen int
+		wantErr bool
+	}{
+		{
+			name: "get search with query",
+			opts: []Option{
+				WithQ("test query"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("q") != "test query" {
+					t.Errorf("expected q=test query, got %s", r.URL.Query().Get("q"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with channelId",
+			opts: []Option{
+				WithChannelId("channel-id"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("channelId") != "channel-id" {
+					t.Errorf(
+						"expected channelId=channel-id, got %s",
+						r.URL.Query().Get("channelId"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with types",
+			opts: []Option{
+				WithTypes([]string{"video", "playlist"}),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				gotType := r.URL.Query()["type"]
+				joined := strings.Join(gotType, ",")
+				if !strings.Contains(joined, "video") || !strings.Contains(
+					joined, "playlist",
+				) {
+					t.Errorf(
+						"expected type to contain video and playlist, got %v", gotType,
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with onBehalfOfContentOwner",
+			opts: []Option{
+				WithOnBehalfOfContentOwner("owner-id"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("onBehalfOfContentOwner") != "owner-id" {
+					t.Errorf(
+						"expected onBehalfOfContentOwner=owner-id, got %s",
+						r.URL.Query().Get("onBehalfOfContentOwner"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with complex filters",
+			opts: []Option{
+				WithLocation("37.42307,-122.08427"),
+				WithLocationRadius("10km"),
+				WithEventType("live"),
+				WithPublishedAfter("2024-01-01T00:00:00Z"),
+				WithVideoDuration("long"),
+				WithRegionCode("US"),
+				WithSafeSearch("strict"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				q := r.URL.Query()
+				if q.Get("location") != "37.42307,-122.08427" {
+					t.Errorf(
+						"expected location=37.42307,-122.08427, got %s", q.Get("location"),
+					)
+				}
+				if q.Get("locationRadius") != "10km" {
+					t.Errorf(
+						"expected locationRadius=10km, got %s", q.Get("locationRadius"),
+					)
+				}
+				if q.Get("eventType") != "live" {
+					t.Errorf("expected eventType=live, got %s", q.Get("eventType"))
+				}
+				if q.Get("publishedAfter") != "2024-01-01T00:00:00Z" {
+					t.Errorf(
+						"expected publishedAfter=2024-01-01T00:00:00Z, got %s",
+						q.Get("publishedAfter"),
+					)
+				}
+				if q.Get("videoDuration") != "long" {
+					t.Errorf("expected videoDuration=long, got %s", q.Get("videoDuration"))
+				}
+				if q.Get("regionCode") != "US" {
+					t.Errorf("expected regionCode=US, got %s", q.Get("regionCode"))
+				}
+				if q.Get("safeSearch") != "strict" {
+					t.Errorf("expected safeSearch=strict, got %s", q.Get("safeSearch"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with for mine",
+			opts: []Option{
+				WithFor("mine"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				q := r.URL.Query()
+				if q.Get("forMine") != "true" {
+					t.Errorf("expected forMine=true, got %s", q.Get("forMine"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with for developer",
+			opts: []Option{
+				WithFor("developer"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				q := r.URL.Query()
+				if q.Get("forDeveloper") != "true" {
+					t.Errorf("expected forDeveloper=true, got %s", q.Get("forDeveloper"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get search with for contentOwner",
+			opts: []Option{
+				WithFor("contentOwner"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				q := r.URL.Query()
+				if q.Get("forContentOwner") != "true" {
+					t.Errorf("expected forContentOwner=true, got %s", q.Get("forContentOwner"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write(
+								[]byte(`{
+					"items": [
+						{"id": {"videoId": "video-1"}, "snippet": {"title": "Video 1"}}
+					]
+				}`),
+							)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				s := NewSearch(opts...)
+				got, err := s.Get()
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Search.Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if len(got) != tt.wantLen {
+					t.Errorf("Search.Get() got length = %v, want %v", len(got), tt.wantLen)
+				}
+			},
+		)
+	}
+}
+
+func TestSearch_Get_Pagination(t *testing.T) {
+	svc := common.NewTestService(
+		t, common.PaginationHandler(
+			"search", func(prefix string, i int) string {
+				return fmt.Sprintf(`{"id": {"videoId": "%s-%d"}}`, prefix, i)
+			},
+		),
+	)
+	s := NewSearch(
+		WithService(svc),
+		WithMaxResults(22),
+	)
+	got, err := s.Get()
+	if err != nil {
+		t.Errorf("Search.Get() error = %v", err)
+	}
+	if len(got) != 22 {
+		t.Errorf("Search.Get() got length = %v, want 22", len(got))
+	}
+}
+
+func TestSearch_List(t *testing.T) {
+	common.RunListTest(
+		t,
+		`{
+			"items": [
+				{
+					"id": {
+						"kind": "youtube#video",
+						"videoId": "video-1"
+					},
+					"snippet": {
+						"title": "Video 1"
+					}
+				}
+			]
+		}`,
+		func(svc *youtube.Service, output string) func(io.Writer) error {
+			s := NewSearch(
+				WithService(svc),
+				WithOutput(output),
+				WithQ("test"),
+			)
+			return s.List
+		},
+	)
+}

@@ -1,0 +1,4 @@
+# tsx runs on esbuild, whose postinstall fetches the platform binary. Without
+# this pnpm blocks that script and the first `pnpm build` on a fresh clone fails.
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,51 @@
+# Upload meta — Weird World Daily (@BizarreWorldDaily) — 2026-10-16 FIX
+Menggantikan video lama 2:37 (ID kJeu_cCr7nA) yang tidak sesuai gaya channel.
+AI disclosure: CENTANG. Kategori: Education. Bahasa: English.
+
+## VIDEO 1 — LONG (ganti video lama)
+File: ~/workspace/youtube-otomatis/weird-en/2026-10-16-fix/long/weird-en-2026-10-16-fix-long.mp4
+Terverifikasi: 1280x720, 30fps, 9:08 (544.7s), 29MB, AAC
+Jadwal: 2026-10-17 19:00 WIB (scheduled)
+Judul: 7 Sounds on Earth NOBODY Can Explain
+Thumbnail text: WHAT MADE THIS?
+Deskripsi:
+Seven sounds recorded on Earth that baffled scientists — from the Bloop, louder than a blue whale, to a hum thousands of people hear every night. Counting down to the loudest sound the ocean ever made.
+
+Chapters:
+0:00 The Bloop tease
+0:28 7 sounds that baffled science
+0:54 #7 Slow Down
+1:37 #6 Julia
+2:21 #5 Upsweep
+3:06 #4 The Hum
+3:55 #3 The 52Hz whale
+4:40 #2 Sky trumpets
+5:27 #1 The Bloop
+6:25 Earth is louder than you think
+8:16 BONUS: Music of the Moon
+
+What do you think made the Bloop? Drop your theory in the comments.
+
+#WeirdWorldDaily #WeirdFacts #UnexplainedSounds #Bloop #OceanMystery
+Tags: the bloop, unexplained sounds, weird facts, 52 hertz whale, the hum, sky trumpets, upsweep sound, julia sound, slow down sound, ocean mysteries, weird world daily, strange sounds earth, unsolved mysteries, noaa bloop, loneliest whale, apollo 10 music, bizarre nature, did you know, science facts, unbelievable
+
+## VIDEO 2 — SHORTS 1 (09:00 WIB)
+File: ~/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts1/weird-en-fix-shorts1-bloop.mp4
+Terverifikasi: 720x1280, 39.3s, 3.2MB
+Jadwal: 2026-10-17 09:00 WIB
+Judul: The Ocean Screamed LOUDER Than a Blue Whale #shorts #weirdfacts #foryou
+Deskripsi: In 1997 the Pacific made the loudest underwater sound ever recorded. Full countdown: [URL long]
+
+## VIDEO 3 — SHORTS 2 (14:00 WIB)
+File: ~/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts2/weird-en-fix-shorts2-hum.mp4
+Terverifikasi: 720x1280, 40.1s, 2.9MB
+Jadwal: 2026-10-17 14:00 WIB
+Judul: Thousands Hear a Hum That DOESN'T Exist #shorts #weirdfacts #foryou
+Deskripsi: 2-4% of people hear a hum with no source. Full countdown: [URL long]
+
+## VIDEO 4 — SHORTS 3 (21:00 WIB)
+File: ~/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts3/weird-en-fix-shorts3-whale.mp4
+Terverifikasi: 720x1280, 39.3s, 2.7MB
+Jadwal: 2026-10-17 21:00 WIB
+Judul: The LONELIEST Whale on Earth #shorts #weirdfacts #foryou
+Deskripsi: Singing at 52Hz for 30 years, never answered. Full countdown: [URL long]

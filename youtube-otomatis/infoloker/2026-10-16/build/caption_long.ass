@@ -1,0 +1,191 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: cap,DejaVu Sans,44,&H00FFFFFF,&H99000000,-1,0,1,3,1,2,40,40,80,1
+
+[Events]
+Format: Layer, Start, End, Style, Text
+Dialogue: 0,0:00:03.00,0:00:06.19,cap,Tahun 2026, delapan bidang pekerjaan ini
+Dialogue: 0,0:00:06.14,0:00:09.34,cap,bikin perusahaan berebut kandidat. Dan nomor
+Dialogue: 0,0:00:09.29,0:00:12.48,cap,tujuh paling tidak terduga.
+Dialogue: 0,0:00:12.78,0:00:15.07,cap,Di video ini kita bedah delapan
+Dialogue: 0,0:00:15.02,0:00:17.32,cap,bidangnya satu per satu: kenapa banyak
+Dialogue: 0,0:00:17.27,0:00:19.57,cap,dibutuhkan, dan skill apa yang wajib
+Dialogue: 0,0:00:19.52,0:00:21.81,cap,kamu siapkan.
+Dialogue: 0,0:00:22.11,0:00:25.15,cap,Nomor satu: teknologi informasi dan pengembang
+Dialogue: 0,0:00:25.10,0:00:28.14,cap,aplikasi. Digitalisasi belum berhenti — dari
+Dialogue: 0,0:00:28.09,0:00:31.12,cap,startup sampai BUMN semua butuh talenta
+Dialogue: 0,0:00:31.07,0:00:34.11,cap,digital.
+Dialogue: 0,0:00:34.41,0:00:37.34,cap,Cara masuknya: kuasai satu bahasa pemrograman
+Dialogue: 0,0:00:37.29,0:00:40.23,cap,populer, bangun tiga proyek portofolio, lalu
+Dialogue: 0,0:00:40.18,0:00:43.11,cap,magang atau freelance. Ijazah nomor dua,
+Dialogue: 0,0:00:43.06,0:00:46.00,cap,bukti kerja nomor satu.
+Dialogue: 0,0:00:46.30,0:00:48.45,cap,Bahkan banyak yang pindah karier dari
+Dialogue: 0,0:00:48.40,0:00:50.56,cap,jurusan non-IT lewat bootcamp intensif tiga
+Dialogue: 0,0:00:50.51,0:00:52.66,cap,bulan.
+Dialogue: 0,0:00:52.97,0:00:55.94,cap,Nomor dua: data dan analitik. Perusahaan
+Dialogue: 0,0:00:55.89,0:00:58.86,cap,tidak lagi menebak — semua keputusan
+Dialogue: 0,0:00:58.81,0:01:01.78,cap,harus berbasis data.
+Dialogue: 0,0:01:02.08,0:01:04.75,cap,Mulai dari spreadsheet yang rapi, lanjut
+Dialogue: 0,0:01:04.70,0:01:07.38,cap,ke SQL dasar dan visualisasi data.
+Dialogue: 0,0:01:07.33,0:01:10.00,cap,Tiga skill ini saja sudah membuka
+Dialogue: 0,0:01:09.95,0:01:12.62,cap,banyak pintu.
+Dialogue: 0,0:01:12.91,0:01:15.54,cap,Portofolio datamu bisa dimulai dari data
+Dialogue: 0,0:01:15.49,0:01:18.13,cap,publik — misalnya data harga pasar
+Dialogue: 0,0:01:18.08,0:01:20.71,cap,atau data cuaca.
+Dialogue: 0,0:01:21.02,0:01:23.95,cap,Nomor tiga: pemasaran digital dan e-commerce.
+Dialogue: 0,0:01:23.91,0:01:26.84,cap,Ribuan UMKM naik online setiap bulan,
+Dialogue: 0,0:01:26.79,0:01:29.72,cap,dan mereka butuh orang yang bisa
+Dialogue: 0,0:01:29.67,0:01:32.61,cap,menjual.
+Dialogue: 0,0:01:32.91,0:01:35.30,cap,Pelajari iklan digital, kelola media sosial
+Dialogue: 0,0:01:35.25,0:01:37.65,cap,bisnis, dan pahami marketplace. Praktik langsung
+Dialogue: 0,0:01:37.60,0:01:39.99,cap,di akun jualan sendiri itu nilai
+Dialogue: 0,0:01:39.94,0:01:42.34,cap,plus.
+Dialogue: 0,0:01:42.64,0:01:44.95,cap,Banyak UMKM mencari freelancer untuk kelola
+Dialogue: 0,0:01:44.90,0:01:47.20,cap,akun jualan mereka — pintu masuk
+Dialogue: 0,0:01:47.15,0:01:49.46,cap,yang realistis.
+Dialogue: 0,0:01:49.76,0:01:52.52,cap,Soal penghasilan, spesialis digital marketing yang
+Dialogue: 0,0:01:52.47,0:01:55.23,cap,sudah punya portofolio kampanye biasanya dihargai
+Dialogue: 0,0:01:55.18,0:01:57.94,cap,di atas rata-rata. Jenjang kariernya juga
+Dialogue: 0,0:01:57.89,0:02:00.64,cap,jelas: dari staf, naik jadi supervisor,
+Dialogue: 0,0:02:00.59,0:02:03.35,cap,sampai kepala divisi digital dalam beberapa
+Dialogue: 0,0:02:03.30,0:02:06.06,cap,tahun.
+Dialogue: 0,0:02:06.36,0:02:08.94,cap,Tips biar menonjol di bidang ini:
+Dialogue: 0,0:02:08.89,0:02:11.47,cap,dokumentasikan semua hasil kerjamu dalam angka.
+Dialogue: 0,0:02:11.42,0:02:14.01,cap,Misalnya, berapa persen kenaikan penjualan dari
+Dialogue: 0,0:02:13.96,0:02:16.54,cap,iklan yang kamu kelola. Data konkret
+Dialogue: 0,0:02:16.49,0:02:19.07,cap,seperti ini yang bikin HRD tertarik
+Dialogue: 0,0:02:19.02,0:02:21.60,cap,padamu.
+Dialogue: 0,0:02:21.90,0:02:25.39,cap,Nomor empat: tenaga kesehatan. Perawat, bidan,
+Dialogue: 0,0:02:25.34,0:02:28.83,cap,dan tenaga farmasi — kebutuhan yang
+Dialogue: 0,0:02:28.78,0:02:32.27,cap,tumbuh seiring populasi.
+Dialogue: 0,0:02:32.57,0:02:36.39,cap,Jalurnya jelas lewat pendidikan vokasi kesehatan.
+Dialogue: 0,0:02:36.34,0:02:40.16,cap,Lulusannya terserap cepat, bahkan sebelum wisuda.
+Dialogue: 0,0:02:40.46,0:02:43.33,cap,Selain rumah sakit, klinik dan layanan
+Dialogue: 0,0:02:43.28,0:02:46.15,cap,homecare juga terus membuka lowongan.
+Dialogue: 0,0:02:46.45,0:02:49.35,cap,Tenaga kesehatan termasuk yang paling stabil
+Dialogue: 0,0:02:49.30,0:02:52.19,cap,penghasilannya, karena kebutuhan tidak pernah surut.
+Dialogue: 0,0:02:52.14,0:02:55.04,cap,Perawat dan bidan berpengalaman bisa naik
+Dialogue: 0,0:02:54.99,0:02:57.88,cap,jadi kepala ruangan, atau membuka praktik
+Dialogue: 0,0:02:57.83,0:03:00.73,cap,mandiri.
+Dialogue: 0,0:03:01.03,0:03:04.62,cap,Kunci untuk menonjol adalah sertifikasi dan
+Dialogue: 0,0:03:04.57,0:03:08.17,cap,pengalaman praktik. Ikuti pelatihan tambahan seperti
+Dialogue: 0,0:03:08.12,0:03:11.72,cap,kegawatdaruratan atau keperawatan khusus. Ini yang
+Dialogue: 0,0:03:11.66,0:03:15.26,cap,membedakanmu dari ratusan pelamar lain.
+Dialogue: 0,0:03:15.56,0:03:18.61,cap,Nomor lima: logistik dan rantai pasok.
+Dialogue: 0,0:03:18.56,0:03:21.61,cap,Belanja online meledak, gudang dan armada
+Dialogue: 0,0:03:21.56,0:03:24.61,cap,butuh banyak orang.
+Dialogue: 0,0:03:24.91,0:03:29.28,cap,Kuasai manajemen gudang, sistem inventaris, dan
+Dialogue: 0,0:03:29.23,0:03:33.60,cap,koordinasi armada. Sertifikasi operasional jadi pembeda.
+Dialogue: 0,0:03:33.90,0:03:36.86,cap,Perusahaan e-commerce rutin membuka rekrutmen untuk
+Dialogue: 0,0:03:36.81,0:03:39.76,cap,posisi gudang dan kurir.
+Dialogue: 0,0:03:40.06,0:03:42.91,cap,Di logistik, posisi supervisor gudang dan
+Dialogue: 0,0:03:42.86,0:03:45.72,cap,koordinator armada punya penghasilan yang solid
+Dialogue: 0,0:03:45.67,0:03:48.52,cap,dan stabil. Kariernya juga cepat naik
+Dialogue: 0,0:03:48.47,0:03:51.33,cap,buat yang rajin, disiplin, dan bisa
+Dialogue: 0,0:03:51.28,0:03:54.13,cap,memimpin tim.
+Dialogue: 0,0:03:54.43,0:03:57.93,cap,Pelajari sistem manajemen gudang yang digital.
+Dialogue: 0,0:03:57.88,0:04:01.37,cap,Perusahaan sekarang mencari orang yang paham
+Dialogue: 0,0:04:01.32,0:04:04.82,cap,teknologi, bukan cuma kuat fisik. Kombinasi
+Dialogue: 0,0:04:04.77,0:04:08.26,cap,keduanya bikin kamu susah digantikan.
+Dialogue: 0,0:04:08.55,0:04:11.65,cap,Nomor enam: energi terbarukan dan kendaraan
+Dialogue: 0,0:04:11.60,0:04:14.69,cap,listrik. Panel surya dan motor listrik
+Dialogue: 0,0:04:14.64,0:04:17.74,cap,butuh teknisi yang paham.
+Dialogue: 0,0:04:18.05,0:04:20.72,cap,Ikuti pelatihan teknis bersertifikat. Bidang ini
+Dialogue: 0,0:04:20.67,0:04:23.35,cap,masih sepi pesaing tapi lowongannya terus
+Dialogue: 0,0:04:23.30,0:04:25.97,cap,bertambah.
+Dialogue: 0,0:04:26.27,0:04:29.64,cap,Bengkel konversi motor listrik mulai menjamur
+Dialogue: 0,0:04:29.59,0:04:32.97,cap,— peluang usaha sekaligus lapangan kerja.
+Dialogue: 0,0:04:33.27,0:04:36.73,cap,Teknisi energi terbarukan masih langka, jadi
+Dialogue: 0,0:04:36.68,0:04:40.13,cap,nilai tawarnya tinggi di pasar kerja.
+Dialogue: 0,0:04:40.08,0:04:43.54,cap,Dari teknisi lapangan, kamu bisa naik
+Dialogue: 0,0:04:43.49,0:04:46.95,cap,jadi supervisor proyek, bahkan konsultan instalasi.
+Dialogue: 0,0:04:47.25,0:04:49.81,cap,Ambil sertifikasi resmi di bidang panel
+Dialogue: 0,0:04:49.76,0:04:52.32,cap,surya atau kendaraan listrik. Bidang ini
+Dialogue: 0,0:04:52.27,0:04:54.83,cap,masih sepi pesaing, jadi siapa yang
+Dialogue: 0,0:04:54.78,0:04:57.34,cap,bersertifikat duluan, dialah yang paling dicari
+Dialogue: 0,0:04:57.29,0:04:59.85,cap,perusahaan.
+Dialogue: 0,0:05:00.15,0:05:03.22,cap,Nomor tujuh, yang paling tidak terduga:
+Dialogue: 0,0:05:03.17,0:05:06.23,cap,kreator konten dan social media specialist.
+Dialogue: 0,0:05:06.18,0:05:09.25,cap,Setiap brand sekarang butuh mesin konten.
+Dialogue: 0,0:05:09.55,0:05:13.47,cap,Modalnya HP dan konsistensi. Kuasai shooting,
+Dialogue: 0,0:05:13.42,0:05:17.35,cap,editing dasar, dan copywriting — portofolio
+Dialogue: 0,0:05:17.30,0:05:21.22,cap,adalah akunmu sendiri.
+Dialogue: 0,0:05:21.52,0:05:23.88,cap,Brand lokal rela membayar kreator pemula
+Dialogue: 0,0:05:23.83,0:05:26.20,cap,— jumlah follower kecil bukan halangan
+Dialogue: 0,0:05:26.15,0:05:28.51,cap,untuk mulai.
+Dialogue: 0,0:05:28.80,0:05:31.76,cap,Penghasilan kreator konten memang variatif, tapi
+Dialogue: 0,0:05:31.71,0:05:34.68,cap,social media specialist di perusahaan punya
+Dialogue: 0,0:05:34.63,0:05:37.59,cap,gaji yang stabil dan terus naik.
+Dialogue: 0,0:05:37.54,0:05:40.51,cap,Banyak juga yang mulai dari freelancer,
+Dialogue: 0,0:05:40.46,0:05:43.42,cap,lalu direkrut jadi karyawan tetap.
+Dialogue: 0,0:05:43.72,0:05:46.41,cap,Bangun portofolio dari akunmu sendiri. Konsisten
+Dialogue: 0,0:05:46.36,0:05:49.04,cap,posting selama tiga bulan dengan tema
+Dialogue: 0,0:05:48.99,0:05:51.68,cap,yang jelas. Itu saja sudah cukup
+Dialogue: 0,0:05:51.62,0:05:54.31,cap,jadi bukti kemampuan di depan perekrut.
+Dialogue: 0,0:05:54.61,0:05:58.00,cap,Nomor delapan: pendidikan dan pelatihan vokasi.
+Dialogue: 0,0:05:57.95,0:06:01.35,cap,Semua bidang di atas butuh pengajar
+Dialogue: 0,0:06:01.30,0:06:04.69,cap,— tutor, instruktur, mentor.
+Dialogue: 0,0:06:04.99,0:06:08.03,cap,Rumusnya sederhana: dalami satu keahlian, lalu
+Dialogue: 0,0:06:07.98,0:06:11.03,cap,ajarkan. Pengajar vokasi yang praktisi selalu
+Dialogue: 0,0:06:10.98,0:06:14.02,cap,dicari.
+Dialogue: 0,0:06:14.31,0:06:17.31,cap,Platform kursus online membuka peluang mengajar
+Dialogue: 0,0:06:17.26,0:06:20.26,cap,dari rumah dengan jadwal fleksibel.
+Dialogue: 0,0:06:20.57,0:06:23.47,cap,Instruktur vokasi yang praktisi bisa dapat
+Dialogue: 0,0:06:23.42,0:06:26.31,cap,penghasilan dari banyak sumber: mengajar tetap,
+Dialogue: 0,0:06:26.26,0:06:29.16,cap,kelas privat, sampai membuat kursus online.
+Dialogue: 0,0:06:29.11,0:06:32.00,cap,Jenjangnya fleksibel, mengikuti keahlian yang kamu
+Dialogue: 0,0:06:31.95,0:06:34.85,cap,miliki.
+Dialogue: 0,0:06:35.15,0:06:37.78,cap,Fokus di satu keahlian yang benar-benar
+Dialogue: 0,0:06:37.73,0:06:40.36,cap,kamu kuasai, lalu buat kurikulum yang
+Dialogue: 0,0:06:40.31,0:06:42.93,cap,praktis. Murid mencari pengajar yang bisa
+Dialogue: 0,0:06:42.88,0:06:45.51,cap,bikin mereka langsung bisa, bukan cuma
+Dialogue: 0,0:06:45.46,0:06:48.09,cap,paham teori.
+Dialogue: 0,0:06:48.39,0:06:50.95,cap,Nah, sebelum lanjut, hindari tiga kesalahan
+Dialogue: 0,0:06:50.90,0:06:53.46,cap,fatal ini. Pertama: pilih bidang cuma
+Dialogue: 0,0:06:53.41,0:06:55.97,cap,karena ikut-ikutan teman. Yang cocok buat
+Dialogue: 0,0:06:55.92,0:06:58.48,cap,orang lain, belum tentu cocok buat
+Dialogue: 0,0:06:58.43,0:07:00.99,cap,kamu.
+Dialogue: 0,0:07:01.29,0:07:04.48,cap,Kedua: kursus tanpa praktik. Sertifikat saja
+Dialogue: 0,0:07:04.43,0:07:07.62,cap,tidak cukup, perusahaan mau lihat bukti
+Dialogue: 0,0:07:07.56,0:07:10.75,cap,kerja nyata. Selalu barengi belajarmu dengan
+Dialogue: 0,0:07:10.70,0:07:13.89,cap,proyek portofolio.
+Dialogue: 0,0:07:14.19,0:07:17.25,cap,Ketiga: menyerah di bulan kedua. Hampir
+Dialogue: 0,0:07:17.20,0:07:20.26,cap,semua orang berhenti tepat sebelum berhasil.
+Dialogue: 0,0:07:20.21,0:07:23.28,cap,Bertahan enam bulan saja sudah menempatkanmu
+Dialogue: 0,0:07:23.23,0:07:26.29,cap,di depan sembilan puluh persen pesaingmu.
+Dialogue: 0,0:07:26.59,0:07:29.31,cap,Jadi polanya jelas: pilih SATU bidang,
+Dialogue: 0,0:07:29.26,0:07:31.99,cap,kursus tiga sampai enam bulan, bangun
+Dialogue: 0,0:07:31.94,0:07:34.66,cap,portofolio, lalu mulai dari magang atau
+Dialogue: 0,0:07:34.61,0:07:37.34,cap,freelance.
+Dialogue: 0,0:07:37.64,0:07:40.76,cap,Tidak perlu menunggu sempurna. Lowongan terbaik
+Dialogue: 0,0:07:40.71,0:07:43.83,cap,datang ke yang sudah siap duluan.
+Dialogue: 0,0:07:44.14,0:07:46.78,cap,Detailnya begini. Bulan pertama dan kedua:
+Dialogue: 0,0:07:46.73,0:07:49.37,cap,fokus belajar dasar, dan cari satu
+Dialogue: 0,0:07:49.32,0:07:51.97,cap,mentor atau komunitas. Jangan belajar sendirian,
+Dialogue: 0,0:07:51.92,0:07:54.56,cap,progress-mu jauh lebih cepat kalau bareng
+Dialogue: 0,0:07:54.51,0:07:57.15,cap,orang lain.
+Dialogue: 0,0:07:57.45,0:08:00.12,cap,Bulan ketiga sampai keenam: kerjakan tiga
+Dialogue: 0,0:08:00.07,0:08:02.74,cap,proyek portofolio, lalu mulai lamar magang
+Dialogue: 0,0:08:02.69,0:08:05.36,cap,atau freelance. Di titik ini kamu
+Dialogue: 0,0:08:05.31,0:08:07.98,cap,sudah punya bukti kemampuan, bukan cuma
+Dialogue: 0,0:08:07.93,0:08:10.60,cap,ijazah.
+Dialogue: 0,0:08:10.90,0:08:12.98,cap,Tulis di komentar: bidang nomor berapa
+Dialogue: 0,0:08:12.93,0:08:15.02,cap,yang paling kamu minati? Biar kita
+Dialogue: 0,0:08:14.97,0:08:17.05,cap,diskusi.
+Dialogue: 0,0:08:17.35,0:08:20.17,cap,Gabung komunitas pencari kerja di kotamu
+Dialogue: 0,0:08:20.12,0:08:22.93,cap,atau grup online. Info lowongan terbaik
+Dialogue: 0,0:08:22.88,0:08:25.70,cap,sering dibagikan dari mulut ke mulut,
+Dialogue: 0,0:08:25.65,0:08:28.46,cap,bukan cuma di situs lowongan kerja.
+Dialogue: 0,0:08:28.76,0:08:32.09,cap,Ingat, setiap ahli dulunya adalah pemula.
+Dialogue: 0,0:08:32.04,0:08:35.38,cap,Bedanya mereka yang berhasil cuma satu:
+Dialogue: 0,0:08:35.33,0:08:38.66,cap,mereka mulai, dan tidak berhenti. Sekarang
+Dialogue: 0,0:08:38.61,0:08:41.94,cap,giliranmu.
+Dialogue: 0,0:08:42.24,0:08:44.41,cap,Subscribe Info Loker Terkini, biar info
+Dialogue: 0,0:08:44.36,0:08:46.53,cap,loker terbaru datang tiap hari ke
+Dialogue: 0,0:08:46.48,0:08:48.65,cap,kamu.

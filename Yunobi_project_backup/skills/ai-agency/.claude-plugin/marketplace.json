@@ -1,0 +1,15 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "ai-agency",
+  "owner": {
+    "name": "Ramzi",
+    "url": "https://github.com/heyramzi"
+  },
+  "plugins": [
+    {
+      "name": "ai-agency",
+      "source": "./",
+      "description": "An SEO kit that takes a site from keyword research to ranked pages, a YouTube kit that takes a video from hook to published post, a ClickUp kit that runs agency delivery end to end, five commands that run the free courses at go.upsys-consulting.com/skool on your own business, and the tools that keep a skills registry honest"
+    }
+  ]
+}

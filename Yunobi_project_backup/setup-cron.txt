@@ -1,0 +1,52 @@
+# =====================================================================
+# setup-cron.txt — Manifest cron project Yunobi
+# Format per baris:  jadwal | perintah | deskripsi | tipe
+#   jadwal    : ekspresi cron (menit jam dom bulan dow), zona Asia/Jakarta
+#   perintah  : perintah shell LENGKAP (untuk tipe=shell)
+#   deskripsi : nama cron + penjelasan singkat
+#   tipe      : shell = dipasang ke crontab oleh setup.sh
+#               agen  = butuh runtime agen (Muse) + browser task;
+#                       TIDAK dipasang otomatis, hanya dicetak sbg checklist
+# Baris diawali # adalah komentar dan diabaikan setup.sh.
+# =====================================================================
+
+# ---------------- Blog & konten (shell) ----------------
+11 15 * * * | cd ~/workspace/blog-otomatis && ./jalan.sh >> ~/workspace/blog-otomatis/hidden_files/cron-blog.log 2>&1 | blog-otomatis-harian: pipeline 6 artikel/hari -> instruksi webpost | shell
+11 17 * * * | cd ~/workspace/blog-otomatis && python3 verifikasi_pagi.py >> ~/workspace/blog-otomatis/hidden_files/cron-verifikasi.log 2>&1 | verifikasi-pagi-blog: verifikasi artikel via feed publik + cek bounce | shell
+11 13 * * * | cd ~/workspace/blog-otomatis && python3 trend_radar.py >> ~/workspace/blog-otomatis/hidden_files/cron-trend.log 2>&1 | trend-radar-youtube: riset demand YouTube per 10 niche | shell
+0 9 * * 1 | cd ~/workspace/youtube-otomatis/yt-growth && python3 analytics.py --weekly >> ~/workspace/youtube-otomatis/hidden_files/cron-seo.log 2>&1 | yt-seo-refresh-mingguan: analitik + refresh metadata 17 channel | shell
+
+# ---------------- Blog & konten (agen) ----------------
+11 20 * * * | - | share-ig-harian: IG reel -> FB -> Threads (butuh approval + browser) | agen
+11 9 * * 1 | - | monitor-token-mingguan: cek kesehatan token OAuth | agen
+0 18 * * 0 | - | refresh-mingguan: refresh rutin mingguan | agen
+
+# ---------------- YouTube: 18 channel (agen, daily 16:11) ----------------
+11 16 * * * | - | horor-harian: Kisah Horor @KisahPOV | agen
+11 16 * * * | - | youtube-pov-harian: @ceritarakyat862 | agen
+11 16 * * * | - | lima-misteri-harian: @LimaMisteri | agen
+11 16 * * * | - | kisahdharma-harian: @KisahDharma | agen
+11 16 * * * | - | jejakislami-harian: @JejakIslami-h3d | agen
+11 16 * * * | - | kisahalkitab-harian: @KisahAlkitab-k9j | agen
+11 16 * * * | - | jejakbuddha-harian: @JejakBuddha | agen
+11 16 * * * | - | tinybuilders-shorts-harian: @tinybuilders-d5z | agen
+11 16 * * * | - | inktime-harian: @InkTime-d3t | agen
+11 16 * * * | - | strangetales-shorts-harian: @StrangeTales-g6n (3 shorts/hari) | agen
+11 16 * * * | - | empires-en-harian: @AncientEmpiresTV | agen
+11 16 * * * | - | history-en-harian: @EchoesOfThePast-e9n | agen
+11 16 * * * | - | horror-en-harian: @TalesOfDreadTV | agen
+11 16 * * * | - | mind-en-harian: @TheDarkMindFiles-s6n | agen
+11 16 * * * | - | mystery-en-harian: @MysteryShadowsTV | agen
+11 16 * * * | - | space-en-harian: @CosmosUnknownTV | agen
+11 16 * * * | - | truecrime-en-harian: @TrueCaseFilesTV | agen
+11 16 * * * | - | weird-en-harian: @BizarreWorldDaily | agen
+
+# ---------------- Pendukung YouTube (agen) ----------------
+0 20 * * * | - | watchdog-retry-upload-youtube: eksekusi antrean retry umur >=23 jam via browser | agen
+11 9 * * * | - | balas-komentar-youtube-pagi: cek 12 channel, balas + seed diskusi | agen
+11 21 * * * | - | balas-komentar-youtube-malam: sama, shift malam | agen
+
+# ---------------- Afiliasi & sosmed (agen) ----------------
+11 17 * * * | - | promo-afiliasi-harian: 5 produk/hari ke 4 akun (butuh approval) | agen
+11 19 * * * | - | shopee-video-harian: paket 5 video _wa.mp4 + caption (upload manual) | agen
+11 10 * * * | - | tiktok-fyp-harian: konten hiburan FYP @ngeweb.yuk via Taisly | agen

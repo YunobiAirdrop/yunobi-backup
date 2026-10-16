@@ -1,0 +1,31 @@
+[2026-10-16 ~10:25 WIB] mind-en daily run (manual 1:1, old pattern):
+- marker: hidden_files/produced-mind-en-2026-10-16.marker (created 08:11 WIB)
+- topik: false memory implantation (eksperimen Elizabeth Loftus) + twist dark psychology
+- hook dipakai: C (Specificity & Data) — "Scientists implanted a fake memory into seventy percent of people..."
+- judul: "Scientists Planted Fake Memories in Strangers #shorts #psychology #mind"
+- voiceover: /opt/hatch/bin/tts, voice avocado_v2:miles (EN natural), 6 beat = 44.28s
+- visual: 7 gambar AI literal per beat (media.generate_image), 9:16
+- build: rakit_shorts.py (baru, vertikal 720x1280) via ffmpeg-queue.sh, preset veryfast
+- on-screen hook: 3 baris "70 PERCENT / REMEMBERED / SOMETHING FAKE" (zona aman atas)
+- anti-AI-look: film grain (noise), grading, vignette, Ken Burns pacing variatif, title card, bed ambient 55Hz -28dB (sintetis — SFX rekaman asli belum tersedia)
+- final: mind-en/2026-10-16/final-mind-en-shorts.mp4 — 4.1MB (<100MB OK), 720x1280, 45.5s
+- upload: browser task spawned -> @TheDarkMindFiles-s6i, terjadwal Sab 2026-10-17 19:00 WIB, AI disclosure dicentang. Menunggu hasil (approval user 20:00-23:00 WIB).
+- catatan: rakit_shorts.py sempat korup state antar-edit (param hook_lines vs body) — diperbaiki, syntax OK. drawtext '%' bermasalah -> pakai kata PERCENT.
+- preferensi baru user (style per-channel 1:1): browser task diminta observasi 3-5 video terakhir channel untuk run berikutnya.
+[2026-10-16 10:30 WIB] UPDATE upload:
+- Browser task: upload 100% disiapkan di YouTube Studio, channel UCAnSrJzQuePS1MJhfwlRJuQ.
+- Copyright check: lolos ("Tidak ditemukan masalah"). Video terdeteksi sebagai Short.
+- Judul/deskripsi/audiens (not for kids)/AI disclosure (Ya)/EN/Education: semua terverifikasi.
+- Visibilitas: "Jadwalkan sebagai publik" 17 Okt 2026 19:00 WIB (GMT+0700 benar). Status saat ini: "Disimpan sebagai pribadi".
+- MENUNGGU ketukan persetujuan user (20:00-23:00 WIB) untuk klik final "Jadwalkan". Browser task parkir, dialog upload tetap terbuka.
+- Observasi gaya channel disimpan: youtube-otomatis/mind-en/gaya-channel.md (pola judul "N Ways/Signals/Tricks", thumbnail gelap + teks putih tebal).
+[2026-10-16 ~16:11 WIB] mind-en scheduled run: IDEMPOTEN — marker produced-mind-en-2026-10-16.marker sudah ada (dibuat 08:24). Produksi dilewati, tidak ada duplikat. Video hari ini (false memory implantation / Loftus, dark psychology twist, 45.5s, 4.1MB) sudah 100% disiapkan di YouTube Studio @TheDarkMindFiles-s6i, jadwal publik Sab 2026-10-17 19:00 WIB, copyright lolos, AI disclosure Ya. Browser task parkir menunggu ketukan final user 20:00-23:00 WIB. Tidak ada retry-queue mind-en (tidak ada kegagalan).
+
+[2026-10-16 ~12:45 WIB] mind-en FIX produksi (subagent): 1 LONG + 2 SHORTS selesai
+- long: "7 Phrases Manipulators Use to Control You" — final/long/darkmind-long-7-phrases.mp4, 1280x720, 487.4s (8.1 mnt), 25MB, h264+AAC. 12 beat, voice Miles, 12 gambar AI (grain+vignette+Ken Burns).
+- shorts1: "5 Signs Someone Is Gaslighting You #shorts #psychology #mindset" — final/s1/darkmind-shorts-gaslighting.mp4, 1080x1920, 33.4s, 5MB. Hook on-screen "YOU ARE NOT / CRAZY".
+- shorts2: "4 Words That Instantly Expose a Liar #shorts #psychology #mindset" — final/s2/darkmind-shorts-liar.mp4, 1080x1920, 33.9s, 5MB. Hook on-screen "FORGET / BODY LANGUAGE".
+- Semua render via ffmpeg-queue.sh, preset veryfast. AI disclosure: CENTANG saat upload.
+- Jadwal: long 2026-10-17 19:00 WIB (CATATAN: bentrok dengan shorts existing "Scientists Planted Fake Memories" yg juga 17 Okt 19:00 — perlu keputusan parent/user); shorts1 2026-10-17 09:00; shorts2 2026-10-17 14:00.
+- Topik hindari: false memory/Loftus (sudah dipakai shorts existing). Tidak upload (menunggu ketukan user 20:00-23:00).
+- Kendala: antrean ffmpeg padat (25 waiter, 2 slot) — build total ~2 jam. Satu gambar AI ditolak safety (diganti konsep aman). Race condition _tmp_segs antar builder (diperbaiki dgn subdir terpisah).

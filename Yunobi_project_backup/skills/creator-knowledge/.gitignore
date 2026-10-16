@@ -1,0 +1,7 @@
+.env
+data/raw-transcripts/*.txt
+data/raw-transcripts/manifest.json
+__pycache__/
+*.pyc
+node_modules/
+# packaged/ — included so people can download .skill files directly

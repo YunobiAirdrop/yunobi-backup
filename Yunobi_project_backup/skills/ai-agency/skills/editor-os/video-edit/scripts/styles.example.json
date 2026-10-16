@@ -1,0 +1,10 @@
+[
+  { "phrase": "export the pre-edited", "highlight": "yellow", "bold": true },
+  { "phrase": "go into timeline here and export in the correct format", "highlight": "blue" },
+  { "phrase": "include the media files and then click Export", "highlight": "green" },
+  { "phrase": "you can get the original media here", "highlight": "blue" },
+  { "phrase": "B-rolls and CTAs", "highlight": "orange", "bold": true },
+  { "phrase": "brand assets", "highlight": "coral", "bold": true },
+  { "phrase": "recording backgrounds", "highlight": "coral" },
+  { "phrase": "good luck with the editing", "highlight": "yellow" }
+]

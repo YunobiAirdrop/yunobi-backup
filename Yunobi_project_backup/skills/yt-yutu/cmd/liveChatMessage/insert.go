@@ -1,0 +1,99 @@
+// Copyright 2026 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package liveChatMessage
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/liveChatMessage"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	insertTool    = "liveChatMessage-insert"
+	insertConfirm = "Send message to live chat %s"
+	insertShort   = "Send a live chat message"
+	insertLong    = "Send a live chat message. Use this tool to post a text message to a live chat."
+	insertExample = `# Send a message to a live chat
+yutu liveChatMessage insert --liveChatId abc123 --messageText "Hello everyone!"`
+)
+
+var insertInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"live_chat_id", "message_text"},
+	Properties: map[string]*jsonschema.Schema{
+		"live_chat_id": {Type: "string", Description: lcidUsage},
+		"message_text": {Type: "string", Description: msgUsage},
+		"parts": {
+			Type: "array", Description: "Parts to include in the response",
+			Items: &jsonschema.Schema{Type: "string"}, Default: jsontext.Value(`["snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: insertTool, Title: insertShort, Description: insertLong,
+			InputSchema: insertInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  false,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			insertTool, cobramcp.ConfirmThen(
+				func(input liveChatMessage.LiveChatMessage) string {
+					return fmt.Sprintf(insertConfirm, input.LiveChatId)
+				},
+				func(input liveChatMessage.LiveChatMessage, w io.Writer) error {
+					return input.Insert(w)
+				},
+			),
+		),
+	)
+	liveChatMessageCmd.AddCommand(insertCmd)
+
+	insertCmd.Flags().StringVarP(&liveChatId, "liveChatId", "l", "", lcidUsage)
+	insertCmd.Flags().StringVarP(&messageText, "messageText", "m", "", msgUsage)
+	insertCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"snippet"}, "Parts to include",
+	)
+	insertCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	insertCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = insertCmd.MarkFlagRequired("liveChatId")
+	_ = insertCmd.MarkFlagRequired("messageText")
+}
+
+var insertCmd = &cobra.Command{
+	Use:     "insert",
+	Short:   insertShort,
+	Long:    insertLong,
+	Example: insertExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(insertConfirm, liveChatId))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := liveChatMessage.NewLiveChatMessage(
+			liveChatMessage.WithLiveChatId(liveChatId),
+			liveChatMessage.WithMessageText(messageText),
+			liveChatMessage.WithParts(parts),
+			liveChatMessage.WithOutput(output),
+		)
+		return input.Insert(c.OutOrStdout())
+	},
+}

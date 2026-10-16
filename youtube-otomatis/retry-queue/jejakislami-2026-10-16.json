@@ -1,0 +1,12 @@
+{
+  "channel": "jejakislami",
+  "handle": "@JejakIslami-h3d",
+  "date": "2026-10-16",
+  "reason": "daily_upload_limit",
+  "youtube_error": "Batas upload harian telah tercapai — Upload lebih banyak video setiap hari setelah verifikasi satu kali atau tunggu 24 jam.",
+  "note": "Channel belum verifikasi nomor HP (thumbnail kustom juga diblokir). Tunggu 24 jam ATAU verifikasi nomor HP channel, lalu upload ulang.",
+  "video_file": "/home/hatch/workspace/youtube-otomatis/jejakislami-2026-10-16/build/jejak-islami-bilal-2026-10-16.mp4",
+  "manifest": "/home/hatch/workspace/youtube-otomatis/jejakislami-2026-10-16/upload-manifest.json",
+  "queued_at_wib": "2026-10-16",
+  "eligible_after": "2026-10-17 (umur >=23 jam, ditangani watchdog 20:00 WIB)"
+}

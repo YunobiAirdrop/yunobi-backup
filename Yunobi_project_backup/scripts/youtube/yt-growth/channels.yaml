@@ -1,0 +1,20 @@
+# 17 channel YouTube (semua di khususstokyunobi@gmail.com).
+# channel_id diisi otomatis saat pertama kali dipakai (resolve via handle).
+channels:
+  empires-en:      { handle: "@AncientEmpiresTV",   workspace: "youtube-otomatis/empires-en",    channel_id: "" }
+  history-en:      { handle: "@EchoesOfThePast-e9m", workspace: "youtube-otomatis/history-en",    channel_id: "" }
+  horor:           { handle: "@KisahPOV",            workspace: "youtube-otomatis/horor",         channel_id: "" }
+  horror-en:       { handle: "@TalesOfDreadTV", channel_id: "UCR7uhocCg9YZM7-Qoi1sVGA",      workspace: "youtube-otomatis/horror-en",     channel_id: "" }
+  jejakbuddha:     { handle: "@JejakBuddha",         workspace: "jejak-buddha",                    channel_id: "" }
+  jejakislami:     { handle: "@JejakIslami-h3d",     workspace: "kisah-islami",                    channel_id: "" }
+  kisahalkitab:    { handle: "@KisahAlkitab-k9j",    workspace: "kisah-alkitab",                   channel_id: "" }
+  kisahdharma:     { handle: "@KisahDharma",         workspace: "kisah-dharma",                   channel_id: "" }
+  lima-misteri:    { handle: "@LimaMisteri",         workspace: "lima-misteri",                   channel_id: "UCQ0vHTsTqVeYy3zLno6pVfQ" }
+  mind-en:         { handle: "@TheDarkMindFiles-s6i", channel_id: "UCAnSrJzQuePS1MJhfwlRJuQ", workspace: "youtube-otomatis/mind-en",      channel_id: "" }
+  mystery-en:      { handle: "@MysteryShadowsTV", channel_id: "UCjxESFWyFPOkGTSpajK69Lw",    workspace: "youtube-otomatis/mystery-en",    channel_id: "" }
+  space-en:        { handle: "@CosmosUnknownTV",     workspace: "youtube-otomatis/space-en",      channel_id: "" }
+  strangetales:    { handle: "@StrangeTales-g6n", channel_id: "UCAVSqZjG8Af_pm_1uD5wRzA", channel_id: "UCAVSqZjG8Af_pm_1uD5wRzA",    workspace: "youtube-otomatis/strange-tales", channel_id: "" }
+  tinybuilders:    { handle: "@tinybuilders-d5z",    workspace: "miniatur-ai",                    channel_id: "" }
+  truecrime-en:    { handle: "@TrueCaseFilesTV",     workspace: "youtube-otomatis/truecrime-en",  channel_id: "" }
+  weird-en:        { handle: "@BizarreWorldDaily",   workspace: "youtube-otomatis/weird-en",      channel_id: "" }
+  youtube-pov:     { handle: "@ceritarakyat862",     workspace: "youtube-otomatis/youtube-pov",   channel_id: "" }

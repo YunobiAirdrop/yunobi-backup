@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "playlistImage",
+    srcs = ["playlistImage.go"],
+    importpath = "github.com/eat-pray-ai/yutu/pkg/playlistImage",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg",
+        "//pkg/common",
+        "@com_github_jedib0t_go_pretty_v6//table",
+        "@org_golang_google_api//youtube/v3:youtube",
+    ],
+)
+
+go_test(
+    name = "playlistImage_test",
+    srcs = ["playlistImage_test.go"],
+    embed = [":playlistImage"],
+    deps = [
+        "//pkg/common",
+        "@org_golang_google_api//youtube/v3:youtube",
+    ],
+)

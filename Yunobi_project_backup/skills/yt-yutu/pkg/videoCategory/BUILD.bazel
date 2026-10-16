@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "videoCategory",
+    srcs = ["videoCategory.go"],
+    importpath = "github.com/eat-pray-ai/yutu/pkg/videoCategory",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/common",
+        "@com_github_jedib0t_go_pretty_v6//table",
+        "@org_golang_google_api//youtube/v3:youtube",
+    ],
+)
+
+go_test(
+    name = "videoCategory_test",
+    srcs = ["videoCategory_test.go"],
+    embed = [":videoCategory"],
+    deps = [
+        "//pkg/common",
+        "@org_golang_google_api//youtube/v3:youtube",
+    ],
+)

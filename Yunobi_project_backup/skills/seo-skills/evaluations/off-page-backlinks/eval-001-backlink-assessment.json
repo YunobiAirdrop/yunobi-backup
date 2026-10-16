@@ -1,0 +1,16 @@
+{
+  "name": "Backlink Profile Assessment",
+  "description": "User wants to understand their site's backlink health.",
+  "userMessage": "Can you analyze the backlink profile of example.com? I want to know if I have any toxic links.",
+  "expectedSkills": ["seo-off-page-backlinks", "seo-mcp-tools-expert"],
+  "expectedTools": ["analyze_backlinks", "analyze_domain_authority"],
+  "expectedBehavior": [
+    "Attempts analyze_backlinks for the domain",
+    "If API unavailable, explains what API key is needed and provides manual methodology",
+    "If API available, assesses backlink quality using the scoring framework",
+    "Identifies potentially toxic links using the TOXIC_LINK_PATTERNS criteria",
+    "Analyzes anchor text distribution for over-optimization",
+    "Provides actionable recommendations",
+    "Explains when to disavow vs when to ignore"
+  ]
+}

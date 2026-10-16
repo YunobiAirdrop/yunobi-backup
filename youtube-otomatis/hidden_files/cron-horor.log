@@ -1,0 +1,22 @@
+[2026-10-16 17:15 WIB] horor-harian 16:11 run:
+- Marker produced-horor-2026-10-16.marker ADA (dibuat run manual 15:24) -> produksi baru DILEWATI (idempotensi).
+- Run manual 15:24 untuk horor-harian GAGAL ("execution turn was interrupted" ~15:55, tercatat di cron.runs) SEBELUM assembly MP4.
+- Retry per ANTI-MOGOK (gagal lain -> retry segera): assembly dari aset manual run via rakit_light.py + ffmpeg-queue.sh (11 segmen).
+- HASIL: horor/2026-10-16/kisah-horor-2026-10-16.mp4 | 1280x720 h264+aac | 349.9 dtk (~5.8 mnt) | 21.7 MB (<100MB OK).
+- Judul: "Antar Penumpang Jam 2 Pagi, Alamatnya Tidak Ada di Peta" (56 char). upload-meta.json dibuat: 20 tags, chapters 11, AI disclosure=true, scheduled 2026-10-17 19:00 WIB.
+- Browser upload task ke @KisahPOV di-spawn (parks menunggu approval/ketukan user 20:00-23:00 WIB).
+- Tidak ada entri retry-queue (bukan gagal limit harian).
+[2026-10-16 17:19 WIB] update upload:
+- Browser task: video ter-upload 100% + terproses di @KisahPOV (link https://youtu.be/aIsrA8upGUc), judul/deskripsi/20 tag/bahasa/audiens/AI disclosure/schedule 17 Okt 2026 19:00 WIB semua terverifikasi. Copyright check bersih.
+- Thumbnail .webp DITOLAK Studio ("File bukan gambar", 2x coba). Dikonversi ke thumbnail.jpg (2048x1152) via ffmpeg-queue.sh; browser task di-steer untuk pasang JPG, lalu parkir menunggu approval klik "Jadwalkan".
+- Status: MENUNGGU ketukan/approval user 20:00-23:00 WIB.
+[2026-10-16 17:20 WIB] thumbnail JPG terpasang & terverifikasi di Studio (custom thumbnail "ORDER HANTU" terpilih, bingkai otomatis terganti). SEMUA SIAP — menunggu approval user klik "Jadwalkan" (20:00-23:00 WIB). Video: https://youtu.be/aIsrA8upGUc, schedule 17 Okt 2026 19:00 WIB.
+[2026-10-16 20:00 WIB] horor-harian shorts fix (subagent):
+- 3 SHORTS selesai & terverifikasi 1080x1920 h264+aac, <100MB:
+  1. shorts1/kisahpov-shorts1-lantai4.mp4 | 54.2 dtk | 7.9MB | "Naik Lift Jam 2 Pagi, Pintunya Terbuka di Lantai Mati #horor #susterngesot #shorts" | jadwal 2026-10-17 09:00 WIB
+  2. shorts2/kisahpov-shorts2-cctv.mp4 | 56.1 dtk | 9.6MB | "Cek CCTV Kos Jam 3 Pagi, Ia Lihat Dirinya Sendiri Tidur #horor #cctv #shorts" | jadwal 2026-10-17 14:00 WIB
+  3. shorts3/kisahpov-shorts3-pasargaib.mp4 | 57.7 dtk | 9.8MB | "Belanja di Pasar Ini Tiap Malam, Penjualnya Tak Punya Bayangan #horor #pasargaib #shorts" | jadwal 2026-10-17 21:00 WIB
+- Voice Mudiwa (avocado_v2:mudiwa), gambar AI + film grain + title card, hook on-screen 3 dtk pertama.
+- upload-meta.txt siap per shorts (AI disclosure=centang). TIDAK diupload (tunggu approval 20:00-23:00 WIB).
+- Catatan: 1 gambar AI shorts1 (suster ngesot merangkak) ditolak policy generator; beat digabung ke 4 segmen, tidak mengurangi kualitas.
+- Marker produced-horor-2026-10-16.marker TIDAK dihapus (idempotensi).

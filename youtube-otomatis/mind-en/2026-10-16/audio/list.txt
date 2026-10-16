@@ -1,0 +1,6 @@
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-1.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-2.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-3.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-4.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-5.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mind-en/2026-10-16/audio/beat-6.mp3'

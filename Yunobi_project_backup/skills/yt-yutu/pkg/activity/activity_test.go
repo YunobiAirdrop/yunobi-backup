@@ -1,0 +1,383 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package activity
+
+import (
+	"errors"
+	"io"
+	"math"
+	"net/http"
+	"reflect"
+	"testing"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"google.golang.org/api/youtube/v3"
+)
+
+func TestNewActivity(t *testing.T) {
+	type args struct {
+		opts []Option
+	}
+
+	svc := &youtube.Service{}
+
+	tests := []struct {
+		name string
+		args args
+		want IActivity[youtube.Activity]
+	}{
+		{
+			name: "with all options",
+			args: args{
+				opts: []Option{
+					WithChannelId("test-channel-123"),
+					WithFor("mine"),
+					WithMaxResults(50),
+					WithPublishedAfter("2024-01-01T00:00:00Z"),
+					WithPublishedBefore("2024-12-31T23:59:59Z"),
+					WithRegionCode("US"),
+					WithService(svc),
+				},
+			},
+			want: &Activity{
+				Service:         svc,
+				ChannelId:       "test-channel-123",
+				MaxResults:      50,
+				For:             "mine",
+				PublishedAfter:  "2024-01-01T00:00:00Z",
+				PublishedBefore: "2024-12-31T23:59:59Z",
+				RegionCode:      "US",
+			},
+		},
+		{
+			name: "with no options",
+			args: args{
+				opts: []Option{},
+			},
+			want: &Activity{Fields: common.Fields{}},
+		},
+		{
+			name: "with empty for option",
+			args: args{
+				opts: []Option{
+					WithFor(""),
+				},
+			},
+			want: &Activity{Fields: common.Fields{}},
+		},
+		{
+			name: "with for home",
+			args: args{
+				opts: []Option{
+					WithFor("home"),
+				},
+			},
+			want: &Activity{
+				Fields: common.Fields{},
+				For:    "home",
+			},
+		},
+		{
+			name: "with zero max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(0),
+				},
+			},
+			want: &Activity{
+				MaxResults: math.MaxInt64,
+			},
+		},
+		{
+			name: "with negative max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(-10),
+				},
+			},
+			want: &Activity{
+				MaxResults: 1,
+			},
+		},
+		{
+			name: "with empty string values",
+			args: args{
+				opts: []Option{
+					WithChannelId(""),
+					WithPublishedAfter(""),
+					WithPublishedBefore(""),
+					WithRegionCode(""),
+				},
+			},
+			want: &Activity{
+				ChannelId:       "",
+				PublishedAfter:  "",
+				PublishedBefore: "",
+				RegionCode:      "",
+			},
+		},
+		{
+			name: "with partial options",
+			args: args{
+				opts: []Option{
+					WithChannelId("partial-channel"),
+					WithMaxResults(25),
+					WithRegionCode("UK"),
+				},
+			},
+			want: &Activity{
+				ChannelId:  "partial-channel",
+				MaxResults: 25,
+				RegionCode: "UK",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				if got := NewActivity(tt.args.opts...); !reflect.DeepEqual(
+					got, tt.want,
+				) {
+					t.Errorf("%s\nNewActivity() = %v\nwant %v", tt.name, got, tt.want)
+				}
+			},
+		)
+	}
+}
+
+func TestActivity_Get(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantLen int
+		wantErr bool
+	}{
+		{
+			name: "get activities with channelId",
+			opts: []Option{
+				WithChannelId("channel-id"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("channelId") != "channel-id" {
+					t.Errorf(
+						"expected channelId=channel-id, got %s",
+						r.URL.Query().Get("channelId"),
+					)
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities with home",
+			opts: []Option{
+				WithFor("home"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("home") != "true" {
+					t.Errorf("expected home=true, got %s", r.URL.Query().Get("home"))
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities with mine",
+			opts: []Option{
+				WithFor("mine"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("mine") != "true" {
+					t.Errorf("expected mine=true, got %s", r.URL.Query().Get("mine"))
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities with publishedAfter",
+			opts: []Option{
+				WithPublishedAfter("2024-01-01T00:00:00Z"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("publishedAfter") != "2024-01-01T00:00:00Z" {
+					t.Errorf(
+						"expected publishedAfter=2024-01-01T00:00:00Z, got %s",
+						r.URL.Query().Get("publishedAfter"),
+					)
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities with publishedBefore",
+			opts: []Option{
+				WithPublishedBefore("2024-12-31T23:59:59Z"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("publishedBefore") != "2024-12-31T23:59:59Z" {
+					t.Errorf(
+						"expected publishedBefore=2024-12-31T23:59:59Z, got %s",
+						r.URL.Query().Get("publishedBefore"),
+					)
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities with regionCode",
+			opts: []Option{
+				WithRegionCode("US"),
+				WithMaxResults(2),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("regionCode") != "US" {
+					t.Errorf(
+						"expected regionCode=US, got %s", r.URL.Query().Get("regionCode"),
+					)
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+		{
+			name: "get activities maxResults capping",
+			opts: []Option{
+				WithMaxResults(50),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("maxResults") != "20" {
+					t.Errorf(
+						"expected maxResults=20, got %s", r.URL.Query().Get("maxResults"),
+					)
+				}
+			},
+			wantLen: 2,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write(
+								[]byte(`{
+					"items": [
+						{"id": "1", "snippet": {"title": "A1"}},
+						{"id": "2", "snippet": {"title": "A2"}}
+					],
+					"nextPageToken": ""
+				}`),
+							)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				a := NewActivity(opts...)
+				got, err := a.Get()
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Activity.Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if len(got) != tt.wantLen {
+					t.Errorf(
+						"Activity.Get() got length = %v, want %v", len(got), tt.wantLen,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestActivity_Get_Pagination(t *testing.T) {
+	svc := common.NewTestService(t, common.PaginationHandler("activity"))
+	a := NewActivity(
+		WithService(svc),
+		WithChannelId("channel-id"),
+		WithMaxResults(22),
+	)
+	got, err := a.Get()
+	if err != nil {
+		t.Errorf("Activity.Get() error = %v", err)
+	}
+	if len(got) != 22 {
+		t.Errorf("Activity.Get() got length = %v, want 22", len(got))
+	}
+}
+
+func TestActivity_List(t *testing.T) {
+	common.RunListTest(
+		t,
+		`{"items": [{"id": "activity-1", "snippet": {"title": "Activity 1", "type": "upload", "publishedAt": "2024-01-01T00:00:00Z"}}], "nextPageToken": ""}`,
+		func(svc *youtube.Service, output string) func(io.Writer) error {
+			a := NewActivity(
+				WithService(svc),
+				WithOutput(output),
+				WithChannelId("channel-id"),
+			)
+			return a.List
+		},
+	)
+}
+
+var errWriteFailed = errors.New("write failed")
+
+type errWriter struct{}
+
+func (errWriter) Write([]byte) (int, error) {
+	return 0, errWriteFailed
+}
+
+func TestActivity_List_ReturnsFetchAndPrintErrors(t *testing.T) {
+	requestCount := 0
+	svc := common.NewTestService(
+		t, http.HandlerFunc(
+			func(w http.ResponseWriter, _ *http.Request) {
+				requestCount++
+				w.Header().Set("Content-Type", "application/json")
+				if requestCount == 1 {
+					_, _ = w.Write(
+						[]byte(`{
+							"items": [{"id": "activity-1", "snippet": {"title": "Activity 1", "type": "upload", "publishedAt": "2024-01-01T00:00:00Z"}}],
+							"nextPageToken": "next-page"
+						}`),
+					)
+					return
+				}
+				http.Error(w, "server error", http.StatusInternalServerError)
+			},
+		),
+	)
+
+	a := NewActivity(
+		WithService(svc),
+		WithOutput("table"),
+		WithMaxResults(22),
+	)
+
+	err := a.List(errWriter{})
+	if !errors.Is(err, errGetActivity) {
+		t.Errorf("Activity.List() error = %v, want %v", err, errGetActivity)
+	}
+	if !errors.Is(err, errWriteFailed) {
+		t.Errorf("Activity.List() error = %v, want write failed", err)
+	}
+}

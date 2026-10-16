@@ -1,0 +1,20 @@
+[2026-10-16 18:24 WIB] horror-en-harian run start (manual 1:1 trigger 15:24 WIB). Marker produced-horror-en-2026-10-16.marker created.
+[2026-10-16] PRODUKSI SELESAI:
+- Topik: The Hat Man (12.000 laporan figur bayangan topi; hook B menang skor 36/40)
+- Naskah: 1249 kata EN, 15 beat + endcard (16 visual), voice avocado_v2:casper via /opt/hatch/bin/tts, speed 1.15x
+- Visual: 17 gambar AI literal per narasi (webp), film grain + kenburns via rakit_light.py, semua render via ffmpeg-queue.sh
+- Audio: voiceover + brown-noise bed + heartbeat sintetis (numpy) di bawah beat kasus 008-013; SFX DISINTESIS (tak ada rekaman asli yang terjangkau di env ini)
+- File: horror-en/2026-10-16/hat-man-final.mp4 — 36MB (<100MB), 1280x720 h264+aac, 648s (10.8 mnt), 19441 frame valid
+- Thumbnail: thumbnail.webp (HE'S WATCHING, rim-lit silhouette)
+- Judul: "He Haunts 12,000 Sleepers and They All Describe Him" (50 char)
+- Gaya channel: dicek 1:1 (video terbaru "The Watcher of 657 Boulevard: The True Story" + gaya-channel.md #15) -> long 8-10 mnt, true-story, chapters, CTA komentar
+[2026-10-16 18:2x WIB] Browser task upload di-spawn: schedule 2026-10-17 19:00 WIB, AI disclosure YES. Menunggu hasil (parkir di konfirmasi akhir utk ketukan persetujuan 20:00-23:00 WIB).
+[2026-10-16 18:29 WIB] UPLOAD STAGED (belum dijadwalkan - menunggu ketukan persetujuan):
+- Browser task: video terunggah ke YouTube Studio, channel Midnight Dread Tales (@TalesOfDreadTV) aktif.
+- Video: https://youtu.be/G8rB-4qSHJI (durasi 10:49, status: pribadi/draft di Studio)
+- Terverifikasi: judul exact, deskripsi + 7 chapter + 8 hashtag, 20 tag, EN/Entertainment, bukan untuk anak, AI disclosure YA, komentar aktif, cek hak cipta bersih.
+- Visibilitas: "Jadwalkan sebagai publik" 17 Okt 2026 19:00 GMT+0700 - tombol Jadwalkan BELUM diklik (butuh ketukan user 20:00-23:00 WIB).
+- KENDALA: thumbnail kustom TIDAK bisa dipasang - channel belum verifikasi nomor telepon ("Untuk menambahkan thumbnail kustom, verifikasi nomor telepon Anda"). Saat ini pakai thumbnail otomatis YouTube. Terkait PENDING user: API key virtual-number utk verifikasi HP channel.
+- Browser task diparkir di layar ulasan akhir (ask_for_information), siap dilanjut setelah persetujuan.
+- KESIMPULAN RUN: produksi 100% selesai & terverifikasi; upload staged; PENJADWALAN FINAL butuh ketukan user.
+[2026-10-16] horror-en-harian run 16:11 WIB (scheduled, attempt 1): IDEMPOTENSI aktif — marker produced-horror-en-2026-10-16.marker SUDAH ADA. Produksi dilewati (tidak ada duplikasi). Retry-queue horror-en hari ini: KOSONG (tidak ada kegagalan limit). Status run 15:24 manual: 1 long "The Hat Man" (hat-man-final.mp4, 36MB, 10:49, 1280x720) sudah terunggah staged ke @TalesOfDreadTV sebagai draft pribadi https://youtu.be/G8rB-4qSHJI, AI disclosure YA; tombol final SCHEDULE 2026-10-17 19:00 WIB masih menunggu ketukan user 20:00-23:00 WIB (thumbnail kustom diblokir: channel belum verifikasi HP — PENDING API key OTPMurah). Browser task upload terparkir di chat run sebelumnya, tidak terlihat dari run ini. Pola 3 shorts + 1 long berlaku mulai jadwal besok.

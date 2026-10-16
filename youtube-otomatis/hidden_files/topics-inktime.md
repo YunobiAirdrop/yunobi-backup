@@ -1,0 +1,4 @@
+2026-10-16 - Why time flies faster as you age - angle: otak menghitung waktu dari KEPADATAN kenangan bukan dari jam; paradox liburan + hack kebaruan (novelty) sebagai penawar. Validasi: ide umum + sudut pandang tidak-umum (holiday paradox / "change the footage"), TAM = semua orang dewasa. Versi jelek ide ini (Vsauce & puluhan explainer "why time speeds up") sudah jutaan views.
+2026-10-16 - SHORTS 1: Napoleon wasn't short (myth buster) - angle: 5'7" vs Imperial Guard giants + British cartoon propaganda. Validasi: ide umum + sudut pandang tidak-umum (pouces vs inches mistranslation).
+2026-10-16 - SHORTS 2: Oxford older than Aztec Empire - angle: 1096 vs 1325, counterintuitive timeline. Validasi: fakta viral terbukti, curiosity gap kuat.
+2026-10-16 - SHORTS 3: Cleopatra closer to moon landing than pyramids - angle: 2560 BC vs 30 BC vs 1969, time compression. Validasi: fakta viral terbukti.

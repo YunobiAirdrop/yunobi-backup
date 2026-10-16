@@ -1,0 +1,17 @@
+{
+  "name": "Google Business Profile Audit",
+  "description": "User wants to optimize their Google Business Profile.",
+  "userMessage": "I have a dental practice and my Google Business Profile isn't getting many views. Can you help me optimize it?",
+  "expectedSkills": ["seo-local-seo"],
+  "expectedTools": [],
+  "expectedBehavior": [
+    "References the GBP Optimization Checklist",
+    "Asks about current profile completeness",
+    "Recommends specific optimizations for dental practice",
+    "Suggests appropriate primary and secondary categories",
+    "Recommends photo types for a dental practice",
+    "Suggests review generation strategy",
+    "Recommends posting schedule",
+    "References healthcare-specific citation sources"
+  ]
+}

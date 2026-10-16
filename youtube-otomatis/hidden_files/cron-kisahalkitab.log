@@ -1,0 +1,39 @@
+====================================================================
+RUN: 2026-10-16 15:24 WIB (kisahalkitab-harian, attempt 1, trigger: 1:1 manual semua channel)
+HASIL: PRODUKSI SELESAI — Shorts "Simson & Delilah" 50,7 dtk, 12,5 MB, 720x1280.
+  Topik: Simson & Delilah (Hakim-hakim 16). Daud vs Goliat DIBATALKAN karena
+    gaya-channel.md mencatat itu topik existing channel (Musa, Daniel, Daud vs Goliat, Yusuf).
+  Naskah: 5 beat, hook A "Pria terkuat di muka bumi... dikalahkan oleh gunting cukur?!"
+  Voiceover: avocado_v2:mudiwa (id), 5 file beat, total 50,7 dtk.
+  Visual: 8 klip Pexels via browser task (5 sesuai request, 3 alternatif);
+    frame 8/8 terverifikasi bersih (gurun/ngarai/langit dramatis/unta).
+    Film grain + vignette + grading, title card "SIMSON vs DELILAH / Hakim-hakim 16",
+    caption per beat di zona aman. SFX: tidak ada (tidak ada library SFX lokal).
+  Render: rakit_shorts.py, SEMUA via ffmpeg-queue.sh, -preset veryfast.
+  File: youtube-otomatis/kisah-alkitab/2026-10-16/build/kisahalkitab-2026-10-16-simson-shorts.mp4
+  Packaging (gaya channel 100%): judul "✂️ Pria Terkuat Tumbang oleh Gunting?! #shorts #kisahalkitab #alkitab";
+    deskripsi = ringkasan + 📖 Hakim-hakim 16 + moral + CTA "Tulis AMIN"; 20 tags; thumb SIMSON vs DELILAH.
+  UPLOAD: BELUM — antre di retry-queue/kisahalkitab-2026-10-16.json untuk
+    watchdog-retry-upload-youtube 20:00 (ketukan user 20:00-23:00 WIB),
+    terjadwal tayang 2026-10-17 19:00 WIB. VERIFIKASI TAYANG: PENDING (menunggu upload).
+  Catatan: pola lama long/shorts bergantian → hari ini Shorts. Mulai besok pola baru
+    (3 shorts + 1 long/hari) berlaku via cron 16:11.
+====================================================================
+====================================================================
+RUN: 2026-10-16 16:11 WIB (kisahalkitab-harian, attempt 1, trigger: scheduled)
+HASIL: SKIP PRODUKSI — marker produced-kisahalkitab-2026-10-16.marker ada
+  (dibuat run manual 1:1 pukul 15:24 WIB). Tidak ada produksi ganda.
+  Status run manual 15:24 (terverifikasi 16:39 WIB):
+  - 1 video Shorts "Simson & Delilah" — file ADA, 12,5 MB, 50,7 dtk, thumb ADA.
+  - Upload: PENDING, antre di retry-queue/kisahalkitab-2026-10-16.json,
+    menunggu watchdog-retry-upload-youtube 20:00 + ketukan user 20:00–23:00 WIB.
+    Tayang terjadwal 2026-10-17 19:00 WIB.
+  - Pola baru (3 shorts + 1 long/hari) mulai berlaku besok 16:11; hari ini pola lama.
+====================================================================
+[2026-10-16 12:20 WIB] FIX-PRODUKSI selesai: 1 LONG + 2 SHORTS
+- LONG: kisahalkitab-2026-10-16-abraham-long-final.mp4 | 417.5s (6.96mnt) | 1280x720 | 59MB | topik: Abraham & ujian Ishak (Kejadian 22) | jadwal: 2026-10-17 19:00 WIB
+- SHORTS Yunus: kisahalkitab-2026-10-16-yunus-shorts.mp4 | 41.5s | 1080x1920 | 28MB | jadwal: 2026-10-17 09:00 WIB
+- SHORTS Dapur Api: kisahalkitab-2026-10-16-dapurapi-shorts.mp4 | 50.8s | 1080x1920 | 41MB | topik: Sadrakh/Mesakh/Abednego (Daniel 3) | jadwal: 2026-10-17 14:00 WIB
+- Simson shorts (sudah ada): 50.7s | jadwal: 2026-10-17 21:00 WIB | antre retry-queue watchdog 20:00
+- Semua: voiceover Mudiwa, footage Pexels, via ffmpeg-queue.sh, <100MB. TIDAK diupload (tunggu ketukan user 20:00-23:00).
+- upload-meta.txt: kisah-alkitab/2026-10-16-fix/upload-meta.txt

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "seo-mcp": {
+      "command": "npx",
+      "args": ["@autom8minds/seo-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "PAGESPEED_API_KEY": "",
+        "DATAFORSEO_LOGIN": "",
+        "DATAFORSEO_PASSWORD": "",
+        "MOZ_ACCESS_ID": "",
+        "MOZ_SECRET_KEY": "",
+        "GSC_CLIENT_ID": "",
+        "GSC_CLIENT_SECRET": "",
+        "GSC_REFRESH_TOKEN": ""
+      }
+    }
+  }
+}

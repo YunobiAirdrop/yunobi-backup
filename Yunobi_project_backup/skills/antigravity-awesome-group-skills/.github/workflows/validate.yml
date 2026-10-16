@@ -1,0 +1,26 @@
+name: Validate Skills
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "docs/contributors/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check skill structure
+        run: |
+          errors=0
+          for dir in skills/*/; do
+            if [ ! -f "${dir}SKILL.md" ]; then
+              echo "Missing SKILL.md in $dir"
+              errors=$((errors+1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "Found $errors errors"
+            exit 1
+          fi
+          echo "All skills validated successfully"

@@ -1,0 +1,81 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package membershipsLevel
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/membershipsLevel"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool    = "membershipsLevel-list"
+	listShort   = "List membership levels"
+	listLong    = "List membership levels. Use this tool to list membership levels."
+	listExample = `# List membership levels in JSON format
+yutu membershipsLevel list --output json`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id", "snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool,
+			func(input membershipsLevel.MembershipsLevel, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	membershipsLevelCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := membershipsLevel.NewMembershipsLevel(
+			membershipsLevel.WithParts(parts),
+			membershipsLevel.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

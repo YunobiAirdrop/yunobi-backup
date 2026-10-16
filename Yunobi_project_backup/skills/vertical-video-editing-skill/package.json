@@ -1,0 +1,52 @@
+{
+  "name": "vertical-video-editing-skill",
+  "version": "1.0.0",
+  "description": "A Claude Code / Claude Agent skill that turns a script + talking-head media + assets into a polished, creator-grade vertical (9:16) short rendered with HyperFrames — editorial look, A-roll/B-roll cutting, eased camera moves, themed motion graphics, layered SFX, and a render verification gate.",
+  "type": "module",
+  "bin": {
+    "vertical-video-editing-skill": "bin/install.mjs"
+  },
+  "scripts": {
+    "install-skill": "node bin/install.mjs",
+    "verify": "node skills/video-editing/scripts/verify-render.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "claude-skill",
+    "agent-skill",
+    "anthropic",
+    "video-editing",
+    "vertical-video",
+    "short-form-video",
+    "shorts",
+    "9-16",
+    "reels",
+    "tiktok",
+    "youtube-shorts",
+    "hyperframes",
+    "gsap",
+    "motion-graphics",
+    "ffmpeg",
+    "ai-video"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "adriiita",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adriiita/vertical-video-editing-skill.git"
+  },
+  "homepage": "https://github.com/adriiita/vertical-video-editing-skill#readme",
+  "bugs": {
+    "url": "https://github.com/adriiita/vertical-video-editing-skill/issues"
+  }
+}

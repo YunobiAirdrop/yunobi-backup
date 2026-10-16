@@ -1,0 +1,23 @@
+{
+  "browser_task_id": "browser-task:3349ab2b-3463-428b-b62e-767f92187292",
+  "channel": "jejakbuddha",
+  "date": "2026-10-16",
+  "description": "Kisagotami kehilangan bayinya dan menolak menerima kenyataan. Buddha memberinya satu tugas yang mustahil — dan tugas itulah yang menyembuhkannya. Kisah Buddha tentang duka, kehilangan, dan pengertian.\n#buddha #jejakbuddha #foryou",
+  "format": "Shorts 9:16",
+  "handle": "@JejakBuddha",
+  "note": "Channel BELUM verifikasi HP (17 channel unverified). Bila upload gagal karena batas harian -> tulis retry-queue/jejakbuddha-2026-10-16.json, JANGAN retry langsung.",
+  "schedule": "2026-10-17 19:00 WIB (Asia/Jakarta)",
+  "status": "upload_ready_parked_awaiting_final_approval",
+  "title": "Bayinya Meninggal, Buddha Malah Memberi Tugas Mustahil #buddha #jejakbuddha #foryou",
+  "topic": "Kisah Kisagotami & segenggam biji sesawi",
+  "video_duration_s": 65.4,
+  "video_file": "/home/hatch/workspace/youtube-otomatis/jejak-buddha/2026-10-16-shorts/jejakbuddha-2026-10-16-shorts.mp4",
+  "video_size_mb": 10.4,
+  "upload_flow": "file terupload, metadata terisi, berhenti sebelum klik final Schedule (sesuai instruksi)",
+  "next": "watchdog 20:00 WIB: steer browser task untuk klik final setelah ketukan user",
+  "video_url": "https://youtube.com/shorts/0xG5W7rbDt4",
+  "visibility_now": "private (disimpan sebagai pribadi)",
+  "processing": "selesai 100%, copyright check: tidak ada masalah",
+  "schedule_set": "2026-10-17 19:00 WIB terpasang, tinggal klik final Jadwalkan",
+  "errors": "tidak ada"
+}

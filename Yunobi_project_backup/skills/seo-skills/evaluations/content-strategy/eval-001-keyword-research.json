@@ -1,0 +1,16 @@
+{
+  "name": "Keyword Research Plan",
+  "description": "User wants to find keywords for a new content area.",
+  "userMessage": "I'm starting a blog about project management software. Can you help me find the best keywords to target?",
+  "expectedSkills": ["seo-content-strategy", "seo-mcp-tools-expert"],
+  "expectedTools": ["research_keywords"],
+  "expectedBehavior": [
+    "Generates seed keywords for project management software",
+    "Attempts research_keywords if API key available",
+    "If API unavailable, provides manual keyword research methodology",
+    "Classifies suggested keywords by search intent",
+    "Suggests a content cluster structure around the topic",
+    "Recommends pillar page and cluster page topics",
+    "Provides prioritization guidance (volume vs difficulty)"
+  ]
+}

@@ -1,0 +1,100 @@
+[
+  {
+    "id": 0,
+    "key": "organise",
+    "label": "Organise",
+    "proves": "One folder per video; tracks named CAM/CAM GS/MIC/SCREEN, one live, only the live one in the script, the green twin on CAM's clock: `descript tracks` prints clean",
+    "commands": ["descript tree", "descript tracks", "descript comps", "track script", "track mute"]
+  },
+  {
+    "id": 1,
+    "key": "cut",
+    "label": "Cut",
+    "proves": "Coach BEFORE the cut, pass 1 deterministic, pass 2 a dispatched read, proven on a fresh dump",
+    "commands": [
+      "take-stats.py",
+      "recut2.py",
+      "beatclock.py",
+      "candidates.py",
+      "restate.py",
+      "prove_cuts.py",
+      "descript cut",
+      "descript edits"
+    ]
+  },
+  {
+    "id": 2,
+    "key": "reorder",
+    "label": "Reorder",
+    "proves": "Intro's second pain and the outro's double ask moved into place, then a `descript marker` chapter on every section, the first at 0:00",
+    "commands": [
+      "arrange.py",
+      "descript move",
+      "beatclock.py",
+      "descript script",
+      "descript marker"
+    ]
+  },
+  {
+    "id": 3,
+    "key": "rhythm",
+    "label": "Rhythm",
+    "proves": "Slots named, the visual read dispatched, then a pack layout on every card",
+    "commands": [
+      "sequence.py",
+      "visuals.py",
+      "descript layout",
+      "layout pace",
+      "layout apply",
+      "layout cards"
+    ]
+  },
+  {
+    "id": 4,
+    "key": "music",
+    "label": "Music",
+    "proves": "Three options offered, nothing laid: the brand's music style searched in Descript Stock, three tracks long enough and named for the mood pulled into Music/ and put on the project page by `editor-os music offer`. `place` lays the one he keeps with `music set`. Style `none` skips the pass",
+    "commands": [
+      "editor-os music",
+      "descript stock music search",
+      "descript stock music pull",
+      "editor-os music offer",
+      "music set",
+      "descript music"
+    ]
+  },
+  {
+    "id": 5,
+    "key": "motion",
+    "label": "Motion",
+    "proves": "plan.md first, one clip per slot, watched, imported to Motion/, not placed yet",
+    "commands": ["fill", "roster", "watch.py", "clips.py", "descript import"]
+  },
+  {
+    "id": 6,
+    "key": "broll",
+    "label": "B-roll",
+    "proves": "Found, generated or captured; licensed into the ledger; imported to B-roll/, not placed yet",
+    "commands": ["source.py", "brollclip.py", "genvideo.py", "descript import"]
+  },
+  {
+    "id": 7,
+    "key": "review",
+    "label": "Review",
+    "proves": "The project page shows transcript, layouts, inserts and sound in order; he closes each, and plan.json holds every choice before placement",
+    "commands": [
+      "editor-os transcript",
+      "editor-os plan",
+      "editor-os wait",
+      "layout apply",
+      "descript pin"
+    ]
+  },
+  {
+    "id": 8,
+    "key": "handoff",
+    "label": "Handoff",
+    "proves": "`descript settings` reads clean, then hand over for the author's human pass. Never publish or export: he does that after watching",
+    "commands": ["descript settings", "get_project"]
+  }
+]

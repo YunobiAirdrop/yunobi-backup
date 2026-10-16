@@ -1,0 +1,37 @@
+{
+  "name": "seo-mcp-skills",
+  "description": "Expert skills for SEO auditing, optimization, and strategy",
+  "owner": {
+    "name": "Anurag Kalita",
+    "url": "https://github.com/Autom8Minds"
+  },
+  "plugins": [
+    {
+      "name": "seo-mcp-skills",
+      "source": "./",
+      "description": "Complete bundle: 7 expert skills for comprehensive SEO using seo-mcp MCP server. Includes skills for on-page optimization, technical auditing, content strategy, schema markup, backlink analysis, local SEO, and MCP tools usage.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Anurag Kalita",
+        "url": "https://github.com/Autom8Minds"
+      },
+      "category": "seo",
+      "keywords": [
+        "seo",
+        "on-page",
+        "off-page",
+        "technical-seo",
+        "schema",
+        "structured-data",
+        "backlinks",
+        "local-seo",
+        "content-strategy",
+        "mcp",
+        "skills"
+      ],
+      "homepage": "https://github.com/Autom8Minds/seo-skills",
+      "repository": "https://github.com/Autom8Minds/seo-skills",
+      "license": "MIT"
+    }
+  ]
+}

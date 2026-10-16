@@ -1,0 +1,60 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package playlistItem
+
+import (
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/spf13/cobra"
+)
+
+const (
+	short        = "Manage YouTube playlist items"
+	long         = "Manage YouTube playlist items. Use this tool to list items in a playlist, add new items, update items, or remove items."
+	titleUsage   = "Title of the playlist item"
+	descUsage    = "Description of the playlist item"
+	kindUsage    = "video|channel|playlist"
+	kvidUsage    = "ID of the video if kind is video"
+	kcidUsage    = "ID of the channel if kind is channel"
+	kpidUsage    = "ID of the playlist if kind is playlist"
+	vidUsage     = "Return the playlist items associated with the given video id"
+	cidUsage     = "ID that YouTube uses to uniquely identify the user that added the item to the playlist"
+	privacyUsage = "public|private|unlisted"
+)
+
+var (
+	ids         []string
+	title       string
+	description = new("")
+	kind        string
+	kVideoId    string
+	kChannelId  string
+	kPlaylistId string
+	videoId     string
+	playlistId  string
+	channelId   string
+	maxResults  int64
+	privacy     string
+	parts       []string
+
+	onBehalfOfContentOwner string
+)
+
+var playlistItemCmd = &cobra.Command{
+	Use:   "playlistItem",
+	Short: short,
+	Long:  long,
+	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
+		utils.ResetFlags(
+			map[string]**string{"description": &description}, cmd.Flags(),
+		)
+	},
+	Run: func(cmd *cobra.Command, _ []string) {
+		_ = cmd.Help()
+	},
+}
+
+func init() {
+	cmd.RootCmd.AddCommand(playlistItemCmd)
+}

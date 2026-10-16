@@ -1,0 +1,3 @@
+file 'beat-01.mp3'
+file 'beat-02.mp3'
+file 'beat-03.mp3'

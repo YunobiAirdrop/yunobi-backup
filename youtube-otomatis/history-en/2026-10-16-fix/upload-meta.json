@@ -1,0 +1,101 @@
+{
+ "channel_handle": "@EchoesOfThePast-e9m",
+ "ai_disclosure": true,
+ "audience": "not made for kids",
+ "long": {
+  "file": "mybuild/vlong/echoes-1453-long.mp4",
+  "thumbnail": "mybuild/vlong/thumbnail-long.jpg",
+  "title": "How a 21-Year-Old Ended the Middle Ages in 53 Days",
+  "description": "In 1453, a 21-year-old sultan broke walls that had stood for 1000 years \u2014 with a giant cannon and 70 warships dragged over a hill in one night. This is the true story of the Siege of Constantinople, the 53 days that ended the Middle Ages.\n\nHonestly, the wildest part isn't the cannon. It's that the old generals laughed at Mehmed \u2014 and he moved an entire fleet across dry land to prove them wrong. Which moment shocked you most: the ships over the hill, or the emperor's last ride? Tell me in the comments.\n\nCHAPTERS\n0:00 The Night of May 29, 1453\n0:54 The Last City of Rome\n1:55 The Boy Sultan\n2:45 The Monster Cannon\n3:44 The Siege Begins\n5:38 Ships Over the Hill\n6:49 The Final Weeks\n7:46 The Fall\n8:50 Aftermath\n9:40 Why It Still Matters\n\nSOURCES\n- Wikipedia: Fall of Constantinople\n- Roger Crowley, \"1453: The Holy War for Constantinople and the Clash of Islam and the West\"\n\n#FallOfConstantinople #SiegeOf1453 #MedievalHistory #MehmedII #HistoryDocumentary #TrueStory",
+  "tags": [
+   "fall of constantinople 1453",
+   "siege of constantinople",
+   "mehmed ii",
+   "mehmed the conqueror",
+   "theodosian walls",
+   "orban cannon",
+   "1453 siege",
+   "constantine xi",
+   "hagia sophia 1453",
+   "ottoman empire history",
+   "byzantine empire fall",
+   "medieval documentary",
+   "dramatic history",
+   "world history documentary",
+   "history stories",
+   "true story history",
+   "dark history",
+   "unsolved sieges",
+   "middle ages history",
+   "echoesofhistory"
+  ],
+  "chapters": [
+   {
+    "time": "0:00",
+    "title": "The Night of May 29, 1453"
+   },
+   {
+    "time": "0:54",
+    "title": "The Last City of Rome"
+   },
+   {
+    "time": "1:55",
+    "title": "The Boy Sultan"
+   },
+   {
+    "time": "2:45",
+    "title": "The Monster Cannon"
+   },
+   {
+    "time": "3:44",
+    "title": "The Siege Begins"
+   },
+   {
+    "time": "5:38",
+    "title": "Ships Over the Hill"
+   },
+   {
+    "time": "6:49",
+    "title": "The Final Weeks"
+   },
+   {
+    "time": "7:46",
+    "title": "The Fall"
+   },
+   {
+    "time": "8:50",
+    "title": "Aftermath"
+   },
+   {
+    "time": "9:40",
+    "title": "Why It Still Matters"
+   }
+  ],
+  "pinned_comment": "Ships over the hill or the monster cannon \u2014 which moment shocked you most?",
+  "schedule": "2026-10-17 19:00 Asia/Jakarta"
+ },
+ "shorts": [
+  {
+   "file": "mybuild/vs1/echoes-1453-short1-ships.mp4",
+   "title": "They Dragged 70 Warships Over a Hill \u2014 In ONE Night #shorts #history #siege",
+   "hook_text": "70 WARSHIPS.|ONE NIGHT.",
+   "schedule": "2026-10-17 09:00 Asia/Jakarta",
+   "description": "A 21-year-old dragged 70 warships over a hill in one night \u2014 and it broke a 1000-year-old city. Full story: [URL LONG]\n\n#history #siege #constantinople"
+  },
+  {
+   "file": "mybuild/vs2/echoes-1453-short2-cannon.mp4",
+   "title": "The Cannon That Needed 60 Oxen to Move #shorts #history #cannon",
+   "hook_text": "60 OXEN.|1 CANNON.",
+   "schedule": "2026-10-17 14:00 Asia/Jakarta",
+   "description": "60 oxen. One cannon. 1000-year-old walls. The Siege of Constantinople, 1453. Full story: [URL LONG]\n\n#history #cannon #medieval"
+  },
+  {
+   "file": "mybuild/vs3/echoes-1453-short3-walls.mp4",
+   "title": "1000 Years of Walls Fell in 53 Days #shorts #history #constantinople",
+   "hook_text": "1000 YEARS.|53 DAYS.",
+   "schedule": "2026-10-17 21:00 Asia/Jakarta",
+   "description": "Walls that survived 1000 years fell in 53 days. Constantinople, 1453. Full story: [URL LONG]\n\n#history #constantinople #medieval"
+  }
+ ],
+ "build_note": "Isolated build in mybuild/ (race with parallel worker on fix/); long+3 shorts rendered via ffmpeg-queue.sh"
+}

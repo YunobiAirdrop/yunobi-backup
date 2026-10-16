@@ -1,0 +1,46 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: cap,DejaVu Sans,52,&H00FFFFFF,&H99000000,-1,0,1,3,1,2,40,40,300,1
+Style: big,DejaVu Sans,72,&H0000FFFF,&H99000000,-1,0,1,4,1,8,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Text
+Dialogue: 0,0:00:00.00,0:00:01.87,cap,Bayinya sudah meninggal. Tapi
+Dialogue: 0,0:00:01.82,0:00:03.68,cap,ibu ini bersumpah akan
+Dialogue: 0,0:00:03.63,0:00:05.50,cap,menghidupkannya kembali.
+Dialogue: 0,0:00:05.80,0:00:08.40,cap,Namanya Kisagotami. Anak satu-satunya
+Dialogue: 0,0:00:08.35,0:00:10.96,cap,meninggal saat masih bayi.
+Dialogue: 0,0:00:11.26,0:00:13.02,cap,Ia menggendong jasad kecil
+Dialogue: 0,0:00:12.97,0:00:14.73,cap,itu dari rumah ke
+Dialogue: 0,0:00:14.68,0:00:16.44,cap,rumah, memohon agar anaknya
+Dialogue: 0,0:00:16.39,0:00:18.15,cap,dihidupkan.
+Dialogue: 0,0:00:18.45,0:00:20.42,cap,Semua orang berkata ia
+Dialogue: 0,0:00:20.37,0:00:22.34,cap,sudah gila karena duka.
+Dialogue: 0,0:00:22.64,0:00:24.19,cap,Lalu seseorang membawanya menghadap
+Dialogue: 0,0:00:24.14,0:00:25.69,cap,Buddha.
+Dialogue: 0,0:00:25.99,0:00:27.89,cap,Buddha berkata: bawakan Aku
+Dialogue: 0,0:00:27.84,0:00:29.74,cap,segenggam biji sesawi, dari
+Dialogue: 0,0:00:29.69,0:00:31.58,cap,rumah yang tak pernah
+Dialogue: 0,0:00:31.53,0:00:33.43,cap,mengalami kematian.
+Dialogue: 0,0:00:33.73,0:00:36.04,cap,Ia berlari penuh harap.
+Dialogue: 0,0:00:35.99,0:00:38.31,cap,Tapi di setiap rumah
+Dialogue: 0,0:00:38.26,0:00:40.57,cap,ada cerita kehilangan: ayah,
+Dialogue: 0,0:00:40.52,0:00:42.83,cap,ibu, anak, saudara.
+Dialogue: 0,0:00:43.13,0:00:44.82,cap,Ia pun berhenti. Dan
+Dialogue: 0,0:00:44.77,0:00:46.46,cap,saat itu, ia akhirnya
+Dialogue: 0,0:00:46.41,0:00:48.10,cap,mengerti.
+Dialogue: 0,0:00:48.40,0:00:50.43,cap,Kematian bukan musibah yang
+Dialogue: 0,0:00:50.38,0:00:52.42,cap,menimpa dirinya saja. Ia
+Dialogue: 0,0:00:52.37,0:00:54.40,cap,milik semua yang hidup.
+Dialogue: 0,0:00:54.70,0:00:57.06,cap,Ia menguburkan anaknya, dan
+Dialogue: 0,0:00:57.01,0:00:59.36,cap,hatinya akhirnya sembuh.
+Dialogue: 0,0:00:59.66,0:01:01.83,cap,Kadang yang kita butuhkan
+Dialogue: 0,0:01:01.78,0:01:03.96,cap,bukan obat, melainkan pengertian.
+Dialogue: 1,0:00:00.30,0:00:03.20,big,{\pos(360,420)}IBU INI TAK TERIMA\NANAKNYA MATI
+Dialogue: 1,0:01:02.80,0:01:05.20,big,{\pos(360,560)}JEJAK BUDDHA

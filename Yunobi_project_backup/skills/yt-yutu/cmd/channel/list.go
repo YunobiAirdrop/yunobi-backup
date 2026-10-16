@@ -1,0 +1,132 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package channel
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/channel"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool     = "channel-list"
+	listIdsUsage = "Return the channels with the specified Ids"
+	listShort    = "List channels"
+	listLong     = "List channels. Use this tool to list channels."
+	listExample  = `# List my channel info
+yutu channel list --for mine
+# List channel by handle
+yutu channel list --forHandle @GoogleDevelopers
+# List channel by ID in JSON format
+yutu channel list --ids UC_x5XG1OV2P6uZZ5FSM9Ttw --output json
+# List channels in table format
+yutu channel list --maxResults 10 --output table`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"category_id":  {Type: "string", Description: cidUsage},
+		"for_handle":   {Type: "string", Description: fhUsage},
+		"for_username": {Type: "string", Description: fuUsage},
+		"hl":           {Type: "string", Description: hlUsage},
+		"ids": {
+			Type: "array", Items: &jsonschema.Schema{Type: "string"},
+			Description: listIdsUsage,
+			Default:     jsontext.Value(`[]`),
+		},
+		"for": {
+			Type: "string", Description: forUsage,
+			Enum: []any{"managedByMe", "mine", "mySubscribers"},
+		},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"),
+			Minimum: new(float64(0)),
+		},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet","status"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool, func(input channel.Channel, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	channelCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringVarP(
+		&categoryId, "categoryId", "g", "", cidUsage,
+	)
+	listCmd.Flags().StringVarP(
+		&forHandle, "forHandle", "d", "", fhUsage,
+	)
+	listCmd.Flags().StringVarP(
+		&forUsername, "forUsername", "u", "", fuUsage,
+	)
+	listCmd.Flags().StringVarP(&hl, "hl", "l", "", hlUsage)
+	listCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, listIdsUsage)
+	listCmd.Flags().StringVarP(&channelFor, "for", "F", "", forUsage)
+	listCmd.Flags().Int64VarP(
+		&maxResults, "maxResults", "n", 5, pkg.MRUsage,
+	)
+	listCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet", "status"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := channel.NewChannel(
+			channel.WithCategoryId(categoryId),
+			channel.WithForHandle(forHandle),
+			channel.WithForUsername(forUsername),
+			channel.WithHl(hl),
+			channel.WithIds(ids),
+			channel.WithFor(channelFor),
+			channel.WithMaxResults(maxResults),
+			channel.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			channel.WithParts(parts),
+			channel.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

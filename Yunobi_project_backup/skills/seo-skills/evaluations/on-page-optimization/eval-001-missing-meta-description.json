@@ -1,0 +1,14 @@
+{
+  "name": "Missing Meta Description",
+  "description": "User has a page with no meta description. Skill should identify the issue and provide recommendations.",
+  "userMessage": "Can you check the SEO of https://example.com/blog/my-first-post? I think something might be wrong with the search snippet.",
+  "expectedSkills": ["seo-on-page-optimization", "seo-mcp-tools-expert"],
+  "expectedTools": ["analyze_page", "generate_meta_suggestions"],
+  "expectedBehavior": [
+    "Runs analyze_page on the URL",
+    "Identifies missing meta description as a High severity issue",
+    "Explains the impact on CTR and search appearance",
+    "Suggests a meta description following the 150-160 character rule",
+    "Recommends including a call-to-action in the description"
+  ]
+}

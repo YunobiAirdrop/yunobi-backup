@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+*.tgz
+.npm/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Local env
+.env
+.env.local

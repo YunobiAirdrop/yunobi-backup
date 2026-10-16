@@ -1,0 +1,112 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package activity
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/activity"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool    = "activity-list"
+	listShort   = "List activities"
+	listLong    = "List activities. Use this tool to list activities such as uploads, likes, and favorites."
+	listExample = `# List my activities
+yutu activity list --for mine
+# List activities by channel ID with limit
+yutu activity list --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw --maxResults 10
+# List activities after a date in JSON format
+yutu activity list --publishedAfter 2024-01-01T00:00:00Z --output json`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"channel_id": {Type: "string", Description: ciUsage},
+		"for": {
+			Type: "string", Description: forUsage,
+			Enum: []any{"home", "mine"},
+		},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"), Minimum: new(float64(0)),
+		},
+		"published_after":  {Type: "string", Description: paUsage},
+		"published_before": {Type: "string", Description: pbUsage},
+		"region_code":      {Type: "string", Description: rcUsage},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet","contentDetails"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool, func(input activity.Activity, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	activityCmd.AddCommand(listCmd)
+	listCmd.Flags().StringVarP(&channelId, "channelId", "c", "", ciUsage)
+	listCmd.Flags().StringVarP(&activityFor, "for", "F", "", forUsage)
+	listCmd.Flags().Int64VarP(&maxResults, "maxResults", "n", 5, pkg.MRUsage)
+	listCmd.Flags().StringVarP(
+		&publishedAfter, "publishedAfter", "a", "", paUsage,
+	)
+	listCmd.Flags().StringVarP(
+		&publishedBefore, "publishedBefore", "b", "", pbUsage,
+	)
+	listCmd.Flags().StringVarP(&regionCode, "regionCode", "r", "", rcUsage)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet", "contentDetails"},
+		pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := activity.NewActivity(
+			activity.WithChannelId(channelId),
+			activity.WithFor(activityFor),
+			activity.WithMaxResults(maxResults),
+			activity.WithPublishedAfter(publishedAfter),
+			activity.WithPublishedBefore(publishedBefore),
+			activity.WithRegionCode(regionCode),
+			activity.WithParts(parts),
+			activity.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

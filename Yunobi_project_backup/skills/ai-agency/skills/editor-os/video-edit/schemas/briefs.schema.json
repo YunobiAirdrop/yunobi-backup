@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "briefs.json: the visual read's beats. An agent writes it off `visuals.py brief`; `visuals.py check` reads it.",
+  "type": "array",
+  "items": {
+    "anyOf": [
+      {
+        "type": "object",
+        "required": ["i", "line", "adds"],
+        "additionalProperties": false,
+        "properties": {
+          "i": { "type": "integer", "minimum": 0 },
+          "line": { "type": "string", "pattern": "\\S" },
+          "adds": { "enum": ["quantity", "consequence", "structure", "recognition"] },
+          "shows": { "type": "string" }
+        }
+      },
+      {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 4,
+        "prefixItems": [
+          { "type": "integer", "minimum": 0 },
+          { "type": "string", "pattern": "\\S" },
+          { "enum": ["quantity", "consequence", "structure", "recognition"] },
+          { "type": "string" }
+        ]
+      }
+    ]
+  }
+}

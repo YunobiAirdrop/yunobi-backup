@@ -1,0 +1,17 @@
+UPLOAD INSTRUCTIONS — Dark Case Files (@TrueCaseFilesTV)
+Video file: /home/hatch/workspace/youtube-otomatis/truecrime-en/2026-10-16/dark-case-files-1960-chicago-detective.mp4
+(SIZE: 29.52 MB — di bawah batas 100MB ✓ | durasi 8:35 | 1280x720 | audio AAC ✓)
+
+1. Buka YouTube Studio (channel @TrueCaseFilesTV) → Create → Upload videos.
+2. Pilih file MP4 di atas.
+3. TITLE (copy persis): The Detective Who Hid a Murder for 65 Years
+4. DESCRIPTION (copy persis dari metadata.json).
+5. TAGS: copy 20 tags dari metadata.json.
+6. Audience: "No, it's not made for kids".
+7. CENTANG: "Altered content" / AI disclosure = YES (video memakai gambar AI + voiceover AI).
+8. Visibility: Schedule → 17 Oktober 2026, 19:00 WIB (Asia/Jakarta).
+9. Thumbnail: upload custom — gunakan frame title card (atau buat dari beats/beat-001.webp) dengan teks overlay "BADGE OF BETRAYAL" (maks 3 kata, jangan ulang kata dari judul).
+10. Publish terjadwal. Verifikasi video muncul di daftar "Scheduled".
+
+CATATAN: upload membutuhkan ketukan persetujuan user 20:00–23:00 WIB di aplikasi Muse.
+Semua aset sudah final dan terverifikasi (resolusi 1280x720, ada audio, <100MB).

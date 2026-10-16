@@ -1,0 +1,39 @@
+====================================================================
+RUN: 2026-10-16 15:24 WIB (tinybuilders-shorts-harian, attempt 1, manual 1:1)
+KONSEP: "Tiny Lighthouse That Actually Lights Up" — miniatur mercusuar yang
+  lampunya benar-benar menyala (gaya channel per gaya-channel.md #8: miniatur
+  yang BENAR-BENAR berfungsi; hashtag channel #satisfying #miniaturebuilding #foryou).
+  Naskah + 3 varian hook A/B/C di miniatur-ai/2026-10-16/naskah.md (dipilih: A curiosity-gap).
+PRODUKSI:
+  - 6 gambar AI 9:16 (1152x2048) via media.generate_image, Ken Burns vertikal
+  - VO Inggris (Warm, /opt/hatch/bin/tts), 6 baris, total VO 21.2s
+  - Audio: VO + ambience laut sintetis + aksen klik hook (SFX rekaman asli TIDAK
+    tersedia di VM — repo hanya berisi manifest tanpa file; dicatat jujur)
+  - rakit_shorts.py (diperbaiki: hook text multi-baris) + caption_pass.sh
+    (caption safe-zone 9:16, title card "TINY BUILDERS" di beat akhir)
+  - Semua render via ./ffmpeg-queue.sh (preset veryfast)
+HASIL: tinybuilders-shorts-2026-10-16.mp4 — 720x1280, 35.0s, 3.8MB (<100MB OK).
+  Frame hook/caption/end terverifikasi visual (teks dalam bingkai, safe zone OK).
+  DEVIASI: body menyebut "scale 1280x720" (landscape) — dipakai 720x1280 (9:16)
+  agar terklasifikasi sebagai YouTube Shorts.
+UPLOAD: BELUM — menunggu ketukan persetujuan user 20:00-23:00 WIB (browser task
+  butuh approval; run detached tidak bisa menunggu). Paket upload siap:
+  ~/workspace/youtube-otomatis/upload-ready/tinybuilders-2026-10-16.json
+  (judul+deskripsi+tag, jadwal 2026-10-17 19:00 WIB, AI disclosure YES).
+  Judul: "This Tiny Lighthouse Actually Lights Up! #satisfying #miniaturebuilding #foryou"
+RETRY-QUEUE: tidak ada (tidak ada kegagalan upload; tidak ada batas harian tersentuh).
+====================================================================
+====================================================================
+RUN: 2026-10-16 16:11 WIB (tinybuilders-shorts-harian, scheduled, attempt 1)
+IDEMPOTENSI: marker produced-tinybuilders-2026-10-16.marker ADA (dibuat run
+  manual 1:1 jam 15:24 WIB) → produksi DILEWATI, lapor status saja.
+  (Pola baru 3 shorts + 1 long berlaku mulai jadwal 16:11 esok hari.)
+STATUS TER VERIFIKASI:
+  - Video: miniatur-ai/2026-10-16/tinybuilders-shorts-2026-10-16.mp4
+    (720x1280 9:16, 35.0s, 3.8MB <100MB OK) — file ada, ukuran cocok.
+  - Paket upload: upload-ready/tinybuilders-2026-10-16.json — READY,
+    judul sesuai gaya channel, 3 hashtag di akhir judul, AI disclosure YES,
+    jadwal terjadwal 2026-10-17 19:00 WIB.
+  - Upload: BELUM — menunggu ketukan persetujuan user 20:00-23:00 WIB
+    (browser task butuh approval; run detached tidak bisa menunggu).
+  - Retry queue: tidak ada entri tinybuilders (tidak ada kegagalan).

@@ -1,0 +1,133 @@
+// Copyright 2026 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package liveBroadcast
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+	"strings"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/liveBroadcast"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	transitionTool    = "liveBroadcast-transition"
+	transitionConfirm = "Transition live broadcast(s) %s to %s"
+	transitionBsUsage = "Broadcast status to transition to (testing, live, complete)"
+	transitionShort   = "Transition a live broadcast"
+	transitionLong    = "Transition a live broadcast. Use this tool to change the status of a live broadcast (e.g., go live, end broadcast)."
+	transitionExample = `# Transition a broadcast to live
+yutu liveBroadcast transition --ids broadcast123 --broadcastStatus live
+# End a broadcast
+yutu liveBroadcast transition --ids broadcast123 --broadcastStatus complete`
+)
+
+var transitionInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"ids", "broadcast_status"},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: "IDs of the live broadcasts to transition",
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"broadcast_status": {
+			Type: "string", Enum: []any{"testing", "live", "complete"},
+			Description: transitionBsUsage,
+		},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"on_behalf_of_content_owner_channel": {
+			Type: "string", Description: obococUsage,
+		},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet","status"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: transitionTool, Title: transitionShort, Description: transitionLong,
+			InputSchema: transitionInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			transitionTool, cobramcp.ConfirmThen(
+				func(input liveBroadcast.LiveBroadcast) string {
+					return fmt.Sprintf(
+						transitionConfirm, strings.Join(input.Ids, ", "),
+						input.BroadcastStatus,
+					)
+				},
+				func(input liveBroadcast.LiveBroadcast, w io.Writer) error {
+					return input.Transition(w)
+				},
+			),
+		),
+	)
+	liveBroadcastCmd.AddCommand(transitionCmd)
+
+	transitionCmd.Flags().StringSliceVarP(
+		&ids, "ids", "i", []string{}, "IDs of the broadcasts to transition",
+	)
+	transitionCmd.Flags().StringVarP(
+		&broadcastStatus, "broadcastStatus", "s", "", transitionBsUsage,
+	)
+	transitionCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	transitionCmd.Flags().StringVarP(
+		&onBehalfOfContentOwnerChannel, "onBehalfOfContentOwnerChannel", "B", "",
+		obococUsage,
+	)
+	transitionCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet", "status"}, pkg.PartsUsage,
+	)
+	transitionCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	transitionCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = transitionCmd.MarkFlagRequired("ids")
+	_ = transitionCmd.MarkFlagRequired("broadcastStatus")
+}
+
+var transitionCmd = &cobra.Command{
+	Use:     "transition",
+	Short:   transitionShort,
+	Long:    transitionLong,
+	Example: transitionExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(
+			c,
+			fmt.Sprintf(transitionConfirm, strings.Join(ids, ", "), broadcastStatus),
+		)
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := liveBroadcast.NewLiveBroadcast(
+			liveBroadcast.WithIds(ids),
+			liveBroadcast.WithBroadcastStatus(broadcastStatus),
+			liveBroadcast.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			liveBroadcast.WithOnBehalfOfContentOwnerChannel(onBehalfOfContentOwnerChannel),
+			liveBroadcast.WithParts(parts),
+			liveBroadcast.WithOutput(output),
+		)
+		return input.Transition(c.OutOrStdout())
+	},
+}

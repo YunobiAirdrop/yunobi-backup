@@ -1,0 +1,11 @@
+# Enable Bzlmod for every Bazel command
+common --enable_bzlmod
+
+# Avoid convenience symlinks that confuse `go` tooling
+build --experimental_convenience_symlinks=ignore
+
+# build, test, and run commands
+build --stamp --workspace_status_command=./scripts/bazel-status.sh
+test --stamp --workspace_status_command=./scripts/bazel-status.sh
+coverage --combined_report=lcov
+run --stamp --workspace_status_command=./scripts/bazel-status.sh

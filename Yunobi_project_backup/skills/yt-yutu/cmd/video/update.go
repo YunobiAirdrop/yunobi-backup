@@ -1,0 +1,155 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package video
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+	"strings"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/eat-pray-ai/yutu/pkg/video"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	updateTool      = "video-update"
+	updateIdUsage   = "ID of the video to update"
+	updateLangUsage = "Language of the video"
+	updateConfirm   = "Update video: %s"
+	updateShort     = "Update a video"
+	updateLong      = "Update a video. Use this tool to update a video."
+	updateExample   = `# Update video title
+yutu video update --id dQw4w9WgXcQ --title 'New Title'
+# Update video description and privacy
+yutu video update --id dQw4w9WgXcQ --description 'Updated description' --privacy public
+# Schedule a private video to publish later
+yutu video update --id dQw4w9WgXcQ --privacy private --publishAt 2026-08-18T15:00:00Z
+# Update video tags and category
+yutu video update --id dQw4w9WgXcQ --tags 'music,pop,2024' --categoryId 10`
+)
+
+var updateInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"ids"},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: updateIdUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"title":       {Type: "string", Description: titleUsage},
+		"description": {Type: "string", Description: descUsage},
+		"tags": {
+			Type: "array", Description: tagsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"language": {Type: "string", Description: updateLangUsage},
+		"license": {
+			Type: "string", Enum: []any{"youtube", "creativeCommon"},
+			Description: licenseUsage,
+		},
+		"thumbnail":   {Type: "string", Description: thumbnailUsage},
+		"playlist_id": {Type: "string", Description: pidUsage},
+		"category_id": {Type: "string", Description: caidUsage},
+		"privacy": {
+			Type: "string", Description: privacyUsage,
+			Enum: []any{"public", "private", "unlisted"},
+		},
+		"publish_at":               {Type: "string", Description: paUsage},
+		"embeddable":               {Type: "boolean", Description: embeddableUsage},
+		"contains_synthetic_media": {Type: "boolean", Description: csmUsage},
+		"recording_date":           {Type: "string", Description: rdUsage},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: updateTool, Title: updateShort, Description: updateLong,
+			InputSchema: updateInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  false,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			updateTool, cobramcp.ConfirmThen(
+				func(input video.Video) string {
+					return fmt.Sprintf(updateConfirm, strings.Join(input.Ids, ", "))
+				},
+				func(input video.Video, w io.Writer) error {
+					input.MaxResults = 1
+					return input.Update(w)
+				},
+			),
+		),
+	)
+	videoCmd.AddCommand(updateCmd)
+
+	updateCmd.Flags().StringSliceVarP(&ids, "id", "i", []string{}, updateIdUsage)
+	updateCmd.Flags().StringVarP(&title, "title", "t", "", titleUsage)
+	updateCmd.Flags().StringVarP(description, "description", "d", "", descUsage)
+	updateCmd.Flags().StringSliceVarP(&tags, "tags", "a", []string{}, tagsUsage)
+	updateCmd.Flags().StringVarP(language, "language", "l", "", updateLangUsage)
+	updateCmd.Flags().StringVarP(&license, "license", "L", "", licenseUsage)
+	updateCmd.Flags().StringVarP(&thumbnail, "thumbnail", "u", "", thumbnailUsage)
+	updateCmd.Flags().StringVarP(&playListId, "playlistId", "y", "", pidUsage)
+	updateCmd.Flags().StringVarP(&categoryId, "categoryId", "g", "", caidUsage)
+	updateCmd.Flags().StringVarP(&privacy, "privacy", "p", "", privacyUsage)
+	updateCmd.Flags().StringVarP(publishAt, "publishAt", "U", "", paUsage)
+	updateCmd.Flags().BoolVarP(
+		embeddable, "embeddable", "E", true, embeddableUsage,
+	)
+	updateCmd.Flags().BoolVarP(
+		containsSyntheticMedia, "containsSyntheticMedia", "M", false, csmUsage,
+	)
+	updateCmd.Flags().StringVarP(recordingDate, "recordingDate", "D", "", rdUsage)
+	updateCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	updateCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = updateCmd.MarkFlagRequired("id")
+}
+
+var updateCmd = &cobra.Command{
+	Use:     "update",
+	Short:   updateShort,
+	Long:    updateLong,
+	Example: updateExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(
+			c, fmt.Sprintf(updateConfirm, strings.Join(ids, ", ")),
+		)
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := video.NewVideo(
+			video.WithIds(ids),
+			video.WithTitle(title),
+			video.WithDescription(description),
+			video.WithTags(tags),
+			video.WithLanguage(language),
+			video.WithLicense(license),
+			video.WithPlaylistId(playListId),
+			video.WithThumbnail(thumbnail),
+			video.WithCategory(categoryId),
+			video.WithPrivacy(privacy),
+			video.WithPublishAt(publishAt),
+			video.WithEmbeddable(embeddable),
+			video.WithContainsSyntheticMedia(containsSyntheticMedia),
+			video.WithRecordingDate(recordingDate),
+			video.WithMaxResults(1),
+			video.WithOutput(output),
+		)
+		return input.Update(c.OutOrStdout())
+	},
+}

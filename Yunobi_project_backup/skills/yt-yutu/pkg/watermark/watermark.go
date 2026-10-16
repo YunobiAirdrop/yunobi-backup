@@ -1,0 +1,140 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package watermark
+
+import (
+	"errors"
+	"fmt"
+	"io"
+
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"google.golang.org/api/youtube/v3"
+)
+
+var (
+	errSetWatermark   = errors.New("failed to set watermark")
+	errUnsetWatermark = errors.New("failed to unset watermark")
+)
+
+type Watermark struct {
+	common.Fields
+	File            string `yaml:"file" json:"file,omitempty"`
+	InVideoPosition string `yaml:"in_video_position" json:"in_video_position,omitempty"`
+	DurationMs      uint64 `yaml:"duration_ms" json:"duration_ms,omitzero"`
+	OffsetMs        uint64 `yaml:"offset_ms" json:"offset_ms,omitzero"`
+	OffsetType      string `yaml:"offset_type" json:"offset_type,omitempty"`
+}
+
+type IWatermark interface {
+	Set(io.Writer) error
+	Unset(io.Writer) error
+}
+
+type Option func(*Watermark)
+
+func NewWatermark(opts ...Option) IWatermark {
+	w := &Watermark{Fields: common.Fields{}}
+	for _, opt := range opts {
+		opt(w)
+	}
+	return w
+}
+
+func (w *Watermark) Set(writer io.Writer) error {
+	if err := w.EnsureService(); err != nil {
+		return err
+	}
+	file, err := pkg.OpenFile(w.File)
+	if err != nil {
+		return errors.Join(errSetWatermark, err)
+	}
+	defer func() { _ = file.Close() }()
+
+	inVideoBranding := &youtube.InvideoBranding{
+		Position: &youtube.InvideoPosition{},
+		Timing:   &youtube.InvideoTiming{},
+	}
+	if w.InVideoPosition != "" {
+		inVideoBranding.Position.Type = "corner"
+		inVideoBranding.Position.CornerPosition = w.InVideoPosition
+	}
+	if w.DurationMs != 0 {
+		inVideoBranding.Timing.DurationMs = w.DurationMs
+	}
+	if w.OffsetMs != 0 {
+		inVideoBranding.Timing.OffsetMs = w.OffsetMs
+	}
+	if w.OffsetType != "" {
+		inVideoBranding.Timing.Type = w.OffsetType
+	}
+
+	call := w.Service.Watermarks.Set(w.ChannelId, inVideoBranding).Media(file)
+	if w.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(w.OnBehalfOfContentOwner)
+	}
+
+	err = call.Do()
+	if err != nil {
+		return errors.Join(errSetWatermark, err)
+	}
+
+	_, _ = fmt.Fprintf(writer, "Watermark set for channel %s\n", w.ChannelId)
+	return nil
+}
+
+func (w *Watermark) Unset(writer io.Writer) error {
+	if err := w.EnsureService(); err != nil {
+		return err
+	}
+	call := w.Service.Watermarks.Unset(w.ChannelId)
+	if w.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(w.OnBehalfOfContentOwner)
+	}
+
+	err := call.Do()
+	if err != nil {
+		return errors.Join(errUnsetWatermark, err)
+	}
+
+	_, _ = fmt.Fprintf(writer, "Watermark unset for channel %s\n", w.ChannelId)
+	return nil
+}
+
+func WithFile(file string) Option {
+	return func(w *Watermark) {
+		w.File = file
+	}
+}
+
+func WithInVideoPosition(inVideoPosition string) Option {
+	return func(w *Watermark) {
+		w.InVideoPosition = inVideoPosition
+	}
+}
+
+func WithDurationMs(durationMs uint64) Option {
+	return func(w *Watermark) {
+		w.DurationMs = durationMs
+	}
+}
+
+func WithOffsetMs(offsetMs uint64) Option {
+	return func(w *Watermark) {
+		w.OffsetMs = offsetMs
+	}
+}
+
+func WithOffsetType(offsetType string) Option {
+	return func(w *Watermark) {
+		w.OffsetType = offsetType
+	}
+}
+
+var (
+	WithChannelId = common.WithChannelId[*Watermark]
+	WithService   = common.WithService[*Watermark]
+
+	WithOnBehalfOfContentOwner = common.WithOnBehalfOfContentOwner[*Watermark]
+)

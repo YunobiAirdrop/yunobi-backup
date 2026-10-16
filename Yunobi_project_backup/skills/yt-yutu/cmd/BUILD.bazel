@@ -1,0 +1,30 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "auth.go",
+        "mcp.go",
+        "root.go",
+        "version.go",
+    ],
+    importpath = "github.com/eat-pray-ai/yutu/cmd",
+    visibility = ["//visibility:public"],
+    x_defs = {
+        "Version": "{STABLE_VERSION}",
+        "Commit": "{STABLE_GIT_SHORT_SHA}",
+        "CommitDate": "{STABLE_GIT_COMMIT_DATE}",
+        "Os": "{STABLE_OS}",
+        "Arch": "{STABLE_ARCH}",
+        "Builder": "{STABLE_Builder}",
+    },
+    deps = [
+        "//pkg",
+        "//pkg/auth",
+        "//pkg/common",
+        "@com_github_eat_pray_ai_cobra_mcp//:cobra-mcp",
+        "@com_github_modelcontextprotocol_go_sdk//mcp",
+        "@com_github_savioxavier_termlink//:termlink",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

@@ -1,0 +1,151 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package caption
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/caption"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	updateTool    = "caption-update"
+	updateConfirm = "Update caption for video %s"
+	updateShort   = "Update a caption"
+	updateLong    = "Update a caption. Use this tool to update a caption."
+	updateExample = `# Publish a draft caption
+yutu caption update --videoId dQw4w9WgXcQ --isDraft=false
+# Update caption language and name
+yutu caption update --videoId dQw4w9WgXcQ --language en --name English
+# Update caption file
+yutu caption update --videoId dQw4w9WgXcQ --file updated.srt`
+)
+
+var updateInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"video_id"},
+	Properties: map[string]*jsonschema.Schema{
+		"file": {Type: "string", Description: fileUsage},
+		"audio_track_type": {
+			Type: "string", Description: attUsage,
+			Enum: []any{"unknown", "primary", "commentary", "descriptive"},
+		},
+		"is_auto_synced": {Type: "boolean", Description: iasUsage},
+		"is_cc":          {Type: "boolean", Description: iscUsage},
+		"is_draft":       {Type: "boolean", Description: isdUsage},
+		"is_easy_reader": {Type: "boolean", Description: iserUsage},
+		"is_large":       {Type: "boolean", Description: islUsage},
+		"language":       {Type: "string", Description: languageUsage},
+		"name":           {Type: "string", Description: nameUsage},
+		"track_kind": {
+			Type: "string", Description: tkUsage,
+			Enum: []any{"standard", "ASR", "forced"},
+		},
+		"video_id":                   {Type: "string", Description: vidUsage},
+		"on_behalf_of":               {Type: "string", Description: pkg.OBOUsage},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: updateTool, Title: updateShort, Description: updateLong,
+			InputSchema: updateInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  false,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			updateTool, cobramcp.ConfirmThen(
+				func(input caption.Caption) string {
+					target := input.VideoId
+					if input.File != "" {
+						target += " with file: " + input.File
+					}
+					return fmt.Sprintf(updateConfirm, target)
+				},
+				func(input caption.Caption, w io.Writer) error {
+					return input.Update(w)
+				},
+			),
+		),
+	)
+	captionCmd.AddCommand(updateCmd)
+
+	updateCmd.Flags().StringVarP(&file, "file", "f", "", fileUsage)
+	updateCmd.Flags().StringVarP(
+		&audioTrackType, "audioTrackType", "a", "unknown", attUsage,
+	)
+	updateCmd.Flags().BoolVarP(
+		isAutoSynced, "isAutoSynced", "A", true, iasUsage,
+	)
+	updateCmd.Flags().BoolVarP(isCC, "isCC", "C", false, iscUsage)
+	updateCmd.Flags().BoolVarP(isDraft, "isDraft", "D", false, isdUsage)
+	updateCmd.Flags().BoolVarP(
+		isEasyReader, "isEasyReader", "E", false, iserUsage,
+	)
+	updateCmd.Flags().BoolVarP(isLarge, "isLarge", "L", false, islUsage)
+	updateCmd.Flags().StringVarP(&language, "language", "l", "", languageUsage)
+	updateCmd.Flags().StringVarP(&name, "name", "n", "", nameUsage)
+	updateCmd.Flags().StringVarP(
+		&trackKind, "trackKind", "t", "standard", tkUsage,
+	)
+	updateCmd.Flags().StringVarP(&videoId, "videoId", "v", "", vidUsage)
+	updateCmd.Flags().StringVarP(&onBehalfOf, "onBehalfOf", "b", "", pkg.OBOUsage)
+	updateCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "B", "", pkg.OBOCOUsage,
+	)
+	updateCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	updateCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = updateCmd.MarkFlagRequired("videoId")
+}
+
+var updateCmd = &cobra.Command{
+	Use:     "update",
+	Short:   updateShort,
+	Long:    updateLong,
+	Example: updateExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		target := videoId
+		if file != "" {
+			target += " with file: " + file
+		}
+		return utils.ConfirmPreRun(c, fmt.Sprintf(updateConfirm, target))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := caption.NewCaption(
+			caption.WithFile(file),
+			caption.WithAudioTrackType(audioTrackType),
+			caption.WithIsAutoSynced(isAutoSynced),
+			caption.WithIsCC(isCC),
+			caption.WithIsDraft(isDraft),
+			caption.WithIsEasyReader(isEasyReader),
+			caption.WithIsLarge(isLarge),
+			caption.WithLanguage(language),
+			caption.WithName(name),
+			caption.WithTrackKind(trackKind),
+			caption.WithVideoId(videoId),
+			caption.WithOnBehalfOf(onBehalfOf),
+			caption.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			caption.WithOutput(output),
+		)
+		return input.Update(c.OutOrStdout())
+	},
+}

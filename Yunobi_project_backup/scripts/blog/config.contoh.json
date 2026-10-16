@@ -1,0 +1,141 @@
+{
+  "_komentar": "6 blog aktif di 1 Gmail (akuntyunobi17). Posting via Blogger API.",
+  "blogs": [
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "2214484859238970994",
+      "feeds": {
+        "Antara": "https://www.antaranews.com/rss/terkini.xml",
+        "CNBC-Market": "https://www.cnbcindonesia.com/market/rss",
+        "CNBC-Tech": "https://www.cnbcindonesia.com/tech/rss",
+        "CNN-Nasional": "https://www.cnnindonesia.com/nasional/rss",
+        "Detik-News": "https://news.detik.com/rss",
+        "DetikInet": "https://inet.detik.com/rss",
+        "JPNN": "https://www.jpnn.com/rss",
+        "Katadata": "https://katadata.co.id/rss",
+        "Kontan-Investasi": "https://investasi.kontan.co.id/rss",
+        "Okezone": "https://www.okezone.com/rss",
+        "Sindo-Nasional": "https://nasional.sindonews.com/rss",
+        "SindoNews": "https://www.sindonews.com/rss"
+      },
+      "nama": "kabarviral",
+      "niche": "campuran",
+      "tampil": "KabarViral",
+      "url": "https://kabarviralterkiniterbaru.blogspot.com",
+      "blogger_email": "khususstokyunobi.1929khususstokyunobi@blogger.com"
+    },
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "7454786879662803920",
+      "feeds": {
+        "CNBC-Tech": "https://www.cnbcindonesia.com/tech/rss",
+        "DetikInet": "https://inet.detik.com/rss"
+      },
+      "nama": "teknopedia",
+      "niche": "teknologi",
+      "tampil": "TEKNO PEDIA",
+      "url": "https://teknopedia-terbaru-dotcom.blogspot.com",
+      "blogger_email": "khususstokyunobi.teknopediapost@blogger.com"
+    },
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "4472618985643360981",
+      "feeds": {
+        "CNN-GayaHidup": "https://www.cnnindonesia.com/gaya-hidup/rss",
+        "Detik-Health": "https://health.detik.com/rss"
+      },
+      "nama": "infokesehatan",
+      "niche": "kesehatan",
+      "tampil": "info kesehatan hari ini",
+      "url": "https://infokesehatan-hari-ini.blogspot.com",
+      "blogger_email": "khususstokyunobi.infokesehatanpost@blogger.com"
+    },
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "3837990085079931876",
+      "feeds": {
+        "CNBC-Market": "https://www.cnbcindonesia.com/market/rss",
+        "Katadata": "https://katadata.co.id/rss",
+        "Kontan-Investasi": "https://investasi.kontan.co.id/rss"
+      },
+      "nama": "ekonomibisnis",
+      "niche": "keuangan",
+      "tampil": "ekonomi bisnis info",
+      "url": "https://ekonomi-bisnis-info-terbaru.blogspot.com",
+      "blogger_email": "khususstokyunobi.ekonomibisnispost@blogger.com"
+    },
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "6262982910681826900",
+      "feeds": {
+        "CNN-Hiburan": "https://www.cnnindonesia.com/hiburan/rss",
+        "DetikHot": "https://hot.detik.com/rss"
+      },
+      "nama": "gayahidup",
+      "niche": "hiburan",
+      "tampil": "Gaya Hidup Kekinian",
+      "url": "https://gaya-hidup-kekikinan.blogspot.com",
+      "blogger_email": "khususstokyunobi.gayahiduppost@blogger.com"
+    },
+    {
+      "artikel_per_hari": 1,
+      "blog_id": "3309326452444173317",
+      "feeds": {
+        "DetikSport": "https://sport.detik.com/rss"
+      },
+      "nama": "olahraga",
+      "niche": "olahraga",
+      "tampil": "olahraga terbaru",
+      "url": "https://olahraga-terbaru-terbaik.blogspot.com",
+      "blogger_email": "khususstokyunobi.olahragapost@blogger.com"
+    },
+    {
+      "nama": "wisata",
+      "tampil": "WisataIndo",
+      "blog_id": "7833035171023355034",
+      "url": "https://wisataindo-terbaru.blogspot.com",
+      "niche": "wisata",
+      "artikel_per_hari": 1,
+      "feeds": {
+        "DetikTravel": "https://travel.detik.com/rss"
+      },
+      "blogger_email": "khususstokyunobi.wisataindopost@blogger.com"
+    },
+    {
+      "nama": "kuliner",
+      "tampil": "KulinerNusantara",
+      "blog_id": "5675665322743920850",
+      "url": "https://kulinernusantara-terbaru.blogspot.com",
+      "niche": "kuliner",
+      "artikel_per_hari": 1,
+      "feeds": {
+        "DetikFood": "https://food.detik.com/rss"
+      },
+      "blogger_email": "khususstokyunobi.kulinernusantarapost@blogger.com"
+    },
+    {
+      "nama": "otomotif",
+      "tampil": "OtomotifInfo",
+      "blog_id": "2186034656474186441",
+      "url": "https://otomotifinfo-terbaru.blogspot.com",
+      "niche": "otomotif",
+      "artikel_per_hari": 1,
+      "feeds": {
+        "DetikOto": "https://oto.detik.com/rss"
+      },
+      "blogger_email": "khususstokyunobi.otomotifinfopost@blogger.com"
+    },
+    {
+      "nama": "pendidikan",
+      "tampil": "PendidikanCerdas",
+      "blog_id": "1839534200092814818",
+      "url": "https://pendidikancerdas-terbaru.blogspot.com",
+      "niche": "pendidikan",
+      "artikel_per_hari": 1,
+      "feeds": {
+        "Detik-Edu": "https://www.detik.com/edu/rss"
+      },
+      "blogger_email": "khususstokyunobi.pendidikancerdaspost@blogger.com"
+    }
+  ]
+}

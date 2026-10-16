@@ -1,0 +1,5 @@
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16-fix/_tmp_shorts/seg00.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16-fix/_tmp_shorts/seg01.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16-fix/_tmp_shorts/seg02.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16-fix/_tmp_shorts/seg03.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16-fix/_tmp_shorts/seg04.mp4'

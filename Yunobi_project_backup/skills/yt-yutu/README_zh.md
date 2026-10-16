@@ -1,0 +1,369 @@
+![Yutu](./assets/yutu.svg)
+
+# `yutu`
+
+[![Static Badge](https://img.shields.io/badge/gitmoji-%F0%9F%98%BF%F0%9F%90%B0%F0%9F%90%A7%E2%9D%A4%EF%B8%8F%E2%80%8D%F0%9F%A9%B9-love?style=flat-square&labelColor=%23EDD1CC&color=%23FF919F)](https://gitmoji.dev)
+[![GitHub License](https://img.shields.io/github/license/eat-pray-ai/yutu?style=flat-square)](https://github.com/eat-pray-ai/yutu?tab=Apache-2.0-1-ov-file)
+[![Go Reference](https://pkg.go.dev/badge/github.com/eat-pray-ai/yutu?style=flat-square)](https://pkg.go.dev/github.com/eat-pray-ai/yutu)
+[![Go Coverage](https://github.com/eat-pray-ai/yutu/wiki/coverage.svg)](https://raw.githack.com/wiki/eat-pray-ai/yutu/coverage.html)
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/eat-pray-ai/yutu?style=flat-square&logo=github)](https://github.com/eat-pray-ai/yutu/stargazers)
+[![GitHub Downloads](https://img.shields.io/github/downloads/eat-pray-ai/yutu/total?style=flat-square)](https://github.com/eat-pray-ai/yutu/releases/latest)
+[![GitHub Actions build Status](https://img.shields.io/github/actions/workflow/status/eat-pray-ai/yutu/publish.yml?style=flat-square&logo=githubactions)](https://github.com/eat-pray-ai/yutu/actions/workflows/publish.yml)
+[![GitHub Actions CodeQL Status](https://img.shields.io/github/actions/workflow/status/eat-pray-ai/yutu/codeql.yml?style=flat-square&logo=githubactions&label=CodeQL)](https://github.com/eat-pray-ai/yutu/actions/workflows/codeql.yml)
+[![GitHub Actions test Status](https://img.shields.io/github/actions/workflow/status/eat-pray-ai/yutu/test.yml?style=flat-square&logo=githubactions&label=test)](https://github.com/eat-pray-ai/yutu/actions/workflows/test.yml)
+[![LINUX DO](./assets/linuxdo_flat-square.svg)](https://linux.do/tag/2234-tag/2234)
+
+[![GitHub Release](https://img.shields.io/github/v/release/eat-pray-ai/yutu?sort=semver&style=flat-square&logo=go)](https://github.com/eat-pray-ai/yutu/releases/latest)
+[![Homebrew Formula Version](https://img.shields.io/homebrew/v/yutu?style=flat-square&logo=homebrew)](https://formulae.brew.sh/formula/yutu)
+[![WinGet Package Version](https://img.shields.io/winget/v/eat-pray-ai.yutu?style=flat-square&label=%F0%9F%93%A6%20winget
+)](https://winstall.app/apps/eat-pray-ai.yutu)
+[![npm Version](https://img.shields.io/npm/v/%40eat-pray-ai/yutu?style=flat-square&logo=npm)](https://www.npmjs.com/package/@eat-pray-ai/yutu)
+
+<!-- [![YouTube CLI, MCP server, Skill and Agent - AI-powered toolkit that grows YouTube channel on autopilot | Product
+Hunt](https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1138118&theme=light)](https://www.producthunt.com/products/yutu?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-youtube-cli-mcp-server-skill-and-agent) -->
+
+`yutu` 是一个 YouTube CLI、MCP 服务器和 AI Agent，可以自动化您的整个 YouTube 工作流程——从上传和优化视频到管理评论、播放列表和频道品牌——帮助您获得更多播放量、更高的点击率和更强的观众互动，同时大幅减少手动操作。
+
+[![mcp demo](./assets/mcp-demo.gif)](https://asciinema.org/a/wXIHU4ciFBAKrHfaFNkMoIs12)
+
+## 目录
+
+- [前提条件](#前提条件)
+- [安装](#安装)
+- [Agent](#agent)
+- [MCP 服务器](#mcp-服务器)
+- [Skills](#skills)
+- [使用方法](#使用方法)
+- [功能特性](#功能特性)
+- [贡献](#贡献)
+
+## 前提条件
+
+开始之前，您需要在 [Google Cloud Platform](https://console.cloud.google.com/) 上创建一个账户来新建**项目**，并为该项目启用以下 API，位置在 `APIs & Services -> Enable APIs and services -> + ENABLE APIS AND SERVICES`:
+
+- [YouTube Data API v3（必需）](https://console.cloud.google.com/apis/api/youtube.googleapis.com/overview)
+- [YouTube Analytics API（可选）](https://console.cloud.google.com/apis/api/youtubeanalytics.googleapis.com/overview)
+- [YouTube Reporting API（可选）](https://console.cloud.google.com/apis/api/youtubereporting.googleapis.com/overview)
+
+启用 API 后，创建一个 `OAuth consent screen`，将您自己设置为测试用户，然后创建一个类型为 `Desktop app` 的 `OAuth Client ID`。
+
+将此凭据下载到本地机器，命名为 `client_secret.json`，它应该看起来像这样：
+
+```json
+{
+  "installed": {
+    "client_id": "11181119.apps.googleusercontent.com",
+    "project_id": "yutu-11181119",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "XXXXXXXXXXXXXXXX",
+    "redirect_uris": [
+      "http://localhost"
+    ]
+  }
+}
+```
+
+要验证此凭据，请运行以下命令：
+
+```shell
+❯ yutu auth --credential client_secret.json
+```
+
+浏览器窗口将打开，要求您授权访问您的 YouTube 账户。授权后，将生成一个令牌并保存到 `youtube.token.json`。
+
+```json
+{
+  "access_token": "ya29.XXXXXXXXX",
+  "token_type": "Bearer",
+  "refresh_token": "1//XXXXXXXXXX",
+  "expiry": "2024-05-26T18:49:56.1911165+08:00",
+  "expires_in": 3599
+}
+```
+
+默认情况下，`yutu` 将从当前目录读取 `client_secret.json` 和 `youtube.token.json`，`--credential/-c` 和 `--cacheToken/-t` 标志仅在 `auth` 子命令中可用。要在所有子命令中修改默认路径，请设置这些环境变量：
+
+```shell
+❯ export YUTU_CREDENTIAL=client_secret.json
+❯ export YUTU_CACHE_TOKEN=youtube.token.json
+# 或
+❯ YUTU_CREDENTIAL=client_secret.json YUTU_CACHE_TOKEN=youtube.token.json yutu subcommand --flag value
+```
+
+### 全局环境变量
+
+| 变量               | 描述                                       | 默认值               |
+|--------------------|--------------------------------------------|----------------------|
+| `YUTU_CREDENTIAL`  | OAuth 客户端密钥的路径、Base64 或 JSON     | `client_secret.json` |
+| `YUTU_CACHE_TOKEN` | 缓存的 OAuth 令牌的路径、Base64 或 JSON    | `youtube.token.json` |
+| `YUTU_ROOT`        | 文件解析的根目录                           | 当前工作目录         |
+| `YUTU_LOG_LEVEL`   | 日志级别：`DEBUG`、`INFO`、`WARN`、`ERROR` | `INFO`               |
+
+## 安装
+
+如果您正在使用 AI Agent，可以复制以下提示词来完成安装：
+
+```plaintext
+Install and configure yutu by following https://raw.githubusercontent.com/eat-pray-ai/yutu/refs/heads/main/internal/tools/skillgen/setup.md
+```
+
+您可以直接从[发布页面](https://github.com/eat-pray-ai/yutu/releases/latest)下载 `yutu`，或使用以下您喜欢的方法。
+
+<details>
+<summary>GitHub Actions</summary>
+
+yutu 有两个可用的 GitHub Action，一个是通用 action，另一个专用于上传视频到 YouTube。更多信息请参考 [youtube-action](https://github.com/eat-pray-ai/youtube-action) 和 [youtube-uploader](https://github.com/eat-pray-ai/youtube-uploader)。
+
+</details>
+
+<details>
+<summary>Node.js</summary>
+
+```shell
+❯ npm i -g @eat-pray-ai/yutu
+```
+
+</details>
+
+<details>
+<summary>Docker</summary>
+
+```shell
+❯ docker pull ghcr.io/eat-pray-ai/yutu:latest
+❯ docker run --rm ghcr.io/eat-pray-ai/yutu:latest
+# 确保 client_secret.json 在当前目录中
+❯ docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -p 8216:8216 ghcr.io/eat-pray-ai/yutu:latest
+```
+
+</details>
+
+<details>
+<summary>Gopher</summary>
+
+```shell
+❯ go install github.com/eat-pray-ai/yutu@latest
+```
+
+</details>
+
+<details>
+<summary>Linux</summary>
+
+```shell
+❯ curl -sSfL https://raw.githubusercontent.com/eat-pray-ai/yutu/main/scripts/install.sh | bash
+```
+
+</details>
+
+<details>
+<summary>macOS</summary>
+
+使用 [Homebrew🍺](https://brew.sh/) 安装 `yutu`（推荐），或运行 shell 脚本。
+
+```shell
+❯ brew install yutu
+
+# 或
+❯ curl -sSfL https://raw.githubusercontent.com/eat-pray-ai/yutu/main/scripts/install.sh | bash
+```
+
+</details>
+
+<details>
+<summary>Windows</summary>
+
+```shell
+❯ winget install yutu
+```
+
+</details>
+
+<details>
+<summary>验证安装</summary>
+
+使用其关联的加密签名证明来验证 `yutu` 的完整性和来源。
+
+```shell
+# Docker
+❯ gh attestation verify oci://ghcr.io/eat-pray-ai/yutu:latest --repo eat-pray-ai/yutu
+
+# Linux 和 macOS（如果使用 shell 脚本安装）
+❯ gh attestation verify $(which yutu) --repo eat-pray-ai/yutu
+
+# Windows
+❯ gh attestation verify $(where.exe yutu.exe) --repo eat-pray-ai/yutu
+```
+
+</details>
+
+## Agent
+
+`yutu` 提供了 Agent 模式（Miffy）来自动化 YouTube 工作流程。该 Agent 可以检索、创建、更新和删除 YouTube 内容，内置 YouTube 增长策略和 SEO 专业知识。
+
+```shell
+# Gemini（兼容）（默认）
+❯ yutu agent --provider google --model gemini-3.8-flash --api-key "YOUR_KEY"
+❯ yutu agent --provider google --model gemini-3.8-flash --api-key "YOUR_KEY" --base-url "https://custom.endpoint.com/"
+# OpenAI（兼容）（OpenAI、DeepSeek、Ollama、vLLM 等）
+❯ yutu agent --provider openai --model gpt-5.6-terra --api-key "YOUR_KEY"
+❯ yutu agent --provider openai --model deepseek-flash --api-key "YOUR_KEY" --base-url "https://api.deepseek.com/"
+# Web 模式
+❯ yutu agent --args "web api a2a webui" --api-key "YOUR_KEY"
+# 查看可用的启动参数
+❯ yutu agent --args ""
+```
+
+### Agent 参数
+
+| 参数                | 描述                                                                   | 默认值                                     |
+|---------------------|------------------------------------------------------------------------|--------------------------------------------|
+| `-a, --args`        | 启动参数（单个字符串）                                                 | `console`                                  |
+| `-p, --provider`    | LLM 提供商：`google` 对应 Gemini（兼容），`openai` 对应 OpenAI（兼容） | `google`                                   |
+| `-m, --model`       | 模型名称                                                               | `gemini-3.8-flash`                         |
+| `--api-key`         | 模型提供商的 API 密钥                                                  |                                            |
+| `--base-url`        | 模型提供商的 API 端点地址                                              |                                            |
+| `-i, --instruction` | 覆盖内置的 Agent 指令                                                  | [INSTRUCTION.md](cmd/agent/INSTRUCTION.md) |
+
+## MCP 服务器
+
+在将 `yutu` 用作 MCP 服务器之前，请确保已安装 `yutu`（参见[安装](#安装)部分），并且您有有效的 `client_secret.json` 和 `youtube.token.json` 文件（参考[前提条件](#前提条件)部分）。
+
+您可以参考下方说明为您常用的工具配置 `yutu` MCP 服务器。
+
+<details>
+<summary>Claude Code</summary>
+
+```shell
+# Stdio 模式
+❯ claude mcp add --env YUTU_CREDENTIAL=/absolute/path/to/client_secret.json \
+  --env YUTU_CACHE_TOKEN=/absolute/path/to/youtube.token.json \
+  yutu -- yutu mcp
+
+# HTTP 模式（先启动服务器：yutu mcp --mode http）
+❯ claude mcp add --transport http \
+  --client-id YOUR_CLIENT_ID.apps.googleusercontent.com \
+  --client-secret \
+  yutu http://localhost:8216/mcp
+```
+
+</details>
+
+<details>
+<summary>Codex</summary>
+
+```shell
+# Stdio 模式
+❯ codex mcp add --env YUTU_CREDENTIAL=/absolute/path/to/client_secret.json \
+  --env YUTU_CACHE_TOKEN=/absolute/path/to/youtube.token.json \
+  yutu -- yutu mcp
+
+# HTTP 模式（先启动服务器：yutu mcp --mode http）
+❯ codex mcp add --url http://localhost:8216/mcp \
+  --oauth-client-id YOUR_CLIENT_ID.apps.googleusercontent.com \
+  yutu
+```
+
+</details>
+
+<details>
+<summary>手动配置（VS Code、Cursor、OpenCode 等）</summary>
+
+将以下配置添加到您的 MCP 设置中。记得将 `YUTU_CREDENTIAL` 和 `YUTU_CACHE_TOKEN` 的值替换为您本地机器上的正确路径。
+
+```json
+{
+  "yutu": {
+    "type": "stdio",
+    "command": "yutu",
+    "args": [
+      "mcp"
+    ],
+    "env": {
+      "YUTU_CREDENTIAL": "/absolute/path/to/client_secret.json",
+      "YUTU_CACHE_TOKEN": "/absolute/path/to/youtube.token.json"
+    }
+  }
+}
+```
+
+</details>
+
+## Skills
+
+`yutu` 提供了一个统一的 [skill](https://opencode.ai/docs/skills)，为 AI Agent 扩展 YouTube 领域知识、常用工作流和 SEO 最佳实践——涵盖视频、播放列表、评论、频道、字幕、订阅等。
+
+```shell
+❯ npx skills add https://github.com/eat-pray-ai/yutu/tree/main/skills/youtube
+```
+
+完整的支持操作列表请参见 [skills/youtube/SKILL.md](skills/youtube/SKILL.md)。
+
+## 使用方法
+
+```shell
+❯ yutu
+yutu is a CLI, MCP server, and AI agent for YouTube that can automate almost all YouTube workflows.
+
+Environment variables:
+  YUTU_CREDENTIAL    Path/Base64/JSON of OAuth client secret (default: client_secret.json)
+  YUTU_CACHE_TOKEN   Path/Base64/JSON of cached OAuth token (default: youtube.token.json)
+  YUTU_ROOT          Root directory for file resolution (default: current working directory)
+  YUTU_LOG_LEVEL     Log level: DEBUG, INFO, WARN, ERROR (default: INFO)
+
+Usage:
+  yutu [flags]
+  yutu [command]
+
+Available Commands:
+  abuseReport            Manage YouTube abuse reports
+  activity               Manage YouTube activities
+  agent                  Start an agent to automate YouTube workflows
+  auth                   Authenticate with YouTube APIs
+  caption                Manage YouTube video captions
+  channel                Manage YouTube channels
+  channelBanner          Manage YouTube channel banners
+  channelSection         Manage YouTube channel sections
+  comment                Manage YouTube comments
+  commentThread          Manage YouTube comment threads
+  completion             Generate the autocompletion script for the specified shell
+  help                   Help about any command
+  i18nLanguage           Manage YouTube i18n languages
+  i18nRegion             Manage YouTube i18n regions
+  liveBroadcast          Manage YouTube live broadcasts
+  liveChatBan            Manage YouTube live chat bans
+  liveChatMessage        Manage YouTube live chat messages
+  liveChatModerator      Manage YouTube live chat moderators
+  liveStream             Manage YouTube live streams
+  mcp                    Start MCP server
+  member                 Manage YouTube channel members
+  membershipsLevel       Manage YouTube membership levels
+  playlist               Manage YouTube playlists
+  playlistImage          Manage YouTube playlist images
+  playlistItem           Manage YouTube playlist items
+  search                 Manage YouTube search
+  subscription           Manage YouTube subscriptions
+  superChatEvent         Manage YouTube Super Chat events
+  thirdPartyLink         Manage YouTube third-party links
+  thumbnail              Manage YouTube video thumbnails
+  version                Show the version of yutu
+  video                  Manage YouTube videos
+  videoAbuseReportReason Manage YouTube video abuse report reasons
+  videoCategory          Manage YouTube video categories
+  watermark              Manage YouTube watermarks
+
+Flags:
+  -h, --help   help for yutu
+
+Use "yutu [command] --help" for more information about a command.
+```
+
+## 功能特性
+
+请参考 [FEATURES.md](docs/FEATURES.md) 获取更多信息。
+
+## 贡献
+
+请参考 [CONTRIBUTING.md](docs/CONTRIBUTING.md) 获取更多信息。

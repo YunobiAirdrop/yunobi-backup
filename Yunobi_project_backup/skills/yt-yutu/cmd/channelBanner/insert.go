@@ -1,0 +1,111 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package channelBanner
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/channelBanner"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	insertTool    = "channelBanner-insert"
+	insertConfirm = "Upload channel banner %s for channel %s"
+	insertShort   = "Upload a channel banner"
+	insertLong    = "Upload a channel banner. Use this tool to upload a channel banner."
+	insertExample = `# Upload a channel banner
+yutu channelBanner insert --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw --file banner.jpg
+# Upload a channel banner with JSON output
+yutu channelBanner insert --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw --file banner.png --output json`
+)
+
+var insertInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"channel_id", "file"},
+	Properties: map[string]*jsonschema.Schema{
+		"channel_id": {Type: "string", Description: cidUsage},
+		"file":       {Type: "string", Description: fileUsage},
+
+		"on_behalf_of_content_owner": {
+			Type:        "string",
+			Description: pkg.OBOCOUsage,
+		},
+		"on_behalf_of_content_owner_channel": {
+			Type:        "string",
+			Description: pkg.OBOCOCUsage,
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: insertTool, Title: insertShort, Description: insertLong,
+			InputSchema: insertInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			insertTool, cobramcp.ConfirmThen(
+				func(input channelBanner.ChannelBanner) string {
+					return fmt.Sprintf(insertConfirm, input.File, input.ChannelId)
+				},
+				func(input channelBanner.ChannelBanner, w io.Writer) error {
+					return input.Insert(w)
+				},
+			),
+		),
+	)
+	channelBannerCmd.AddCommand(insertCmd)
+
+	insertCmd.Flags().StringVarP(&channelId, "channelId", "c", "", cidUsage)
+	insertCmd.Flags().StringVarP(&file, "file", "f", "", fileUsage)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwnerChannel, "onBehalfOfContentOwnerChannel", "B", "",
+		pkg.OBOCOCUsage,
+	)
+	insertCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	insertCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = insertCmd.MarkFlagRequired("channelId")
+	_ = insertCmd.MarkFlagRequired("file")
+}
+
+var insertCmd = &cobra.Command{
+	Use:     "insert",
+	Short:   insertShort,
+	Long:    insertLong,
+	Example: insertExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(insertConfirm, file, channelId))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := channelBanner.NewChannelBanner(
+			channelBanner.WithChannelId(channelId),
+			channelBanner.WithFile(file),
+			channelBanner.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			channelBanner.WithOnBehalfOfContentOwnerChannel(onBehalfOfContentOwnerChannel),
+			channelBanner.WithOutput(output),
+		)
+		return input.Insert(c.OutOrStdout())
+	},
+}

@@ -1,0 +1,337 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package search
+
+import (
+	"errors"
+	"io"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"google.golang.org/api/youtube/v3"
+)
+
+var (
+	errGetSearch = errors.New("failed to get search")
+)
+
+type Search struct {
+	common.Fields
+	ChannelType               string   `yaml:"channel_type" json:"channel_type,omitempty"`
+	EventType                 string   `yaml:"event_type" json:"event_type,omitempty"`
+	For                       string   `yaml:"for" json:"for,omitempty"`
+	Location                  string   `yaml:"location" json:"location,omitempty"`
+	LocationRadius            string   `yaml:"location_radius" json:"location_radius,omitempty"`
+	Order                     string   `yaml:"order" json:"order,omitempty"`
+	PublishedAfter            string   `yaml:"published_after" json:"published_after,omitempty"`
+	PublishedBefore           string   `yaml:"published_before" json:"published_before,omitempty"`
+	Q                         string   `yaml:"q" json:"q,omitempty"`
+	RegionCode                string   `yaml:"region_code" json:"region_code,omitempty"`
+	RelevanceLanguage         string   `yaml:"relevance_language" json:"relevance_language,omitempty"`
+	SafeSearch                string   `yaml:"safe_search" json:"safe_search,omitempty"`
+	TopicId                   string   `yaml:"topic_id" json:"topic_id,omitempty"`
+	Types                     []string `yaml:"types" json:"types,omitempty"`
+	VideoCaption              string   `yaml:"video_caption" json:"video_caption,omitempty"`
+	VideoCategoryId           string   `yaml:"video_category_id" json:"video_category_id,omitempty"`
+	VideoDefinition           string   `yaml:"video_definition" json:"video_definition,omitempty"`
+	VideoDimension            string   `yaml:"video_dimension" json:"video_dimension,omitempty"`
+	VideoDuration             string   `yaml:"video_duration" json:"video_duration,omitempty"`
+	VideoEmbeddable           string   `yaml:"video_embeddable" json:"video_embeddable,omitempty"`
+	VideoLicense              string   `yaml:"video_license" json:"video_license,omitempty"`
+	VideoPaidProductPlacement string   `yaml:"video_paid_product_placement" json:"video_paid_product_placement,omitempty"`
+	VideoSyndicated           string   `yaml:"video_syndicated" json:"video_syndicated,omitempty"`
+	VideoType                 string   `yaml:"video_type" json:"video_type,omitempty"`
+}
+
+type ISearch[T any] interface {
+	Get() ([]*T, error)
+	List(io.Writer) error
+}
+
+type Option func(*Search)
+
+func NewSearch(opts ...Option) ISearch[youtube.SearchResult] {
+	s := &Search{Fields: common.Fields{}}
+	for _, opt := range opts {
+		opt(s)
+	}
+	return s
+}
+
+func (s *Search) Get() ([]*youtube.SearchResult, error) {
+	if err := s.EnsureService(); err != nil {
+		return nil, err
+	}
+	call := s.Service.Search.List(s.Parts)
+	if s.ChannelId != "" {
+		call = call.ChannelId(s.ChannelId)
+	}
+	if s.ChannelType != "" {
+		call = call.ChannelType(s.ChannelType)
+	}
+	if s.EventType != "" {
+		call = call.EventType(s.EventType)
+	}
+	switch s.For {
+	case "mine":
+		call = call.ForMine(true)
+	case "developer":
+		call = call.ForDeveloper(true)
+	case "contentOwner":
+		call = call.ForContentOwner(true)
+	}
+	if s.Location != "" {
+		call = call.Location(s.Location)
+	}
+	if s.LocationRadius != "" {
+		call = call.LocationRadius(s.LocationRadius)
+	}
+	if s.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(s.OnBehalfOfContentOwner)
+	}
+	if s.Order != "" {
+		call = call.Order(s.Order)
+	}
+	if s.PublishedAfter != "" {
+		call = call.PublishedAfter(s.PublishedAfter)
+	}
+	if s.PublishedBefore != "" {
+		call = call.PublishedBefore(s.PublishedBefore)
+	}
+	if s.Q != "" {
+		call = call.Q(s.Q)
+	}
+	if s.RegionCode != "" {
+		call = call.RegionCode(s.RegionCode)
+	}
+	if s.RelevanceLanguage != "" {
+		call = call.RelevanceLanguage(s.RelevanceLanguage)
+	}
+	if s.SafeSearch != "" {
+		call = call.SafeSearch(s.SafeSearch)
+	}
+	if s.TopicId != "" {
+		call = call.TopicId(s.TopicId)
+	}
+	if len(s.Types) > 0 {
+		call = call.Type(s.Types...)
+	}
+	if s.VideoCaption != "" {
+		call = call.VideoCaption(s.VideoCaption)
+	}
+	if s.VideoCategoryId != "" {
+		call = call.VideoCategoryId(s.VideoCategoryId)
+	}
+	if s.VideoDefinition != "" {
+		call = call.VideoDefinition(s.VideoDefinition)
+	}
+	if s.VideoDimension != "" {
+		call = call.VideoDimension(s.VideoDimension)
+	}
+	if s.VideoDuration != "" {
+		call = call.VideoDuration(s.VideoDuration)
+	}
+	if s.VideoEmbeddable != "" {
+		call = call.VideoEmbeddable(s.VideoEmbeddable)
+	}
+	if s.VideoLicense != "" {
+		call = call.VideoLicense(s.VideoLicense)
+	}
+	if s.VideoPaidProductPlacement != "" {
+		call = call.VideoPaidProductPlacement(s.VideoPaidProductPlacement)
+	}
+	if s.VideoSyndicated != "" {
+		call = call.VideoSyndicated(s.VideoSyndicated)
+	}
+	if s.VideoType != "" {
+		call = call.VideoType(s.VideoType)
+	}
+
+	return common.Paginate(
+		&s.Fields, call,
+		func(r *youtube.SearchListResponse) ([]*youtube.SearchResult, string) {
+			return r.Items, r.NextPageToken
+		}, errGetSearch,
+	)
+}
+
+func (s *Search) List(writer io.Writer) error {
+	results, err := s.Get()
+	if err != nil && results == nil {
+		return err
+	}
+
+	return errors.Join(
+		err,
+		common.PrintList(
+			s.Output, results, writer, table.Row{"Kind", "Title", "Resource ID"},
+			func(r *youtube.SearchResult) table.Row {
+				var resourceId string
+				switch r.Id.Kind {
+				case "youtube#video":
+					resourceId = r.Id.VideoId
+				case "youtube#channel":
+					resourceId = r.Id.ChannelId
+				case "youtube#playlist":
+					resourceId = r.Id.PlaylistId
+				}
+				return table.Row{r.Id.Kind, r.Snippet.Title, resourceId}
+			},
+		),
+	)
+}
+
+func WithChannelType(channelType string) Option {
+	return func(s *Search) {
+		s.ChannelType = channelType
+	}
+}
+
+func WithEventType(eventType string) Option {
+	return func(s *Search) {
+		s.EventType = eventType
+	}
+}
+
+func WithFor(f string) Option {
+	return func(s *Search) {
+		s.For = f
+	}
+}
+
+func WithLocation(location string) Option {
+	return func(s *Search) {
+		s.Location = location
+	}
+}
+
+func WithLocationRadius(locationRadius string) Option {
+	return func(s *Search) {
+		s.LocationRadius = locationRadius
+	}
+}
+
+func WithOrder(order string) Option {
+	return func(s *Search) {
+		s.Order = order
+	}
+}
+
+func WithPublishedAfter(publishedAfter string) Option {
+	return func(s *Search) {
+		s.PublishedAfter = publishedAfter
+	}
+}
+
+func WithPublishedBefore(publishedBefore string) Option {
+	return func(s *Search) {
+		s.PublishedBefore = publishedBefore
+	}
+}
+
+func WithQ(q string) Option {
+	return func(s *Search) {
+		s.Q = q
+	}
+}
+
+func WithRegionCode(regionCode string) Option {
+	return func(s *Search) {
+		s.RegionCode = regionCode
+	}
+}
+
+func WithRelevanceLanguage(relevanceLanguage string) Option {
+	return func(s *Search) {
+		s.RelevanceLanguage = relevanceLanguage
+	}
+}
+
+func WithSafeSearch(safeSearch string) Option {
+	return func(s *Search) {
+		s.SafeSearch = safeSearch
+	}
+}
+
+func WithTopicId(topicId string) Option {
+	return func(s *Search) {
+		s.TopicId = topicId
+	}
+}
+
+func WithTypes(types []string) Option {
+	return func(s *Search) {
+		s.Types = types
+	}
+}
+
+func WithVideoCaption(videoCaption string) Option {
+	return func(s *Search) {
+		s.VideoCaption = videoCaption
+	}
+}
+
+func WithVideoCategoryId(videoCategoryId string) Option {
+	return func(s *Search) {
+		s.VideoCategoryId = videoCategoryId
+	}
+}
+
+func WithVideoDefinition(videoDefinition string) Option {
+	return func(s *Search) {
+		s.VideoDefinition = videoDefinition
+	}
+}
+
+func WithVideoDimension(videoDimension string) Option {
+	return func(s *Search) {
+		s.VideoDimension = videoDimension
+	}
+}
+
+func WithVideoDuration(videoDuration string) Option {
+	return func(s *Search) {
+		s.VideoDuration = videoDuration
+	}
+}
+
+func WithVideoEmbeddable(videoEmbeddable string) Option {
+	return func(s *Search) {
+		s.VideoEmbeddable = videoEmbeddable
+	}
+}
+
+func WithVideoLicense(videoLicense string) Option {
+	return func(s *Search) {
+		s.VideoLicense = videoLicense
+	}
+}
+
+func WithVideoPaidProductPlacement(videoPaidProductPlacement string) Option {
+	return func(s *Search) {
+		s.VideoPaidProductPlacement = videoPaidProductPlacement
+	}
+}
+
+func WithVideoSyndicated(videoSyndicated string) Option {
+	return func(s *Search) {
+		s.VideoSyndicated = videoSyndicated
+	}
+}
+
+func WithVideoType(videoType string) Option {
+	return func(s *Search) {
+		s.VideoType = videoType
+	}
+}
+
+var (
+	WithParts      = common.WithParts[*Search]
+	WithOutput     = common.WithOutput[*Search]
+	WithService    = common.WithService[*Search]
+	WithMaxResults = common.WithMaxResults[*Search]
+	WithChannelId  = common.WithChannelId[*Search]
+
+	WithOnBehalfOfContentOwner = common.WithOnBehalfOfContentOwner[*Search]
+)

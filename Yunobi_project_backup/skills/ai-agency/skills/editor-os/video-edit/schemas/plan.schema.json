@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "plan.json: the slot ledger. The studio writes it by projecting pins.json or cut.json; approvals and picks are the only human or agent input.",
+  "type": "object",
+  "required": ["route", "from", "projectedAt", "slots"],
+  "additionalProperties": false,
+  "properties": {
+    "route": { "enum": ["descript", "local"] },
+    "from": { "enum": ["pins.json", "cut.json", "beats.json"] },
+    "projectedAt": { "type": "string" },
+    "placed": {
+      "type": "object",
+      "required": ["at", "signature"],
+      "additionalProperties": false,
+      "properties": { "at": { "type": "string" }, "signature": { "type": "string" } }
+    },
+    "review": {
+      "type": "object",
+      "required": ["steps", "choices"],
+      "additionalProperties": false,
+      "properties": {
+        "steps": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "transcript": { "type": "string" },
+            "layouts": { "type": "string" },
+            "inserts": { "type": "string" },
+            "sound": { "type": "string" }
+          }
+        },
+        "choices": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["state"],
+            "additionalProperties": false,
+            "properties": {
+              "state": { "enum": ["proposed", "approved", "changed", "skipped"] },
+              "pick": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": ["decision", "more", "asked"],
+      "additionalProperties": false,
+      "properties": {
+        "decision": { "enum": ["undecided", "kept", "skipped"] },
+        "keep": { "type": "string" },
+        "more": { "type": "boolean" },
+        "asked": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "slot", "anchor", "text", "status", "createdAt"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "slot": { "type": "string" },
+          "anchor": { "type": "string" },
+          "text": { "type": "string" },
+          "status": { "enum": ["open", "held", "answered", "done"] },
+          "reply": { "type": "string" },
+          "thread": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["by", "text"],
+              "additionalProperties": false,
+              "properties": { "by": { "type": "string" }, "text": { "type": "string" } }
+            }
+          },
+          "working": {
+            "type": "object",
+            "required": ["text", "at"],
+            "additionalProperties": false,
+            "properties": { "text": { "type": "string" }, "at": { "type": "string" } }
+          },
+          "createdAt": { "type": "string" }
+        }
+      }
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "at", "dur", "line", "anchor", "lane", "brief", "state"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^s[0-9]+$" },
+          "at": { "type": "number", "minimum": 0 },
+          "dur": { "type": "number", "minimum": 0 },
+          "line": { "type": "string" },
+          "to": { "type": "string" },
+          "anchor": { "type": "string" },
+          "sourceCode": { "type": "string" },
+          "lane": { "enum": ["drawn", "found", "generated", "captured", "zoom"] },
+          "brief": { "type": "string" },
+          "state": { "enum": ["proposed", "approved", "changed", "skipped"] },
+          "orphaned": { "type": "boolean" },
+          "pick": {
+            "type": "object",
+            "required": ["kind", "name"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "enum": ["media", "cell"] },
+              "name": { "type": "string", "minLength": 1 },
+              "file": { "type": "string", "minLength": 1 },
+              "at": { "type": "number", "minimum": 0 },
+              "props": {
+                "type": "object",
+                "additionalProperties": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "number" },
+                    { "type": "boolean" },
+                    { "type": "array", "items": { "type": "string" } }
+                  ]
+                }
+              }
+            }
+          },
+          "draft": {
+            "type": "object",
+            "required": ["path", "state", "at"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string" },
+              "state": { "enum": ["queued", "rendering", "ready", "error"] },
+              "at": { "type": "number" },
+              "error": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

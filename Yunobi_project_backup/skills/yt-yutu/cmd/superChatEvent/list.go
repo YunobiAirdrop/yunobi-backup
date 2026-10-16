@@ -1,0 +1,91 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package superChatEvent
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/superChatEvent"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool    = "superChatEvent-list"
+	listShort   = "List Super Chat events"
+	listLong    = "List Super Chat events. Use this tool to list Super Chat events."
+	listExample = `# List Super Chat events
+yutu superChatEvent list --maxResults 10`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"hl": {Type: "string", Description: hlUsage},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"),
+			Minimum: new(float64(0)),
+		},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool,
+			func(input superChatEvent.SuperChatEvent, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	superChatEventCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringVarP(&hl, "hl", "l", "", hlUsage)
+	listCmd.Flags().Int64VarP(&maxResults, "maxResults", "n", 5, pkg.MRUsage)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := superChatEvent.NewSuperChatEvent(
+			superChatEvent.WithHl(hl),
+			superChatEvent.WithMaxResults(maxResults),
+			superChatEvent.WithParts(parts),
+			superChatEvent.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

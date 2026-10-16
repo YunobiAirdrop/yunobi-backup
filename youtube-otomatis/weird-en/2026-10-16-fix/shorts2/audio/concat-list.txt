@@ -1,0 +1,4 @@
+file '/home/hatch/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts2/audio/beat-001.mp3'
+file '/home/hatch/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts2/audio/beat-002.mp3'
+file '/home/hatch/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts2/audio/beat-003.mp3'
+file '/home/hatch/workspace/youtube-otomatis/weird-en/2026-10-16-fix/shorts2/audio/beat-004.mp3'

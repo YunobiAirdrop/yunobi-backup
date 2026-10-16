@@ -1,0 +1,32 @@
+[2026-10-16 16:30 WIB] PRODUKSI SELESAI, UPLOAD DIDELEGASIKAN
+- Topik: "5 Misteri Gunung Indonesia, Nomor 1 Paling Bikin Merinding | Lima Misteri" (long, countdown 5 misteri: Lawu/Pasar Setan, Semeru/Ranu Kumbolo, Salak, Rinjani/Dewi Anjani, Merapi/Pasar Bubrah)
+- Hook: 3 varian A/B/C ditulis, dipakai A (Y8 cold-open pasar gaib Lawu jam 2 pagi)
+- Voiceover: 12 segmen, voice avocado_v2:mudiwa (Mudiwa), Bahasa Indonesia, total 6:29
+- Visual: 12 gambar AI webp literal per narasi + film grain/grading/vignette via rakit_light.py (1280x720, veryfast, via ffmpeg-queue.sh)
+- File: lima-misteri-2026-10-16.mp4, 24.8MB (<100MB OK), 6.5 menit
+- Thumbnail: GERBANG DUNIA LAIN (3 kata, tidak mengulang kata judul)
+- Manifest: ~/workspace/youtube-otomatis/lima-misteri/upload-2026-10-16.json
+- CATATAN GAYA CHANNEL: riset gaya 16:00 WIB -> channel 100% long 9-12 mnt, judul pola "... Nomor 1 Paling ..." — judul sudah disesuaikan; durasi 6.5 mnt di bawah pola channel (catat untuk run besok). Run hari ini finish as-is.
+- GAP: SFX rekaman asli tidak tersedia di VM (tidak ada aset) -> tidak dipasang; film grain+grading tetap jalan.
+- Upload: browser task didelegasikan (jadwal 17 Okt 2026 19:00 WIB, AI disclosure dicentang). Menunggu hasil.
+[2026-10-16 17:10 WIB] UPLOAD BERHASIL & TERVERIFIKASI
+- Video ID: yq4QOAdYsv0 | URL: https://youtu.be/yq4QOAdYsv0
+- Channel: Lima Misteri (UCQ0vHTsTqVeYy3zLno6pVfQ, 33 subs) — terkonfirmasi
+- Status: DIJADWALKAN 17 Okt 2026 19:00 WIB (Studio tampil GMT+0700, tab Konten: "Dijadwalkan")
+- Judul: 5 Misteri Gunung Indonesia, Nomor 1 Paling Bikin Merinding | Lima Misteri
+- Deskripsi 816/5000 karakter (timestamps + hashtag), 20 tag, bukan untuk anak-anak, AI disclosure TERCENTANG
+- Thumbnail kustom terpasang (thumbnail.jpg 278KB; versi webp DITOLAK YouTube "File bukan gambar" -> pelajaran: thumbnail selalu JPG/PNG)
+- Pemeriksaan hak cipta lolos; pemeriksaan Pedoman Komunitas masih jalan saat penjadwalan (tayang besok, aman)
+- Tidak ada batas harian, tidak ada ketukan persetujuan yang terpakai
+[2026-10-16 16:11 WIB] RUN DILEWATI (IDEMPOTENSI)
+- Marker produced-lima-misteri-2026-10-16.marker sudah ada (run manual 15:24 pola lama 1 long finish as-is).
+- Produksi hari ini SELESAI & upload TERVERIFIKASI: video yq4QOAdYsv0 (https://youtu.be/yq4QOAdYsv0), terjadwal 17 Okt 2026 19:00 WIB, AI disclosure dicentang.
+- Retry queue: tidak ada file lima-misteri (tidak ada kegagalan tertunda).
+- Pola baru (3 shorts + 1 long) berlaku mulai jadwal besok 17 Okt 2026 16:11 WIB.
+[2026-10-16 17:45 WIB] 3 SHORTS SELESAI (produksi pelengkap)
+- shorts1: lima-misteri-shorts1-masalembo-2026-10-16.mp4 | 58.5s | 1080x1920 | 6.9MB | "3 Misteri Segitiga Masalembo, Nomor 1 Paling Aneh"
+- shorts2: lima-misteri-shorts2-tempat-angker-2026-10-16.mp4 | 49.2s | 1080x1920 | 7.1MB | "3 Tempat Paling Angker di Indonesia, Nomor 1 Bikin Merinding"
+- shorts3: lima-misteri-shorts3-candi-kuno-2026-10-16.mp4 | 55.1s | 1080x1920 | 8.4MB | "3 Misteri Candi Kuno, Nomor 1 Tak Terpecahkan"
+- Voice: Mudiwa (avocado_v2:mudiwa), id, speed 95 + atempo 1.2x (agar <60s). Visual: 12 gambar AI literal + film grain + caption on-screen + tag LIMA MISTERI.
+- Upload-meta.txt siap di tiap folder shorts (jadwal 17 Okt: 09:00/14:00/21:00 WIB, AI disclosure YA). TIDAK di-upload (menunggu ketukan user 20:00-23:00).
+- Long tetap terjadwal 17 Okt 19:00 (yq4QOAdYsv0), tidak diganggu. Marker idempotensi tidak dihapus.

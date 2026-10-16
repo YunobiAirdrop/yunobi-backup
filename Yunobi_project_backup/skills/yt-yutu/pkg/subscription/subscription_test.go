@@ -1,0 +1,607 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package subscription
+
+import (
+	"bytes"
+	"encoding/json/v2"
+	"errors"
+	"io"
+	"math"
+	"net/http"
+	"reflect"
+	"strings"
+	"testing"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"google.golang.org/api/youtube/v3"
+)
+
+func TestNewSubscription(t *testing.T) {
+	type args struct {
+		opts []Option
+	}
+
+	svc := &youtube.Service{}
+
+	tests := []struct {
+		name string
+		args args
+		want ISubscription[youtube.Subscription]
+	}{
+		{
+			name: "with all options",
+			args: args{
+				opts: []Option{
+					WithIds([]string{"sub1", "sub2"}),
+					WithSubscriberChannelId("subscriber123"),
+					WithDescription("Test subscription description"),
+					WithChannelId("channel123"),
+					WithForChannelId("forChannel123"),
+					WithMaxResults(50),
+					WithFor("mine"),
+					WithOnBehalfOfContentOwner("owner123"),
+					WithOnBehalfOfContentOwnerChannel("ownerChannel123"),
+					WithOrder("relevance"),
+					WithTitle("Test Subscription"),
+					WithParts([]string{"snippet", "contentDetails"}),
+					WithOutput("json"),
+					WithService(svc),
+				},
+			},
+			want: &Subscription{
+				Service:                       svc,
+				Parts:                         []string{"snippet", "contentDetails"},
+				Output:                        "json",
+				Ids:                           []string{"sub1", "sub2"},
+				MaxResults:                    50,
+				ChannelId:                     "channel123",
+				OnBehalfOfContentOwner:        "owner123",
+				SubscriberChannelId:           "subscriber123",
+				Description:                   "Test subscription description",
+				ForChannelId:                  "forChannel123",
+				For:                           "mine",
+				OnBehalfOfContentOwnerChannel: "ownerChannel123",
+				Order:                         "relevance",
+				Title:                         "Test Subscription",
+			},
+		},
+		{
+			name: "with no options",
+			args: args{
+				opts: []Option{},
+			},
+			want: &Subscription{Fields: common.Fields{}},
+		},
+		{
+			name: "with empty for option",
+			args: args{
+				opts: []Option{
+					WithFor(""),
+				},
+			},
+			want: &Subscription{Fields: common.Fields{}},
+		},
+		{
+			name: "with for mySubscribers",
+			args: args{
+				opts: []Option{
+					WithFor("mySubscribers"),
+				},
+			},
+			want: &Subscription{
+				Fields: common.Fields{},
+				For:    "mySubscribers",
+			},
+		},
+		{
+			name: "with zero max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(0),
+				},
+			},
+			want: &Subscription{
+				MaxResults: math.MaxInt64,
+			},
+		},
+		{
+			name: "with negative max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(-10),
+				},
+			},
+			want: &Subscription{
+				MaxResults: 1,
+			},
+		},
+		{
+			name: "with empty string values",
+			args: args{
+				opts: []Option{
+					WithSubscriberChannelId(""),
+					WithDescription(""),
+					WithChannelId(""),
+					WithForChannelId(""),
+					WithOnBehalfOfContentOwner(""),
+					WithOnBehalfOfContentOwnerChannel(""),
+					WithOrder(""),
+					WithTitle(""),
+				},
+			},
+			want: &Subscription{
+				ChannelId:                     "",
+				OnBehalfOfContentOwner:        "",
+				SubscriberChannelId:           "",
+				Description:                   "",
+				ForChannelId:                  "",
+				OnBehalfOfContentOwnerChannel: "",
+				Order:                         "",
+				Title:                         "",
+			},
+		},
+		{
+			name: "with partial options",
+			args: args{
+				opts: []Option{
+					WithChannelId("myChannel"),
+					WithTitle("My Subscription"),
+					WithMaxResults(25),
+					WithOrder("alphabetical"),
+					WithFor("mine"),
+				},
+			},
+			want: &Subscription{
+				ChannelId:  "myChannel",
+				MaxResults: 25,
+				Title:      "My Subscription",
+				Order:      "alphabetical",
+				For:        "mine",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				if got := NewSubscription(tt.args.opts...); !reflect.DeepEqual(
+					got, tt.want,
+				) {
+					t.Errorf("%s\nNewSubscription() = %v\nwant %v", tt.name, got, tt.want)
+				}
+			},
+		)
+	}
+}
+
+func TestSubscription_Get(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantLen int
+		wantErr bool
+	}{
+		{
+			name: "get subscription by id",
+			opts: []Option{
+				WithIds([]string{"sub-id"}),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("id") != "sub-id" {
+					t.Errorf("expected id=sub-id, got %s", r.URL.Query().Get("id"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get subscription by channelId",
+			opts: []Option{
+				WithChannelId("channel-id"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("channelId") != "channel-id" {
+					t.Errorf(
+						"expected channelId=channel-id, got %s",
+						r.URL.Query().Get("channelId"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get subscription mine",
+			opts: []Option{
+				WithFor("mine"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("mine") != "true" {
+					t.Errorf("expected mine=true, got %s", r.URL.Query().Get("mine"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get subscription myRecentSubscribers",
+			opts: []Option{
+				WithFor("myRecentSubscribers"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("myRecentSubscribers") != "true" {
+					t.Errorf(
+						"expected myRecentSubscribers=true, got %s",
+						r.URL.Query().Get("myRecentSubscribers"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get subscription mySubscribers",
+			opts: []Option{
+				WithFor("mySubscribers"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("mySubscribers") != "true" {
+					t.Errorf(
+						"expected mySubscribers=true, got %s",
+						r.URL.Query().Get("mySubscribers"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get subscription with onBehalfOfContentOwner",
+			opts: []Option{
+				WithOnBehalfOfContentOwner("owner-id"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("onBehalfOfContentOwner") != "owner-id" {
+					t.Errorf(
+						"expected onBehalfOfContentOwner=owner-id, got %s",
+						r.URL.Query().Get("onBehalfOfContentOwner"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write(
+								[]byte(`{
+					"items": [
+						{"id": "sub-1", "snippet": {"title": "Subscription 1"}}
+					]
+				}`),
+							)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				s := NewSubscription(opts...)
+				got, err := s.Get()
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Subscription.Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if len(got) != tt.wantLen {
+					t.Errorf(
+						"Subscription.Get() got length = %v, want %v", len(got), tt.wantLen,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestSubscription_Get_Pagination(t *testing.T) {
+	svc := common.NewTestService(t, common.PaginationHandler("sub"))
+	s := NewSubscription(WithService(svc), WithMaxResults(22))
+	got, err := s.Get()
+	if err != nil {
+		t.Errorf("Subscription.Get() error = %v", err)
+	}
+	if len(got) != 22 {
+		t.Errorf("Subscription.Get() got length = %v, want 22", len(got))
+	}
+}
+
+func TestSubscription_List(t *testing.T) {
+	common.RunListTest(
+		t, `{
+			"items": [
+				{
+					"id": "sub-1",
+					"snippet": {
+						"resourceId": {
+							"kind": "youtube#channel",
+							"channelId": "channel-1"
+						},
+						"title": "Channel 1"
+					}
+				}
+			]
+		}`,
+		func(svc *youtube.Service, output string) func(io.Writer) error {
+			s := NewSubscription(
+				WithService(svc), WithOutput(output), WithIds([]string{"sub-1"}),
+			)
+			return s.List
+		},
+	)
+}
+
+func TestSubscription_List_ResourceKinds(t *testing.T) {
+	svc := common.NewTestService(
+		t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{
+				"items": [
+					{"id": "sub-video", "snippet": {"title": "Video", "resourceId": {"kind": "youtube#video", "videoId": "video-id"}}},
+					{"id": "sub-channel", "snippet": {"title": "Channel", "resourceId": {"kind": "youtube#channel", "channelId": "channel-id"}}},
+					{"id": "sub-playlist", "snippet": {"title": "Playlist", "resourceId": {"kind": "youtube#playlist", "playlistId": "playlist-id"}}}
+				]
+			}`))
+		}),
+	)
+
+	s := NewSubscription(
+		WithService(svc),
+		WithOutput("table"),
+		WithMaxResults(3),
+	)
+
+	var buf bytes.Buffer
+	if err := s.List(&buf); err != nil {
+		t.Fatalf("Subscription.List() error = %v", err)
+	}
+	output := buf.String()
+	for _, want := range []string{"video-id", "channel-id", "playlist-id"} {
+		if !strings.Contains(output, want) {
+			t.Errorf("Subscription.List() output = %q, want %q", output, want)
+		}
+	}
+}
+
+var errWriteFailed = errors.New("write failed")
+
+type errWriter struct{}
+
+func (errWriter) Write([]byte) (int, error) {
+	return 0, errWriteFailed
+}
+
+func TestSubscription_List_PartialErrorAndPrintError(t *testing.T) {
+	requestCount := 0
+	svc := common.NewTestService(
+		t, http.HandlerFunc(
+			func(w http.ResponseWriter, _ *http.Request) {
+				requestCount++
+				w.Header().Set("Content-Type", "application/json")
+				if requestCount == 1 {
+					_, _ = w.Write([]byte(`{
+						"items": [{"id": "sub-1", "snippet": {"title": "Channel 1", "resourceId": {"kind": "youtube#channel", "channelId": "channel-1"}}}],
+						"nextPageToken": "next-page"
+					}`))
+					return
+				}
+				http.Error(w, "server error", http.StatusInternalServerError)
+			},
+		),
+	)
+
+	s := NewSubscription(
+		WithService(svc),
+		WithOutput("table"),
+		WithMaxResults(22),
+	)
+
+	err := s.List(errWriter{})
+	if !errors.Is(err, errGetSubscription) {
+		t.Errorf("Subscription.List() error = %v, want %v", err, errGetSubscription)
+	}
+	if !errors.Is(err, errWriteFailed) {
+		t.Errorf("Subscription.List() error = %v, want write error", err)
+	}
+}
+
+func TestSubscription_Insert(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "insert subscription",
+			opts: []Option{
+				WithChannelId("channel-id"),
+				WithTitle("my-title"),
+				WithDescription("my-description"),
+				WithSubscriberChannelId("subscriber-channel-id"),
+			},
+			verify: func(r *http.Request) {
+				// ensure HTTP method
+				if r.Method != "POST" {
+					t.Errorf("expected POST, got %s", r.Method)
+				}
+
+				// decode request body and verify payload
+				defer func() { _ = r.Body.Close() }()
+				var body struct {
+					Snippet struct {
+						ResourceId struct {
+							ChannelId string `json:"channelId"`
+						} `json:"resourceId"`
+						Title       string `json:"title"`
+						Description string `json:"description"`
+						ChannelId   string `json:"channelId"`
+					} `json:"snippet"`
+				}
+				if err := json.UnmarshalRead(r.Body, &body); err != nil {
+					t.Fatalf("failed to decode request body: %v", err)
+				}
+
+				if body.Snippet.ResourceId.ChannelId != "channel-id" {
+					t.Errorf(
+						"expected snippet.resourceId.channelId=channel-id, got %s",
+						body.Snippet.ResourceId.ChannelId,
+					)
+				}
+				if body.Snippet.Title != "my-title" {
+					t.Errorf("expected snippet.title=my-title, got %s", body.Snippet.Title)
+				}
+				if body.Snippet.Description != "my-description" {
+					t.Errorf(
+						"expected snippet.description=my-description, got %s",
+						body.Snippet.Description,
+					)
+				}
+				if body.Snippet.ChannelId != "subscriber-channel-id" {
+					t.Errorf(
+						"expected snippet.channelId=subscriber-channel-id, got %s",
+						body.Snippet.ChannelId,
+					)
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write([]byte(`{"id": "new-sub-id"}`))
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				s := NewSubscription(opts...)
+				var buf bytes.Buffer
+				if err := s.Insert(&buf); (err != nil) != tt.wantErr {
+					t.Errorf(
+						"Subscription.Insert() error = %v, wantErr %v", err, tt.wantErr,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestSubscription_Delete(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "delete subscription",
+			opts: []Option{
+				WithIds([]string{"sub-id"}),
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "DELETE" {
+					t.Errorf("expected DELETE, got %s", r.Method)
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.WriteHeader(http.StatusNoContent)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				s := NewSubscription(opts...)
+				var buf bytes.Buffer
+				if err := s.Delete(&buf); (err != nil) != tt.wantErr {
+					t.Errorf(
+						"Subscription.Delete() error = %v, wantErr %v", err, tt.wantErr,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestSubscription_Delete_DoesNotReturnEarly(t *testing.T) {
+	var gotIDs []string
+	svc := common.NewTestService(
+		t, http.HandlerFunc(
+			func(w http.ResponseWriter, r *http.Request) {
+				id := r.URL.Query().Get("id")
+				gotIDs = append(gotIDs, id)
+
+				if id == "sub-1" {
+					http.Error(w, "server error", http.StatusInternalServerError)
+					return
+				}
+
+				w.WriteHeader(http.StatusNoContent)
+			},
+		),
+	)
+
+	s := NewSubscription(
+		WithService(svc),
+		WithIds([]string{"sub-1", "sub-2"}),
+	)
+
+	var buf bytes.Buffer
+	err := s.Delete(&buf)
+	if !errors.Is(err, errDeleteSubscription) {
+		t.Errorf("Subscription.Delete() error = %v, want %v", err, errDeleteSubscription)
+	}
+	if !reflect.DeepEqual(gotIDs, []string{"sub-1", "sub-2"}) {
+		t.Errorf("Subscription.Delete() got IDs = %v, want [sub-1 sub-2]", gotIDs)
+	}
+	if !strings.Contains(buf.String(), "Subscription sub-2 deleted") {
+		t.Errorf("Subscription.Delete() output = %q, want successful second delete output", buf.String())
+	}
+}

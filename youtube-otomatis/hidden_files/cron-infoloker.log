@@ -1,0 +1,13 @@
+[2026-10-16 18:49 WIB] infoloker-harian (scheduled 16:11 WIB, attempt 1): marker produced-infoloker-2026-10-16.marker ADA → produksi DILEWATI (idempotensi), status dilaporkan.
+- 3 shorts terverifikasi OK: shorts1=1080x1920/69.4s/13.5MB, shorts2=1080x1920/67.3s/12.3MB, shorts3=1080x1920/64.8s/12.4MB (semua <100MB). Judul ≤3 hashtag di akhir ✓, AI disclosure dicentang (metadata) ✓.
+- Long: SEDANG RENDER oleh proses koordinator sebelumnya (PID 163164, alive 1h01m, status S/waiting ffmpeg queue); 11/11 segmen _segs_long selesai, final mux belum. TIDAK diganggu — tidak duplikat.
+- retry-queue: tidak ada entry infoloker (tidak ada kegagalan tercatat).
+- Upload: terjadwal 2026-10-17 (shorts 09:00/14:00/21:00 WIB, long 19:00 WIB); browser task upload + ketukan user 20:00–23:00 WIB pending; watchdog-retry-upload-youtube 20:00 aktif.
+- Topik tercatat di topics-infoloker.md (long=8-bidang-pekerjaan-2026; s1=tanda-lowongan-palsu; s2=5-pekerjaan-bergaji-tinggi; s3=kesalahan-cv-hrd-6-detik).
+[2026-10-16 20:05 WIB] PRODUKSI SELESAI — 4/4 video Info Loker Terkini (@InfoLokerTerkiniID)
+- infoloker-2026-10-16-shorts1.mp4 | 1080x1920 | 69.5s | 13.5MB | "3 Tanda Lowongan Kerja Palsu, Jangan Transfer Uang! #shorts #loker #infoloker" | jadwal 2026-10-17 09:00 WIB
+- infoloker-2026-10-16-shorts2.mp4 | 1080x1920 | 67.3s | 12.3MB | "5 Pekerjaan Paling Dicari 2026, Gaji di Atas Rata-Rata #shorts #loker #infoloker" | jadwal 2026-10-17 14:00 WIB
+- infoloker-2026-10-16-shorts3.mp4 | 1080x1920 | 64.8s | 12.4MB | "CV-mu Dibuang HRD dalam 6 Detik karena Ini #shorts #loker #infoloker" | jadwal 2026-10-17 21:00 WIB
+- infoloker-2026-10-16-long.mp4 | 1280x720 | 528.6s (8.8 mnt) | 62.9MB | "8 Bidang Pekerjaan Paling Dibutuhkan di Indonesia 2026" | jadwal 2026-10-17 19:00 WIB
+Semua: VO Mudiwa (id, speed 95), 29 gambar AI + grain + SFX tersinkron + caption + title card/hook overlay. Semua render via ffmpeg-queue.sh, preset veryfast, <100MB. Metadata: infoloker/2026-10-16/metadata.md (judul, deskripsi, chapter, 20 tags, jadwal, AI disclosure dicentang).
+Catatan: long 8.8 mnt (melebihi target 5-7 mnt) karena 19 beat pendalaman ditambahkan ke naskah (total 49 beat). Tidak ada kegagalan limit harian; retry-queue tidak dipakai.

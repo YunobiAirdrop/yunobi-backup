@@ -1,0 +1,16 @@
+{
+  "name": "Product Schema Generation",
+  "description": "User needs Product schema for an e-commerce page.",
+  "userMessage": "I need to add structured data to my product page at https://mystore.com/products/widget-pro. It's a software product priced at $49/month.",
+  "expectedSkills": ["seo-schema-structured-data", "seo-mcp-tools-expert"],
+  "expectedTools": ["extract_schema", "generate_schema"],
+  "expectedBehavior": [
+    "Runs extract_schema to check for existing schema",
+    "Uses generate_schema with type 'SoftwareApplication' or 'Product'",
+    "Includes required properties (name, image, offers)",
+    "Includes AggregateRating if reviews exist",
+    "Validates against Google requirements",
+    "Provides ready-to-paste JSON-LD snippet",
+    "Explains rich result eligibility"
+  ]
+}

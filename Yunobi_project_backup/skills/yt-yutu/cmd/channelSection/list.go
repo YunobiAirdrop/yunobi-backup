@@ -1,0 +1,106 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package channelSection
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/channelSection"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool     = "channelSection-list"
+	listIdsUsage = "Return the channel sections with the given ids"
+	listShort    = "List channel sections"
+	listLong     = "List channel sections. Use this tool to list channel sections."
+	listExample  = `# List my channel sections
+yutu channelSection list --mine
+# List channel sections by channel ID
+yutu channelSection list --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw
+# List specific channel sections in JSON format
+yutu channelSection list --ids abc123,def456 --output json`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: listIdsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"channel_id":                 {Type: "string", Description: cidUsage},
+		"hl":                         {Type: "string", Description: hlUsage},
+		"mine":                       {Type: "boolean", Description: mineUsage},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool,
+			func(input channelSection.ChannelSection, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	channelSectionCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, listIdsUsage)
+	listCmd.Flags().StringVarP(&channelId, "channelId", "c", "", cidUsage)
+	listCmd.Flags().StringVarP(&hl, "hl", "l", "", hlUsage)
+	listCmd.Flags().BoolVarP(mine, "mine", "M", false, mineUsage)
+	listCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := channelSection.NewChannelSection(
+			channelSection.WithIds(ids),
+			channelSection.WithChannelId(channelId),
+			channelSection.WithHl(hl),
+			channelSection.WithMine(mine),
+			channelSection.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			channelSection.WithParts(parts),
+			channelSection.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

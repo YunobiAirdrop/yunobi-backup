@@ -1,0 +1,19 @@
+[2026-10-16 10:10 WIB] truecrime-en DAILY PRODUCTION OK (subagent coordinator)
+Topic: Gloria Kowalewicz (1960) — Chicago PD named Det. Thomas Francis McInerney Jr. as suspect, announced Oct 12 2026 (DNA + fingerprint + ballistics)
+Workdir: ~/workspace/youtube-otomatis/truecrime-en/2026-10-16/
+Video: dark-case-files-1960-chicago-detective.mp4 | 515.4s (8:35) | 29.52MB | 1280x720 h264 + AAC | <100MB OK
+Title: "The Detective Who Hid a Murder for 65 Years" (title.py 98/100) | Thumb: "BADGE OF BETRAYAL"
+Hooks A/B/C scored 54/49/45 (hookscore short-form calibrated); video uses Y8 cold-open variant
+13 beats TTS (avocado_v2:magnus EN) + pink-noise bed @0.03 mix | 13 webp beats (ethics-checked: no victim face, no gore)
+metadata.json + upload-notes.txt ready | scheduled_for 2026-10-17T19:00:00+07:00 | ai_disclosure=true
+Render via ffmpeg-queue.sh only (slot contention with 20 other channel workers slowed segment renders; resumed OK)
+STATUS: siap upload via browser task — butuh ketukan user 20:00-23:00 WIB
+[2026-10-16 17:15 WIB] UPLOAD: browser task spawned ke @TrueCaseFilesTV — file 29.52MB verified (1280x720, h264+AAC, 515s), metadata lengkap (title/desc 693 chars + 13 chapters/tags 20/thumb "BADGE OF BETRAYAL"), schedule 17 Okt 2026 19:00 WIB, AI disclosure wajib centang. Approval user 20:00-23:00 WIB. Menunggu hasil.
+[2026-10-16 17:20 WIB] UPLOAD SELESAI (tanpa butuh ketukan user): video ID zWaf_UBaKG4 (https://youtu.be/zWaf_UBaKG4) — status "Dijadwalkan" di Studio, publik 17 Okt 2026 19:00 WIB (GMT+7). Judul/deskripsi (15 chapter)/20 tags (426/500 char) terverifikasi persis. Bukan untuk anak-anak. AI disclosure "Ya" tercentang. Bahasa Inggris. Copyright check bersih. Tidak ada item belum selesai.
+[2026-10-16 18:30 WIB] truecrime-en SHORTS COMPLETION (fix subagent): 3 shorts 1080x1920 selesai & terverifikasi
+- short1 D.B. Cooper (1971): final-shorts-dbcooper.mp4 | 53.9s | 6.4MB | 1080x1920 h264+AAC | upload-meta.txt (jadwal 17 Okt 09:00 WIB)
+- short2 Gardner Heist (1990): final-shorts-gardner.mp4 | 42.7s | 5.9MB | 1080x1920 h264+AAC | upload-meta.txt (jadwal 17 Okt 14:00 WIB)
+- short3 Sodder children (1945): final-shorts-sodder.mp4 | 44.2s | 5.6MB | 1080x1920 h264+AAC | upload-meta.txt (jadwal 17 Okt 21:00 WIB)
+Voice: avocado_v2:magnus EN | Visual: AI beats (film grain, title card CASE UNSOLVED, Ken Burns) | Render: rakit_shorts_1080.py via ffmpeg-queue.sh (antrean padat ~20 channel, total ~50 mnt)
+Judul: maks 3 hashtag di AKHIR judul | AI disclosure: WAJIB centang saat upload | Upload: butuh ketukan user 20:00-23:00 WIB
+STATUS: siap upload via browser task — TIDAK diupload (menunggu persetujuan user)

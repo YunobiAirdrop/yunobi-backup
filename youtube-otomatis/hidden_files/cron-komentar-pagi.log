@@ -1,0 +1,32 @@
+====================================================================
+RUN: 2026-10-16 09:11 WIB (balas-komentar-youtube-pagi, attempt 1)
+HASIL: 0 komentar dibalas, 0 seed dibuat — RUN GAGAL (blocker akses)
+====================================================================
+
+Jalur 1 — Browser task (studio.youtube.com, login khususstokyunobi@gmail.com):
+  * Password berhasil diisi dari kredensial tersimpan, namun Google meminta
+    Verifikasi 2 Langkah: notifikasi "Apakah Anda yang mencoba login?"
+    terkirim ke perangkat Vivo Y19s dan Infinix SMRAT 8 PRO (tap "Ya" di HP).
+  * Opsi lain: kode keamanan aplikasi Google di HP, atau kode cadangan 8 digit.
+    SMS ke nomor ••09/••89 tidak tersedia; passkey tidak didukung browser ini.
+  * Run terjadwal berjalan detached (user tidak menonton) -> approval 2FA tidak
+    bisa dipenuhi. Browser task ditutup, slot dibebaskan.
+
+Jalur 2 — YouTube Data API (token per-channel di ~/.hermes/yt-growth/tokens/):
+  * Direktori tokens/ KOSONG; client_secret.json juga tidak ada.
+  * SETUP.md mencatat 17/17 token aktif per 2026-10-08, tapi di VM ini tidak
+    ditemukan — kemungkinan disimpan di VM/akun lain atau terhapus.
+  * Otorisasi ulang butuh langkah manual user (Google Cloud + OAuth per channel).
+
+Tindak lanjut yang dibutuhkan dari user (bukan di run ini):
+  1. Tap "Ya" di notifikasi login Google pada Vivo Y19s / Infinix SMRAT 8 PRO
+     agar sesi browser VM kembali terautentikasi, ATAU
+  2. Kembalikan token OAuth per-channel ke ~/.hermes/yt-growth/tokens/ (atau
+     otorisasi ulang 12 channel via auth.py) agar cron bisa memakai API resmi.
+
+Per channel (12): tidak ada yang tersentuh — Kisah Horor, Cerita Rakyat,
+Lima Misteri, Kisah Dharma, Jejak Islami, Kisah Alkitab, Jejak Buddha,
+Tiny Builders, Strange Tales, Ancient Empires, Echoes of the Past,
+Tales of Dread.
+Catatan: pin komentar tetap TIDAK dicoba (butuh verifikasi HP, ditolak user).
+====================================================================

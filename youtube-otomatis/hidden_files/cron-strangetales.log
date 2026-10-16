@@ -1,0 +1,17 @@
+[2026-10-16 18:40 WIB] RUN strangetales-shorts-harian (1:1 manual, attempt 1) — SELESAI PRODUKSI, UPLOAD MENUNGGU JENDELA KETUKAN 20:00-23:00
+- Idempotensi: marker produced-strangetales-2026-10-16.marker dibuat 15:24 WIB.
+- V1 DIBATALKAN (~16:00): topik true-crime (Lead Masks/Sodder/Dyatlov) tidak cocok gaya channel hasil riset gaya-channel.md (WAJIB 100%: shorts EN fenomena aneh alam, judul pola "?!", hashtag #shorts #weirdfacts #strangetales). Arsip: strange-tales/2026-10-16/archive-v1-offstyle/ + ALASAN.txt. Sodder juga duplikat niche TrueCaseFilesTV.
+- V2 (sesuai gaya channel):
+  s1 "Fish Fall From the Sky in Honduras — Real?! #shorts #weirdfacts #strangetales" | 1080x1920 44.6s 9.2MB | jadwal 2026-10-16 21:00 WIB | hook B pattern-interrupt "IT RAINS FISH"
+  s2 "This Glacier in Antarctica BLEEDS Red — Real?! #shorts #weirdfacts #strangetales" | 1080x1920 51.5s 11.4MB | jadwal 2026-10-17 03:00 WIB | hook B "NOT A SPECIAL EFFECT"
+  s3 "These Rocks Move Alone Across the Desert — Real?! #shorts #weirdfacts #strangetales" | 1080x1920 49.8s 12.3MB | jadwal 2026-10-17 07:00 WIB | hook B "NO ONE TOUCHES THEM"
+- Voice: avocado_v2:miles (Satiny Moon) EN speed 105, 5 beat/short. Gambar: 15 AI images literal per narasi, verifikasi visual manual. Build: rakit_shorts_st.py (1080x1920, veryfast, Ken Burns portrait, film grain, caption on-screen per beat + tag STRANGE TALES), SEMUA via ffmpeg-queue.sh.
+- BUG DITEMUKAN & DIPERBAIKI: rakit_shorts_st.py memakai _tmp_segs bersama di outdir → 3 render paralel saling menimpa segmen (video s1 sempat tercampur visual s3). Fix: tmpd unik per manifest (sX/_tmp_segs). s1 & s2 & s3 di-render ulang dan diverifikasi frame-per-beat (5 frame/video cocok naskah).
+- Insiden render: 2x GAGAL segmen transient (slot contention, ~30 proses ffmpeg channel lain) → retry sukses. 2 gambar V1 ditolak media policy (integrity_check_failed, rumah terbakar) → tidak diulang; V2 tidak kena.
+- GAP: SFX rekaman asli TIDAK tersedia di VM (library backup hanya manifest tanpa file audio) → video tanpa bed SFX. Perlu tindak lanjut.
+- UPLOAD: BELUM. Menunggu ketukan persetujuan user 20:00-23:00 WIB. Staging lengkap: sX/upload-meta.md (judul/deskripsi/tags persis) + upload-plan.md (instruksi browser task + AI disclosure CENTANG + jadwal). Browser task TIDAK di-spawn dari run ini (detached run tidak bisa terima ketukan).
+[2026-10-16 16:11 WIB] RUN strangetales-shorts-harian (scheduled, attempt 1) — IDEMPOTENSI: marker produced-strangetales-2026-10-16.marker SUDAH ADA (produksi hari ini selesai via run manual 1:1). PRODUKSI DILEWATI, status saja.
+- Verifikasi file: 3 shorts V2 final ada & valid — s1 strangetales-s1-2026-10-16.mp4 (1080x1920, 44.64s, 9.2MB), s2 strangetales-s2-2026-10-16.mp4 (1080x1920, 51.48s, 11.4MB), s3 strangetales-s3-2026-10-16.mp4 (1080x1920, 49.78s, 12.3MB); semua <100MB ✓. sX/upload-meta.md + upload-plan.md lengkap.
+- UPLOAD: BELUM dilaksanakan (menunggu jendela ketukan persetujuan user 20:00–23:00 WIB). Browser task TIDAK di-spawn dari run ini (detached run tidak bisa terima ketukan; spawn dilakukan main agent pada jendela ketukan memakai upload-plan.md — AI disclosure CENTANG, jadwal 21:00 / 03:00 / 07:00 WIB).
+- retry-queue/strangetales-2026-10-16.json: tidak ada (belum ada kegagalan upload; gagal batas harian akan dicatat saat upload).
+- Catatan: pola baru (3 shorts + 1 long, long 19:00 WIB) berlaku mulai jadwal besok 2026-10-17; hari ini tetap 3 shorts hasil run manual 15:24.

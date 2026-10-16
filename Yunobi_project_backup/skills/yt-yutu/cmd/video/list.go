@@ -1,0 +1,137 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package video
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/video"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool     = "video-list"
+	listIdsUsage = "Return videos with the given ids"
+	listMrUsage  = "Return videos liked/disliked by the authenticated user"
+	listShort    = "List videos"
+	listLong     = "List videos. Use this tool to list videos."
+	listExample  = `# List a video by ID
+yutu video list --ids IBju0NwjQRc
+# List multiple videos in JSON format
+yutu video list --ids IBju0NwjQRc,wZ9z3FUuNvQ --output json
+# List most popular videos by region
+yutu video list --chart mostPopular --regionCode US --maxResults 10
+# List my liked videos
+yutu video list --myRating like --output yaml`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: listIdsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"chart": {
+			Type: "string", Description: chartUsage,
+			Enum: []any{"chartUnspecified", "mostPopular"},
+		},
+		"hl":          {Type: "string", Description: hlUsage},
+		"locale":      {Type: "string", Description: localeUsage},
+		"category_id": {Type: "string", Description: caidUsage},
+		"region_code": {Type: "string", Description: rcUsage},
+		"max_height": {
+			Type: "number", Description: mhUsage, Minimum: new(float64(0)),
+		},
+		"max_width": {
+			Type: "number", Description: mwUsage, Minimum: new(float64(0)),
+		},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"), Minimum: new(float64(0)),
+		},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"rating":                     {Type: "string", Description: listMrUsage},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet","status","statistics"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool, func(input video.Video, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	videoCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, listIdsUsage)
+	listCmd.Flags().StringVarP(&chart, "chart", "c", "", chartUsage)
+	listCmd.Flags().StringVarP(&hl, "hl", "l", "", hlUsage)
+	listCmd.Flags().StringVarP(&locale, "locale", "L", "", localeUsage)
+	listCmd.Flags().StringVarP(&categoryId, "videoCategoryId", "g", "", caidUsage)
+	listCmd.Flags().StringVarP(&regionCode, "regionCode", "r", "", rcUsage)
+	listCmd.Flags().Int64VarP(&maxHeight, "maxHeight", "H", 0, mhUsage)
+	listCmd.Flags().Int64VarP(&maxWidth, "maxWidth", "W", 0, mwUsage)
+	listCmd.Flags().Int64VarP(&maxResults, "maxResults", "n", 5, pkg.MRUsage)
+	listCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	listCmd.Flags().StringVarP(&rating, "myRating", "R", "", listMrUsage)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet", "status", "statistics"},
+		pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := video.NewVideo(
+			video.WithIds(ids),
+			video.WithChart(chart),
+			video.WithHl(hl),
+			video.WithLocale(locale),
+			video.WithCategory(categoryId),
+			video.WithRegionCode(regionCode),
+			video.WithMaxHeight(maxHeight),
+			video.WithMaxWidth(maxWidth),
+			video.WithMaxResults(maxResults),
+			video.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			video.WithRating(rating),
+			video.WithParts(parts),
+			video.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

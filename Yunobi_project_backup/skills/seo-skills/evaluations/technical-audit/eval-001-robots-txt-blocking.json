@@ -1,0 +1,14 @@
+{
+  "name": "Robots.txt Blocking Important Pages",
+  "description": "robots.txt accidentally blocks important content pages.",
+  "userMessage": "My new product pages aren't showing up in Google at all. The site is example.com. Can you help figure out why?",
+  "expectedSkills": ["seo-technical-audit", "seo-mcp-tools-expert"],
+  "expectedTools": ["analyze_robots_txt", "analyze_page"],
+  "expectedBehavior": [
+    "Runs analyze_robots_txt first to check crawlability",
+    "Identifies Disallow rule blocking the product pages",
+    "Explains that blocked pages cannot be indexed",
+    "Provides corrected robots.txt configuration",
+    "Suggests also checking for noindex meta tags on the pages"
+  ]
+}

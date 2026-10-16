@@ -1,0 +1,5 @@
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/audio/beat1.mp3'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/audio/beat2.mp3'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/audio/beat3.mp3'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/audio/beat4.mp3'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/audio/beat5.mp3'

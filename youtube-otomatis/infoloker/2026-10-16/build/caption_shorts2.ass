@@ -1,0 +1,45 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: cap,DejaVu Sans,64,&H00FFFFFF,&H99000000,-1,0,1,3,1,2,60,60,470,1
+Style: big,DejaVu Sans,110,&H0000F5FF,&H99000000,-1,0,1,5,1,8,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Text
+Dialogue: 0,0:00:00.00,0:00:01.97,cap,Lima pekerjaan ini gajinya
+Dialogue: 0,0:00:01.92,0:00:03.88,cap,di atas rata-rata, dan
+Dialogue: 0,0:00:03.83,0:00:05.79,cap,perusahaannya masih berebut mencari
+Dialogue: 0,0:00:05.75,0:00:07.71,cap,orang.
+Dialogue: 0,0:00:07.96,0:00:10.05,cap,Pertama: analis data. Semua
+Dialogue: 0,0:00:10.00,0:00:12.08,cap,perusahaan butuh orang yang
+Dialogue: 0,0:00:12.03,0:00:14.12,cap,bisa mengubah angka jadi
+Dialogue: 0,0:00:14.07,0:00:16.15,cap,keputusan.
+Dialogue: 0,0:00:16.39,0:00:18.82,cap,Kedua: pengembang perangkat lunak.
+Dialogue: 0,0:00:18.77,0:00:21.21,cap,Aplikasi terus tumbuh, programmer
+Dialogue: 0,0:00:21.16,0:00:23.59,cap,selalu dicari.
+Dialogue: 0,0:00:23.84,0:00:25.91,cap,Ketiga: spesialis pemasaran digital.
+Dialogue: 0,0:00:25.86,0:00:27.93,cap,Bisnis pindah online, ahli
+Dialogue: 0,0:00:27.88,0:00:29.96,cap,iklan dan konten jadi
+Dialogue: 0,0:00:29.91,0:00:31.98,cap,rebutan.
+Dialogue: 0,0:00:32.23,0:00:34.53,cap,Keempat: tenaga kesehatan. Perawat
+Dialogue: 0,0:00:34.48,0:00:36.77,cap,dan bidan — kebutuhan
+Dialogue: 0,0:00:36.72,0:00:39.02,cap,yang tidak pernah surut.
+Dialogue: 0,0:00:39.28,0:00:41.71,cap,Kelima: ahli keamanan siber.
+Dialogue: 0,0:00:41.66,0:00:44.10,cap,Makin banyak data digital,
+Dialogue: 0,0:00:44.05,0:00:46.48,cap,makin dicari penjaganya.
+Dialogue: 0,0:00:46.73,0:00:49.24,cap,Kabar baiknya: semua bisa
+Dialogue: 0,0:00:49.19,0:00:51.69,cap,dipelajari dari nol. Banyak
+Dialogue: 0,0:00:51.64,0:00:54.15,cap,kursus gratis di internet.
+Dialogue: 0,0:00:54.40,0:00:56.51,cap,Pilih satu bidang, dalami
+Dialogue: 0,0:00:56.46,0:00:58.58,cap,enam bulan, biar portfoliomu
+Dialogue: 0,0:00:58.53,0:01:00.64,cap,yang bicara.
+Dialogue: 0,0:01:00.89,0:01:02.69,cap,Mau naik level di
+Dialogue: 0,0:01:02.64,0:01:04.45,cap,2026? Mulai dari lima
+Dialogue: 0,0:01:04.40,0:01:06.20,cap,bidang ini.
+Dialogue: 1,0:00:00.25,0:00:03.20,big,{\pos(540,700)}5 PEKERJAAN\NPALING DICARI\N2026
+Dialogue: 1,0:01:04.94,0:01:07.24,big,{\pos(540,700)}INFO LOKER\NTERKINI

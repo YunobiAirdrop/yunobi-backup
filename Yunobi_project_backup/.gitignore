@@ -1,0 +1,36 @@
+# Media & file besar — jangan commit
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp3
+*.wav
+*.aac
+
+# Data runtime
+data/
+*_terkirim*.json
+riwayat-*.json
+*-history.json
+retry-queue/
+__pycache__/
+*.pyc
+
+# Kredensial & secret — JANGAN PERNAH commit
+*.env
+*token*
+*credential*
+*secret*
+*.pem
+*.key
+id_rsa*
+!channels.yaml
+
+# Log & sementara
+*.log
+/tmp/

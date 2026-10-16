@@ -1,0 +1,84 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package caption
+
+import (
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/spf13/cobra"
+)
+
+const (
+	short         = "Manage YouTube video captions"
+	long          = "Manage YouTube video captions. Use this tool to list, insert, update, download, or delete video captions."
+	fileUsage     = "Path to save the caption file"
+	attUsage      = "unknown|primary|commentary|descriptive"
+	iasUsage      = "Whether YouTube synchronized the caption track to the audio track in the video"
+	iscUsage      = "Whether the track contains closed captions for the deaf and hard of hearing"
+	isdUsage      = "whether the caption track is a draft"
+	iserUsage     = "Whether caption track is formatted for 'easy reader'"
+	islUsage      = "Whether the caption track uses large text for the vision-impaired"
+	languageUsage = "Language of the caption track"
+	nameUsage     = "Name of the caption track"
+	tkUsage       = "standard|ASR|forced"
+	vidUsage      = "ID of the video"
+	tfmtUsage     = "sbv|srt|vtt"
+	tlangUsage    = "Translate the captions into this language"
+)
+
+var (
+	ids                    []string
+	file                   string
+	audioTrackType         string
+	isAutoSynced           = new(false)
+	isCC                   = new(false)
+	isDraft                = new(false)
+	isEasyReader           = new(false)
+	isLarge                = new(false)
+	language               string
+	name                   string
+	trackKind              string
+	onBehalfOf             string
+	onBehalfOfContentOwner string
+	videoId                string
+	parts                  []string
+	tfmt                   string
+	tlang                  string
+)
+
+var captionCmd = &cobra.Command{
+	Use:   "caption",
+	Short: short,
+	Long:  long,
+	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
+		resetFlags(cmd)
+	},
+	Run: func(cmd *cobra.Command, _ []string) {
+		_ = cmd.Help()
+	},
+}
+
+func init() {
+	cmd.RootCmd.AddCommand(captionCmd)
+}
+
+func resetFlags(cmd *cobra.Command) {
+	flagSet := cmd.Flags()
+	boolFlags := map[string]**bool{
+		"isAutoSynced": &isAutoSynced,
+		"isCC":         &isCC,
+		"isDraft":      &isDraft,
+		"isEasyReader": &isEasyReader,
+		"isLarge":      &isLarge,
+	}
+	utils.ResetFlags(boolFlags, flagSet)
+
+	if cmd.Name() == "update" {
+		stringFlags := map[string]*string{
+			"audioTrackType": &audioTrackType,
+			"trackKind":      &trackKind,
+		}
+		utils.ResetFlags(stringFlags, flagSet)
+	}
+}

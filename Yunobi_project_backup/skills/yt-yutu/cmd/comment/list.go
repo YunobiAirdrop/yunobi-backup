@@ -1,0 +1,111 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package comment
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/comment"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool     = "comment-list"
+	listPidUsage = "Returns replies to the specified comment"
+	listShort    = "List comments"
+	listLong     = "List comments. Use this tool to list comments by IDs."
+	listExample  = `# List replies to a comment
+yutu comment list --parentId UgyXXXXXXXX --maxResults 10
+# List specific comments in JSON format
+yutu comment list --ids abc123,def456 --output json
+# List a comment in plain text
+yutu comment list --ids abc123 --textFormat plainText`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: idsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"),
+			Minimum: new(float64(0)),
+		},
+		"parent_id": {Type: "string", Description: listPidUsage},
+		"text_format": {
+			Type: "string", Enum: []any{"textFormatUnspecified", "html", "plainText"},
+			Description: tfUsage, Default: jsontext.Value(`"html"`),
+		},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool, func(input comment.Comment, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	commentCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, idsUsage)
+	listCmd.Flags().Int64VarP(
+		&maxResults, "maxResults", "n", 5, pkg.MRUsage,
+	)
+	listCmd.Flags().StringVarP(&parentId, "parentId", "P", "", listPidUsage)
+	listCmd.Flags().StringVarP(
+		&textFormat, "textFormat", "t", "html", tfUsage,
+	)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := comment.NewComment(
+			comment.WithIds(ids),
+			comment.WithMaxResults(maxResults),
+			comment.WithParentId(parentId),
+			comment.WithTextFormat(textFormat),
+			comment.WithParts(parts),
+			comment.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

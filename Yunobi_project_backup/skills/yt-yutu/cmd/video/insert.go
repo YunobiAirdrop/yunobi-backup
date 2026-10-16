@@ -1,0 +1,194 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package video
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/eat-pray-ai/yutu/pkg/video"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	insertTool      = "video-insert"
+	insertLangUsage = "Language of the video"
+	insertConfirm   = "Upload video: %s"
+	insertShort     = "Upload a video"
+	insertLong      = "Upload a video. Use this tool to upload a video."
+	insertExample   = `# Upload a public video
+yutu video insert --file video.mp4 --title 'My Video' --categoryId 22 --privacy public
+# Upload a private video with tags
+yutu video insert --file video.mp4 --title 'Tutorial' --categoryId 27 --privacy private --tags 'go,tutorial'
+# Upload an unlisted video with custom thumbnail
+yutu video insert --file video.mp4 --title 'Music Video' --categoryId 10 --privacy unlisted --thumbnail cover.jpg`
+)
+
+var insertInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"file", "category_id", "privacy"},
+	Properties: map[string]*jsonschema.Schema{
+		"auto_levels": {Type: "boolean", Description: alUsage},
+		"file":        {Type: "string", Description: fileUsage},
+		"title":       {Type: "string", Description: titleUsage},
+		"description": {Type: "string", Description: descUsage},
+		"tags": {
+			Type: "array", Description: tagsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["yutu🐰"]`),
+		},
+		"language": {Type: "string", Description: insertLangUsage},
+		"license": {
+			Type: "string", Enum: []any{"youtube", "creativeCommon"},
+			Description: licenseUsage,
+		},
+		"thumbnail":   {Type: "string", Description: thumbnailUsage},
+		"channel_id":  {Type: "string", Description: chidUsage},
+		"playlist_id": {Type: "string", Description: pidUsage},
+		"category_id": {Type: "string", Description: caidUsage},
+		"privacy": {
+			Type: "string", Description: privacyUsage,
+			Enum: []any{"public", "private", "unlisted"},
+		},
+		"for_kids": {
+			Type: "boolean", Description: fkUsage, Default: jsontext.Value("false"),
+		},
+		"contains_synthetic_media": {
+			Type: "boolean", Description: csmUsage, Default: jsontext.Value("false"),
+		},
+		"embeddable":            {Type: "boolean", Description: embeddableUsage},
+		"recording_date":        {Type: "string", Description: rdUsage},
+		"publish_at":            {Type: "string", Description: paUsage},
+		"stabilize":             {Type: "boolean", Description: stabilizeUsage},
+		"notify_subscribers":    {Type: "boolean", Description: nsUsage},
+		"public_stats_viewable": {Type: "boolean", Description: psvUsage},
+		"on_behalf_of_content_owner": {
+			Type:        "string",
+			Description: pkg.OBOCOUsage,
+		},
+		"on_behalf_of_content_owner_channel": {
+			Type:        "string",
+			Description: pkg.OBOCOCUsage,
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: insertTool, Title: insertShort, Description: insertLong,
+			InputSchema: insertInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  false,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			insertTool, cobramcp.ConfirmThen(
+				func(input video.Video) string {
+					return fmt.Sprintf(insertConfirm, input.File)
+				},
+				func(input video.Video, w io.Writer) error {
+					return input.Insert(w)
+				},
+			),
+		),
+	)
+	videoCmd.AddCommand(insertCmd)
+
+	insertCmd.Flags().BoolVarP(
+		autoLevels, "autoLevels", "A", true, alUsage,
+	)
+	insertCmd.Flags().StringVarP(&file, "file", "f", "", fileUsage)
+	insertCmd.Flags().StringVarP(&title, "title", "t", "", titleUsage)
+	insertCmd.Flags().StringVarP(description, "description", "d", "", descUsage)
+	insertCmd.Flags().StringSliceVarP(
+		&tags, "tags", "a", []string{"yutu🐰"}, tagsUsage,
+	)
+	insertCmd.Flags().StringVarP(language, "language", "l", "", insertLangUsage)
+	insertCmd.Flags().StringVarP(&license, "license", "L", "", licenseUsage)
+	insertCmd.Flags().StringVarP(&thumbnail, "thumbnail", "u", "", thumbnailUsage)
+	insertCmd.Flags().StringVarP(&channelId, "channelId", "c", "", chidUsage)
+	insertCmd.Flags().StringVarP(&playListId, "playlistId", "y", "", pidUsage)
+	insertCmd.Flags().StringVarP(&categoryId, "categoryId", "g", "", caidUsage)
+	insertCmd.Flags().StringVarP(&privacy, "privacy", "p", "", privacyUsage)
+	insertCmd.Flags().BoolVarP(forKids, "forKids", "K", false, fkUsage)
+	insertCmd.Flags().BoolVarP(
+		embeddable, "embeddable", "E", true, embeddableUsage,
+	)
+	insertCmd.Flags().BoolVarP(
+		containsSyntheticMedia, "containsSyntheticMedia", "M", false, csmUsage,
+	)
+	insertCmd.Flags().StringVarP(recordingDate, "recordingDate", "D", "", rdUsage)
+	insertCmd.Flags().StringVarP(publishAt, "publishAt", "U", "", paUsage)
+	insertCmd.Flags().BoolVarP(stabilize, "stabilize", "S", true, stabilizeUsage)
+	insertCmd.Flags().BoolVarP(
+		notifySubscribers, "notifySubscribers", "N", true, nsUsage,
+	)
+	insertCmd.Flags().BoolVarP(
+		publicStatsViewable, "publicStatsViewable", "P", false, psvUsage,
+	)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwnerChannel, "onBehalfOfContentOwnerChannel", "B", "",
+		pkg.OBOCOCUsage,
+	)
+	insertCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	insertCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = insertCmd.MarkFlagRequired("file")
+	_ = insertCmd.MarkFlagRequired("categoryId")
+	_ = insertCmd.MarkFlagRequired("privacy")
+}
+
+var insertCmd = &cobra.Command{
+	Use:     "insert",
+	Short:   insertShort,
+	Long:    insertLong,
+	Example: insertExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(insertConfirm, file))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := video.NewVideo(
+			video.WithAutoLevels(autoLevels),
+			video.WithFile(file),
+			video.WithTitle(title),
+			video.WithDescription(description),
+			video.WithTags(tags),
+			video.WithLanguage(language),
+			video.WithLicense(license),
+			video.WithThumbnail(thumbnail),
+			video.WithChannelId(channelId),
+			video.WithPlaylistId(playListId),
+			video.WithCategory(categoryId),
+			video.WithPrivacy(privacy),
+			video.WithForKids(forKids),
+			video.WithEmbeddable(embeddable),
+			video.WithContainsSyntheticMedia(containsSyntheticMedia),
+			video.WithRecordingDate(recordingDate),
+			video.WithPublishAt(publishAt),
+			video.WithStabilize(stabilize),
+			video.WithNotifySubscribers(notifySubscribers),
+			video.WithPublicStatsViewable(publicStatsViewable),
+			video.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			video.WithOnBehalfOfContentOwnerChannel(onBehalfOfContentOwnerChannel),
+			video.WithOutput(output),
+		)
+		return input.Insert(c.OutOrStdout())
+	},
+}

@@ -1,0 +1,22 @@
+=== cron-space-en 2026-10-16 16:11 WIB (run terjadwal) ===
+IDEMPOTENSI: marker produced-space-en-2026-10-16.marker SUDAH ADA (dibuat 15:26 WIB oleh run manual 1:1) → produksi DILEWATI, laporan status saja.
+
+STATUS PRODUKSI HARI INI (run manual 15:24 WIB):
+- 1 LONG diproduksi: "The Moon Is Rusting — And It Should Be Impossible"
+  - file: space-en/output/2026-10-16/final.mp4 (35 MB, <100 MB OK; 1280x720, 6:11)
+  - 25 gambar AI (1/beat ~15s), VO EN avocado_v2:MAI_03 (0.92x pacing dokumenter)
+  - hook A/B/C ditulis, dipilih Hook A (Curiosity Gap); formula judul Y1, 49 karakter
+  - anti full-AI look: film grain + vignette, brown-noise ambient bed, pacing variatif
+  - hashtag di deskripsi; ai_disclosure_required: true; metadata.json lengkap
+  - render selesai 18:40 WIB, 25/25 segmen OK (via rakit_light.py + ffmpeg-queue.sh)
+- 3 SHORTS: TIDAK diproduksi hari ini. Sesuai pola lama 1:1 (run manual); pola baru 3 shorts + 1 long berlaku mulai jadwal besok 16:11 WIB. Bukan kegagalan.
+- retry-queue: TIDAK ada entri space-en-2026-10-16.json (tidak ada kegagalan limit yang dicatat).
+
+STATUS UPLOAD:
+- belum ada catatan upload-pending-space-en-2026-10-16.json
+- file siap upload: space-en/output/2026-10-16/final.mp4
+- jadwal metadata: publish 2026-10-17 19:00 WIB (long)
+- ketukan user 20:00–23:00 WIB via watchdog-retry-upload-youtube (20:00): perlu steering browser task untuk upload + centang AI disclosure setelah approval user
+
+DILANJUTKAN BESOK: pola baru 3 shorts + 1 long mulai jadwal 2026-10-17 16:11 WIB. Topik hari ini (Moon rusting) dicatat agar tidak diulang.
+[2026-10-16 18:40 WIB] space-en LONG OK | topic='The Moon Is Rusting — And It Should Be Impossible' | video=final.mp4 34.7MB 1280x720 6:11 | beats=25 imgs=25 (AI photoreal, literal) | VO=avocado_v2:MAI_03 EN, slowed 0.92x, ambient rumble bed | hook=A curiosity-gap | title='The Moon Is Rusting — And It Should Be Impossible' (49ch) | thumb='EARTH'S FAULT' | scheduled=2026-10-17 19:00 WIB | upload: NOT attempted (agen upload terpisah) | notes: render lambat ~3 jam karena antrean ffmpeg-queue padat (1:1 21 channel)

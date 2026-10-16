@@ -1,0 +1,96 @@
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "go.*"
+      - "**/*.go"
+      - "!**/*.md"
+      - "**/*.bazel"
+      - "scripts/**"
+      - ".github/workflows/test.yml"
+    tags-ignore:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+    paths:
+      - "go.*"
+      - "**/*.go"
+      - "!**/*.md"
+      - "**/*.bazel"
+      - "scripts/**"
+      - ".github/workflows/test.yml"
+
+permissions:
+  contents: read
+
+env:
+  COVERAGE_FILE: ./coverage.out
+
+jobs:
+  go-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: ./go.mod
+      - name: Lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
+      - name: Go test
+        shell: bash
+        run: |
+          go test ./... -coverprofile=${{ env.COVERAGE_FILE }} -coverpkg="./pkg/..."
+      - name: Command tests
+        shell: bash
+        run: ./scripts/command-test.sh
+      - uses: ncruces/go-coverage-report@v0
+        with:
+          coverage-file: ${{ env.COVERAGE_FILE }}
+          badge-style: flat-square
+          chart: true
+          amend: true
+        if: |
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/main'
+
+  bazel-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: bazel-contrib/setup-bazel@0.19.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+          external-cache: |
+            manifest:
+              go_sdk: go.mod
+              modules: MODULE.bazel.lock
+          cache-save: ${{ github.event_name != 'pull_request' }}
+      - name: Verify dependencies
+        shell: bash
+        run: |
+          bazel run @rules_go//go -- mod tidy -v
+          # bazel run @rules_go//go -- generate ./...
+          bazel run //:gazelle
+          bazel mod tidy
+          git diff --exit-code
+      - name: Bazel test
+        shell: bash
+        run: bazel test //... --test_output=errors
+      - name: Command tests
+        shell: bash
+        run: |
+          binary="$(bazel info execution_root)/$(bazel cquery --output=files //:yutu-linux-amd64)"
+          ./scripts/command-test.sh "$binary"

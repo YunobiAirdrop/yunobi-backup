@@ -1,0 +1,53 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package cmd
+
+import (
+	"log/slog"
+	"os"
+
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/auth"
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"github.com/spf13/cobra"
+)
+
+const (
+	authShort  = "Authenticate with YouTube APIs"
+	authLong   = "Authenticate with YouTube APIs to access and manage YouTube resources."
+	credUsage  = "Path to client secret file, or Base64 encoded string, or JSON string (env: YUTU_CREDENTIAL)"
+	cacheUsage = "Path to token cache file, or Base64 encoded string, or JSON string (env: YUTU_CACHE_TOKEN)"
+)
+
+var (
+	credential string
+	cacheToken string
+)
+
+var authCmd = &cobra.Command{
+	Use:   "auth",
+	Short: authShort,
+	Long:  authLong,
+	Run: func(cmd *cobra.Command, _ []string) {
+		if _, err := auth.NewY2BService(
+			auth.WithCredential(credential, pkg.Root.FS()),
+			auth.WithCacheToken(cacheToken, pkg.Root.FS()),
+			auth.WithRedirectURL(common.DefaultRedirectURL),
+		).GetService(); err != nil {
+			slog.Error("authentication failed", "error", err)
+			os.Exit(1)
+		}
+	},
+}
+
+func init() {
+	RootCmd.AddCommand(authCmd)
+
+	authCmd.Flags().StringVarP(
+		&credential, "credential", "c", "client_secret.json", credUsage,
+	)
+	authCmd.Flags().StringVarP(
+		&cacheToken, "cacheToken", "t", "youtube.token.json", cacheUsage,
+	)
+}

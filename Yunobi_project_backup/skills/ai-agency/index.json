@@ -1,0 +1,220 @@
+{
+  "repository": "https://github.com/heyramzi/ai-agency",
+  "marketplace": "heyramzi/ai-agency",
+  "install": [
+    "/plugin marketplace add heyramzi/ai-agency",
+    "/plugin install ai-agency@ai-agency"
+  ],
+  "read_this_first": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/AGENTS.md",
+  "courses": "https://go.upsys-consulting.com/skool",
+  "commands": [
+    {
+      "name": "clickup-foundations",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/clickup-foundations.md"
+    },
+    {
+      "name": "marketing-department",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/marketing-department.md"
+    },
+    {
+      "name": "seo-engine",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/seo-engine.md"
+    },
+    {
+      "name": "start-here",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/start-here.md"
+    },
+    {
+      "name": "the-project-manager",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/the-project-manager.md"
+    },
+    {
+      "name": "youtube-engine",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/commands/youtube-engine.md"
+    }
+  ],
+  "agents": [
+    {
+      "name": "project-manager",
+      "markdown": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/agents/delivery/project-manager.md"
+    }
+  ],
+  "skills": [
+    {
+      "name": "generate-social",
+      "area": "content",
+      "description": "Writes LinkedIn and X posts from YouTube transcripts, ideas or client stories in the founder's own measured voice, holding the structural targets for length and block count and the ban on bait endings. Use when a transcript needs repurposing, when an idea, insight or client story should become posts, or on 'create posts', 'write content', '/generate-social'.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/content/generate-social/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/content/generate-social",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/generate-social.zip"
+    },
+    {
+      "name": "board",
+      "area": "delivery",
+      "description": "Runs the ClickUp board lifecycle: move changes a task's status, spec turns an Open idea into a PRD, start implements a Ready task into a reviewed PR, ship merges a PR and closes the task. Use on /board-move, /board-spec, /board-start, /board-ship, or picking up, speccing or shipping a task.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/delivery/board/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/delivery/board",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/board.zip"
+    },
+    {
+      "name": "clickup",
+      "area": "delivery",
+      "description": "Runs ClickUp: the cu CLI for tasks, docs and hierarchy (default), scripted bulk work (cleanup, demo enrichment, doc-name standardizing), and the browser for what has no API (templates, automations, dashboards, statuses, Workload). Use for any ClickUp task, doc, bulk-update or browser-only job.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/delivery/clickup/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/delivery/clickup",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/clickup.zip"
+    },
+    {
+      "name": "whiteboard",
+      "area": "design",
+      "description": "Builds the whiteboard a video talks over: a compiled document, or hand-drawn Excalidraw elements drawn live on the iPad. Use when a video needs a board, a diagram from the terminal, or an .excalidraw file to write, change or read.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/design/whiteboard/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/design/whiteboard",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/whiteboard.zip"
+    },
+    {
+      "name": "youtube-thumbnail",
+      "area": "design",
+      "description": "Designs YouTube thumbnails: for the founder, systems and AI-tooling niche off 270 measured frames, from a growing template library. Ships a build order or a finished render. Use when a video needs a thumbnail, CTR needs improving, or on 'thumbnail', 'YouTube cover', 'thumbnail A/B'.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/design/youtube-thumbnail/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/design/youtube-thumbnail",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/youtube-thumbnail.zip"
+    },
+    {
+      "name": "motion-design",
+      "area": "editor-os",
+      "description": "Makes video clips and product films: motion graphics, captions, figures, 3D, CTAs. Use when a video needs a clip that is not the presenter's face, a product needs a film with no voice-over, or on a Remotion or HyperFrames question.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/editor-os/motion-design/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/editor-os/motion-design",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/motion-design.zip"
+    },
+    {
+      "name": "video-edit",
+      "area": "editor-os",
+      "description": "Runs a take from card to composition. In Descript: DJI lav sync, project setup, pre-cut coaching, the script cut, long-form or the tighter 5-pass Short. Use when a reel used a lav, footage needs to land in Descript, a take needs coaching before cutting, or a raw take or Short needs cutting.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/editor-os/video-edit/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/editor-os/video-edit",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/video-edit.zip"
+    },
+    {
+      "name": "ai-manager",
+      "area": "operations",
+      "description": "Manages every skill and agent: writes, repairs, reviews and cleans them, critiques the shelf for bad names and overlap, and gates broken agent-to-skill links. Use when writing or editing a skill or agent, when one fires wrong, before it ships, or when the shelf feels messy.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/operations/ai-manager/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/operations/ai-manager",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/ai-manager.zip"
+    },
+    {
+      "name": "programmatic-seo",
+      "area": "search",
+      "description": "The SEO and AI-search pipeline for one person: what page to write next, keyword and prompt research, the page itself, and the off-site mentions that decide whether an assistant names you. Use on 'SEO', 'AEO', 'GEO', 'rank on Google', 'get cited by ChatGPT', or keyword research.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/search/programmatic-seo/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/search/programmatic-seo",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/programmatic-seo.zip"
+    },
+    {
+      "name": "search-console",
+      "area": "search",
+      "description": "Queries Google Search Console for keyword performance, content gaps, cannibalisation and ranking analysis. Use when checking search performance, deciding what page to write next, finding queries that rank with no page behind them, or on 'GSC', 'check rankings', 'what am I ranking for'.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/search/search-console/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/search/search-console",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/search-console.zip"
+    },
+    {
+      "name": "seo-content-strategy",
+      "area": "search",
+      "description": "When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also use when the user mentions \"content strategy,\" \"what should I write about,\" \"content ideas,\" \"blog strategy,\" \"topic clusters,\" or \"content planning.\" For writing the individual pages, see programmatic-seo.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/search/seo-content-strategy/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/search/seo-content-strategy",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/seo-content-strategy.zip"
+    },
+    {
+      "name": "seo-schema-markup",
+      "area": "search",
+      "description": "When the user wants to add, fix, or optimize schema markup and structured data on their site. Also use when the user mentions \"schema markup,\" \"structured data,\" \"JSON-LD,\" \"rich snippets,\" \"schema.org,\" \"FAQ schema,\" \"product schema,\" \"review schema,\" or \"breadcrumb schema.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/search/seo-schema-markup/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/search/seo-schema-markup",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/seo-schema-markup.zip"
+    },
+    {
+      "name": "ai-video-prompting",
+      "area": "video",
+      "description": "Writes, improves, audits and splits prompts for AI video generators (Seedance, Kling, Veo, Runway, Luma, Pika, Sora, any image-to-video system), plus the storyboard, shot list, director treatment, camera direction, lighting, blocking, pacing, character continuity, dialogue and sound design behind them. Use when a scene, a shot breakdown or a storyboard is asked for, when a script has to become prompts, or when a prompt is shared and needs fixing. Also triggers on the same asks in Russian.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/ai-video-prompting/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/ai-video-prompting",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/ai-video-prompting.zip"
+    },
+    {
+      "name": "descript-projects",
+      "area": "video",
+      "description": "Creates, names, folders and reorders everything in a Descript project from the terminal: projects, imported media, folders in both panels, and compositions. Use when footage or b-roll needs to land in Descript, when a project or a drive is disorganised, when a composition has to be created, duplicated or filed, or when planning an import so the names come out right the first time.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/descript-projects/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/descript-projects",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/descript-projects.zip"
+    },
+    {
+      "name": "descript-script-edit",
+      "area": "video",
+      "description": "Cuts a Descript composition's script - false starts, retakes, filler and digressions - then plans and places the shots on it: the jump-cut rhythm, the layout each beat calls for, and the b-roll, through the rich clipboard the user pastes back. Use when a raw take is full of restarts, when an edit is cut but has no b-roll or reads flat, when a video needs its sequence cuts and layouts decided, when Descript AI credits are exhausted, or when prompt_project_agent is unavailable.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/descript-script-edit/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/descript-script-edit",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/descript-script-edit.zip"
+    },
+    {
+      "name": "dji-sync",
+      "area": "video",
+      "description": "Pulls DJI Mic takes off the transmitter, waveform-matches a reel take to its iPhone clip and swaps in the lav audio losslessly, or cuts and transcribes a solo take into the vault, then archives and wipes the card. Use when a reel was recorded with a DJI lav, when phone audio needs replacing with the lav take, when a rambled voice memo needs transcribing, or when the DJI card needs clearing.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/dji-sync/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/dji-sync",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/dji-sync.zip"
+    },
+    {
+      "name": "shorts-production",
+      "area": "video",
+      "description": "Takes a finished short-form recording to a scheduled, coded, attached ClickUp task, with the export on Google Drive. Covers the SCALPM pillar codes, the rule that exports ship as they are and are never re-encoded, and the calendar write-back. Use when a Short has just been recorded, when a recording needs uploading, or when a Short needs coding and scheduling in the Socials calendar.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/shorts-production/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/shorts-production",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/shorts-production.zip"
+    },
+    {
+      "name": "video-coach",
+      "area": "video",
+      "description": "Reviews a recorded long-form take against the plan it was recorded from, before a single cut is made. Reads the concept and its script from the app, the raw transcript from Descript, measures what the take actually did, and returns one habit to change on the next recording. Use after a recording lands in Descript and before descript-script-edit, when a take felt off and the reason is not obvious, or on 'coach me on this video', 'how did that take go', '/video-coach'.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/video-coach/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/video-coach",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/video-coach.zip"
+    },
+    {
+      "name": "video-hooks",
+      "area": "video",
+      "description": "Writes the opening of a video and the full structure of a Short, for both the 1-to-3-second Shorts window and the 30-second long-form open. Generates competing hook variants by named mechanism, rates each for drop-off risk, and holds every factual claim to something measured. Use when writing or fixing a hook, when restructuring a Short script, when a Short is being swiped away, or when a script opens weakly.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/video-hooks/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/video-hooks",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/video-hooks.zip"
+    },
+    {
+      "name": "video-script",
+      "area": "video",
+      "description": "Writes a video's words: the long-form body, the opening hook, or a whole Short filed in CutKit. Use when a video needs a script or a hook, when a script runs long or asks too early, when an open reads weak, or on create a short, script a short, make a TikTok about.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/video-script/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/video-script",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/video-script.zip"
+    },
+    {
+      "name": "whiteboard",
+      "area": "video",
+      "description": "Lays out hand-drawn concept boards as code and draws them onto the iPad live over Excalidraw's collaboration protocol, so a diagram arrives already composed and still editable on camera. Use when a video needs a board behind it, when an idea has to become circles, arrows and highlighter rings, when a board needs re-laying out or re-pushing, or when anything needs drawing into ExcalidrawZ from the Mac.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/whiteboard/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/whiteboard",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/whiteboard.zip"
+    },
+    {
+      "name": "youtube-ctas",
+      "area": "video",
+      "description": "Builds the evergreen 1920x1080 transparent overlays a finished YouTube edit is dressed with, in Remotion: subscribe, like, comment, book-a-call and link-in-the-description pills, the channel lower third, and the end-screen bed. Use when a CTA, a lower third or an end card is needed, when an overlay renders without its alpha channel, when an overlay has to land where YouTube's own clickable elements go, or when adding a clip to the Design Assets shelf.",
+      "skill_md": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/skills/video/youtube-ctas/SKILL.md",
+      "folder": "https://github.com/heyramzi/ai-agency/tree/main/skills/video/youtube-ctas",
+      "zip": "https://raw.githubusercontent.com/heyramzi/ai-agency/main/zips/youtube-ctas.zip"
+    }
+  ]
+}

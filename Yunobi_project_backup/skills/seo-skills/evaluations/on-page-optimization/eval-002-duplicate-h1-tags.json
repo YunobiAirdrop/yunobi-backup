@@ -1,0 +1,14 @@
+{
+  "name": "Duplicate H1 Tags",
+  "description": "Page has multiple H1 tags. Skill should identify and recommend fix.",
+  "userMessage": "My page has the right content but isn't ranking well. Can you check https://example.com/services?",
+  "expectedSkills": ["seo-on-page-optimization", "seo-mcp-tools-expert"],
+  "expectedTools": ["analyze_page", "analyze_headings"],
+  "expectedBehavior": [
+    "Runs analyze_page first for overall assessment",
+    "Identifies multiple H1 tags as an issue",
+    "Runs analyze_headings for detailed heading structure",
+    "Recommends keeping one H1 with the primary keyword",
+    "Suggests converting extra H1s to H2s"
+  ]
+}

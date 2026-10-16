@@ -1,0 +1,150 @@
+// Copyright 2026 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package main
+
+import (
+	"cmp"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"slices"
+	"strings"
+
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/spf13/cobra"
+
+	_ "github.com/eat-pray-ai/yutu/cmd/agent"
+	_ "github.com/eat-pray-ai/yutu/cmd/resources"
+)
+
+const header = `#!/usr/bin/env bash
+# Copyright 2025 eat-pray-ai & OpenWaygate
+# SPDX-License-Identifier: Apache-2.0
+
+set -euo pipefail
+
+# Accept yutu executable path as first parameter
+YUTU_PATH="${1:-}"
+
+# If no path provided, build yutu
+if [[ -z "$YUTU_PATH" ]]; then
+    echo "No yutu path provided, building yutu..."
+
+    MOD="github.com/eat-pray-ai/yutu/cmd"
+    Version="${MOD}.Version=$(git describe --tags --always --dirty)"
+    Commit="${MOD}.Commit=$(git rev-parse --short HEAD)"
+    CommitDate="${MOD}.CommitDate=$(git log -1 --date='format:%Y-%m-%dT%H:%M:%SZ' --pretty=%cd)"
+    Os="${MOD}.Os=$(go env GOOS)"
+    Arch="${MOD}.Arch=$(go env GOARCH)"
+    Builder="${MOD}.Builder=${GITHUB_ACTOR:-$USER}"
+    ldflags="-s -X ${Version} -X ${Commit} -X ${CommitDate} -X ${Os} -X ${Arch} -X ${Builder}"
+
+    trap 'rm -f yutu' EXIT INT TERM
+    go mod download
+    go build -ldflags "${ldflags}" -o yutu .
+    chmod +x yutu
+
+    YUTU_PATH="./yutu"
+else
+    # Verify the provided path exists and is executable
+    if [[ ! -f "$YUTU_PATH" ]]; then
+        echo "Error: yutu executable not found at: $YUTU_PATH"
+        exit 1
+    fi
+    if [[ ! -x "$YUTU_PATH" ]]; then
+        echo "Error: $YUTU_PATH is not executable"
+        exit 1
+    fi
+    echo "Using yutu at: $YUTU_PATH"
+fi
+
+# Run tests with the yutu executable
+"$YUTU_PATH" help
+"$YUTU_PATH" completion
+"$YUTU_PATH" version
+`
+
+func isResource(c *cobra.Command) bool {
+	return strings.HasPrefix(c.Short, "Manage")
+}
+
+func generate() string {
+	root := cmd.RootCmd
+	root.InitDefaultHelpCmd()
+
+	var b strings.Builder
+	b.WriteString(header)
+
+	var coreCommands, resourceCommands []*cobra.Command
+	for _, c := range root.Commands() {
+		name := c.Name()
+		if name == "help" || name == "completion" || name == "version" {
+			continue
+		}
+		if isResource(c) {
+			resourceCommands = append(resourceCommands, c)
+		} else {
+			coreCommands = append(coreCommands, c)
+		}
+	}
+
+	slices.SortFunc(
+		coreCommands, func(a, b *cobra.Command) int {
+			return cmp.Compare(a.Name(), b.Name())
+		},
+	)
+	slices.SortFunc(
+		resourceCommands, func(a, b *cobra.Command) int {
+			return cmp.Compare(a.Name(), b.Name())
+		},
+	)
+
+	b.WriteString("\n# yutu\n")
+	for _, c := range coreCommands {
+		name := c.Name()
+		_, _ = fmt.Fprintf(&b, "echo \"======= %s =======\"\n", name)
+		_, _ = fmt.Fprintf(&b, "\"$YUTU_PATH\" %s --help\n\n", name)
+	}
+
+	b.WriteString("# youtube api\n")
+	for _, c := range resourceCommands {
+		name := c.Name()
+		_, _ = fmt.Fprintf(&b, "echo \"======= %s =======\"\n", name)
+		_, _ = fmt.Fprintf(&b, "\"$YUTU_PATH\" %s --help\n", name)
+
+		var subs []*cobra.Command
+		for _, sub := range c.Commands() {
+			if sub.Name() == "help" {
+				continue
+			}
+			subs = append(subs, sub)
+		}
+		slices.SortFunc(
+			subs, func(a, b *cobra.Command) int {
+				return cmp.Compare(a.Name(), b.Name())
+			},
+		)
+
+		for _, sub := range subs {
+			_, _ = fmt.Fprintf(&b, "echo \"------- %s -------\"\n", sub.Name())
+			_, _ = fmt.Fprintf(&b, "\"$YUTU_PATH\" %s %s --help\n", name, sub.Name())
+		}
+		b.WriteString("\n")
+	}
+
+	return strings.TrimRight(b.String(), "\n") + "\n"
+}
+
+func main() {
+	out := flag.String("out", "./scripts/command-test.sh", "output file")
+	flag.Parse()
+
+	content := generate()
+
+	if err := os.WriteFile(*out, []byte(content), 0o755); err != nil {
+		log.Fatalf("write %s: %v", *out, err)
+	}
+	fmt.Printf("Generated %s\n", *out)
+}

@@ -1,0 +1,6 @@
+[2026-10-16 20:00 WIB] watchdog-retry-upload-youtube run
+  Scan ~/workspace/youtube-otomatis/retry-queue/: 2 file ditemukan, 0 memenuhi syarat umur >=23 jam.
+  - empires-en-2026-10-16.json (Lost Empires @AncientEmpiresTV, umur ~4.2 jam, status pending_auth; blocked_at 2026-10-16T08:47:17Z) -> SKIP (umur <23 jam)
+  - kisahalkitab-2026-10-16.json (@KisahAlkitab-k9j, umur ~3.4 jam, status pending-upload; created_at 2026-10-16T16:40+07) -> SKIP (umur <23 jam)
+  Kelayakan file: semua file video/meta/thumbnail ADA (empires-en mp4 17.0MB, kisah-alkitab shorts 12.5MB, thumbnail 55KB).
+  Tindakan: tidak ada eksekusi upload; kedua antrean dibiarkan untuk run besok. Diproses: 0, berhasil: 0, masih antre: 2.

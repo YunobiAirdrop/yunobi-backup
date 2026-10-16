@@ -1,0 +1,31 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package membershipsLevel
+
+import (
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/spf13/cobra"
+)
+
+const (
+	short = "Manage YouTube membership levels"
+	long  = "Manage YouTube membership levels. Use this tool to list membership levels."
+)
+
+var (
+	parts []string
+)
+
+var membershipsLevelCmd = &cobra.Command{
+	Use:   "membershipsLevel",
+	Short: short,
+	Long:  long,
+	Run: func(cmd *cobra.Command, _ []string) {
+		_ = cmd.Help()
+	},
+}
+
+func init() {
+	cmd.RootCmd.AddCommand(membershipsLevelCmd)
+}

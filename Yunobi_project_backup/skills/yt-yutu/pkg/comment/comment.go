@@ -1,0 +1,297 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package comment
+
+import (
+	"errors"
+	"fmt"
+	"io"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"google.golang.org/api/youtube/v3"
+)
+
+var (
+	errGetComment          = errors.New("failed to get comment")
+	errMarkAsSpam          = errors.New("failed to mark comment as spam")
+	errDeleteComment       = errors.New("failed to delete comment")
+	errInsertComment       = errors.New("failed to insert comment")
+	errUpdateComment       = errors.New("failed to update comment")
+	errSetModerationStatus = errors.New("failed to set comment moderation status")
+)
+
+type Comment struct {
+	common.Fields
+	AuthorChannelId  string `yaml:"author_channel_id" json:"author_channel_id,omitempty"`
+	CanRate          *bool  `yaml:"can_rate" json:"can_rate,omitzero"`
+	ParentId         string `yaml:"parent_id" json:"parent_id,omitempty"`
+	TextFormat       string `yaml:"text_format" json:"text_format,omitempty"`
+	TextOriginal     string `yaml:"text_original" json:"text_original,omitempty"`
+	ModerationStatus string `yaml:"moderation_status" json:"moderation_status,omitempty"`
+	BanAuthor        *bool  `yaml:"ban_author" json:"ban_author,omitzero"`
+	VideoId          string `yaml:"video_id" json:"video_id,omitempty"`
+	ViewerRating     string `yaml:"viewer_rating" json:"viewer_rating,omitempty"`
+}
+
+type IComment[T any] interface {
+	Get() ([]*T, error)
+	List(io.Writer) error
+	Insert(io.Writer) error
+	Update(io.Writer) error
+	Delete(io.Writer) error
+	MarkAsSpam(io.Writer) error
+	SetModerationStatus(io.Writer) error
+}
+
+type Option func(*Comment)
+
+func NewComment(opts ...Option) IComment[youtube.Comment] {
+	c := &Comment{Fields: common.Fields{}}
+	for _, opt := range opts {
+		opt(c)
+	}
+	return c
+}
+
+func (c *Comment) Get() ([]*youtube.Comment, error) {
+	if err := c.EnsureService(); err != nil {
+		return nil, err
+	}
+	call := c.Service.Comments.List(c.Parts)
+	if len(c.Ids) > 0 && c.Ids[0] != "" {
+		call = call.Id(c.Ids...)
+	}
+	if c.ParentId != "" {
+		call = call.ParentId(c.ParentId)
+	}
+	if c.TextFormat != "" {
+		call = call.TextFormat(c.TextFormat)
+	}
+
+	return common.Paginate(
+		&c.Fields, call,
+		func(r *youtube.CommentListResponse) ([]*youtube.Comment, string) {
+			return r.Items, r.NextPageToken
+		}, errGetComment,
+	)
+}
+
+func (c *Comment) List(writer io.Writer) error {
+	comments, err := c.Get()
+	if err != nil && comments == nil {
+		return err
+	}
+
+	return errors.Join(
+		err,
+		common.PrintList(
+			c.Output, comments, writer,
+			table.Row{"ID", "Author", "Video ID", "Text Display"},
+			func(cm *youtube.Comment) table.Row {
+				author := ""
+				videoId := ""
+				textDisplay := ""
+				if cm.Snippet != nil {
+					author = cm.Snippet.AuthorDisplayName
+					videoId = cm.Snippet.VideoId
+					textDisplay = cm.Snippet.TextDisplay
+				}
+				return table.Row{cm.Id, author, videoId, textDisplay}
+			},
+		),
+	)
+}
+
+func (c *Comment) Insert(writer io.Writer) error {
+	if err := c.EnsureService(); err != nil {
+		return err
+	}
+	comment := &youtube.Comment{
+		Snippet: &youtube.CommentSnippet{
+			AuthorChannelId: &youtube.CommentSnippetAuthorChannelId{
+				Value: c.AuthorChannelId,
+			},
+			ChannelId:    c.ChannelId,
+			ParentId:     c.ParentId,
+			TextOriginal: c.TextOriginal,
+			VideoId:      c.VideoId,
+		},
+	}
+
+	if c.CanRate != nil {
+		comment.Snippet.CanRate = *c.CanRate
+	}
+
+	call := c.Service.Comments.Insert([]string{"snippet"}, comment)
+	res, err := call.Do()
+	if err != nil {
+		return errors.Join(errInsertComment, err)
+	}
+
+	return common.PrintResult(
+		c.Output, res, writer, "Comment inserted: %s\n", res.Id,
+	)
+}
+
+func (c *Comment) Update(writer io.Writer) error {
+	if err := c.EnsureService(); err != nil {
+		return err
+	}
+	c.Parts = []string{"id", "snippet"}
+	comments, err := c.Get()
+
+	if err != nil {
+		return errors.Join(errUpdateComment, err)
+	}
+	if len(comments) == 0 {
+		return errGetComment
+	}
+
+	comment := comments[0]
+	if c.CanRate != nil {
+		comment.Snippet.CanRate = *c.CanRate
+		comment.Snippet.ForceSendFields = append(
+			comment.Snippet.ForceSendFields, "CanRate",
+		)
+	}
+
+	if c.TextOriginal != "" {
+		comment.Snippet.TextOriginal = c.TextOriginal
+	}
+
+	if c.ViewerRating != "" {
+		comment.Snippet.ViewerRating = c.ViewerRating
+	}
+
+	call := c.Service.Comments.Update([]string{"snippet"}, comment)
+	res, err := call.Do()
+	if err != nil {
+		return errors.Join(errUpdateComment, err)
+	}
+
+	return common.PrintResult(
+		c.Output, res, writer, "Comment updated: %s\n", res.Id,
+	)
+}
+
+func (c *Comment) MarkAsSpam(writer io.Writer) error {
+	if err := c.EnsureService(); err != nil {
+		return err
+	}
+	call := c.Service.Comments.MarkAsSpam(c.Ids)
+	err := call.Do()
+	if err != nil {
+		return errors.Join(errMarkAsSpam, err)
+	}
+
+	return common.PrintResult(
+		c.Output, c, writer, "Comment marked as spam: %s\n", c.Ids,
+	)
+}
+
+func (c *Comment) SetModerationStatus(writer io.Writer) error {
+	if err := c.EnsureService(); err != nil {
+		return err
+	}
+	call := c.Service.Comments.SetModerationStatus(c.Ids, c.ModerationStatus)
+
+	if c.BanAuthor != nil {
+		call = call.BanAuthor(*c.BanAuthor)
+	}
+
+	err := call.Do()
+	if err != nil {
+		return errors.Join(errSetModerationStatus, err)
+	}
+
+	return common.PrintResult(
+		c.Output, c, writer, "Comment moderation status set to %s: %s\n",
+		c.ModerationStatus, c.Ids,
+	)
+}
+
+func (c *Comment) Delete(writer io.Writer) (errs error) {
+	if errs = c.EnsureService(); errs != nil {
+		return errs
+	}
+	for _, id := range c.Ids {
+		call := c.Service.Comments.Delete(id)
+		err := call.Do()
+		if err != nil {
+			errs = errors.Join(errs, errDeleteComment, err)
+			continue
+		}
+		_, err = fmt.Fprintf(writer, "Comment %s deleted\n", id)
+		errs = errors.Join(errs, err)
+	}
+	return errs
+}
+
+func WithAuthorChannelId(authorChannelId string) Option {
+	return func(c *Comment) {
+		c.AuthorChannelId = authorChannelId
+	}
+}
+
+func WithCanRate(canRate *bool) Option {
+	return func(c *Comment) {
+		if canRate != nil {
+			c.CanRate = canRate
+		}
+	}
+}
+
+func WithParentId(parentId string) Option {
+	return func(c *Comment) {
+		c.ParentId = parentId
+	}
+}
+
+func WithTextFormat(textFormat string) Option {
+	return func(c *Comment) {
+		c.TextFormat = textFormat
+	}
+}
+
+func WithTextOriginal(textOriginal string) Option {
+	return func(c *Comment) {
+		c.TextOriginal = textOriginal
+	}
+}
+
+func WithModerationStatus(moderationStatus string) Option {
+	return func(c *Comment) {
+		c.ModerationStatus = moderationStatus
+	}
+}
+
+func WithBanAuthor(banAuthor *bool) Option {
+	return func(c *Comment) {
+		if banAuthor != nil {
+			c.BanAuthor = banAuthor
+		}
+	}
+}
+
+func WithVideoId(videoId string) Option {
+	return func(c *Comment) {
+		c.VideoId = videoId
+	}
+}
+
+func WithViewerRating(viewerRating string) Option {
+	return func(c *Comment) {
+		c.ViewerRating = viewerRating
+	}
+}
+
+var (
+	WithParts      = common.WithParts[*Comment]
+	WithOutput     = common.WithOutput[*Comment]
+	WithService    = common.WithService[*Comment]
+	WithIds        = common.WithIds[*Comment]
+	WithMaxResults = common.WithMaxResults[*Comment]
+	WithChannelId  = common.WithChannelId[*Comment]
+)

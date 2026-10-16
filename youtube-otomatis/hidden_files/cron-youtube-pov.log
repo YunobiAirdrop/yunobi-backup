@@ -1,0 +1,5 @@
+[2026-10-16 18:49 WIB] RUN SKIPPED (idempotensi): marker produced-youtube-pov-2026-10-16.marker ada (dibuat 15:24 WIB oleh run manual 1:1). Status terverifikasi:
+- Long #1 (pola lama, narasi orang ketiga "Raksasa Bali Ini Dibunuh Gajah Mada..."): SELESAI render 17:07 WIB, 37.3MB final-youtube-pov-2026-10-16.mp4 — DITOLAK sebagai rilis (style-mismatch, bukan POV).
+- Long #2 (REDO, POV first-person "POV: Kamu Jadi Prajurit Majapahit — Sumur Maut Kebo Iwa"): render via ffmpeg-queue BERJALAN, segmen s000-s003 selesai pukul 18:49 WIB, audio-final 10.6MB siap.
+- Pola baru (3 shorts + 1 long) mulai besok 16:11 WIB; hari ini tidak ada produksi baru.
+- Upload staging: belum ada browser task / upload-pending file untuk POV di run ini; ketukan user 20:00-23:00 WIB untuk final approval (watchdog 20:00).

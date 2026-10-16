@@ -1,0 +1,85 @@
+{
+ "ai_disclosure": true,
+ "beat_durations_sec": {
+  "beat-001": 21.69,
+  "beat-002": 11.85,
+  "beat-003": 37.05,
+  "beat-004": 28.48,
+  "beat-005": 34.79,
+  "beat-006": 28.31,
+  "beat-007": 31.48,
+  "beat-008": 24.28,
+  "beat-009": 32.13,
+  "beat-010": 37.77,
+  "beat-011": 12.53
+ },
+ "beats": 11,
+ "description": "7 kebiasaan sehari-hari orang Indonesia yang bikin turis asing melongo — dari kerokan sampai makan pakai tangan. Nomor satu paling tidak masuk akal buat orang luar negeri!\n\nKita hitung mundur 7 kebiasaan Indonesia yang buat bule syok berat: sapaan 'sudah makan belum', makan pakai tangan, mandi dua kali sehari pakai gayung, jam karet, aturan tangan kanan, toilet tanpa tisu, dan kerokan.\n\nMenurut saya, justru kebiasaan-kebiasaan inilah yang bikin Indonesia dirindukan dunia. Ramah itu bukan pencitraan — memang sudah bawaan.\n\nBab:\n0:00 Hook: punggung digaruk koin?\n0:21 Hitung mundur dimulai\n0:33 Nomor 7: sapaan sudah makan belum\n1:10 Nomor 6: makan pakai tangan\n1:39 Nomor 5: mandi dua kali sehari\n2:13 Nomor 4: jam karet\n2:42 Nomor 3: aturan tangan kanan\n3:13 Nomor 2: toilet tanpa tisu\n3:37 Nomor 1: kerokan\n4:10 Benang merahnya\n4:47 Tulis di komentar\n\n#MacamMacam #FaktaIndonesia #BudayaIndonesia",
+ "duration_sec": 300.4,
+ "format": "long",
+ "gaps": [
+  "SFX rekaman asli tidak dipakai — file mp3 SFX di repo backup tidak ada (hanya manifest.json + CREDITS.md); tidak mengarang SFX sintetis agar tidak melanggar 'rekaman asli'"
+ ],
+ "hashtags": [
+  "#MacamMacam",
+  "#FaktaIndonesia",
+  "#BudayaIndonesia"
+ ],
+ "hook_chosen": "A_curiosity_gap",
+ "hook_formula": "Y8 Cold-Open + Y7 Restate-and-Raise (buka dari momen paling mengejutkan: kerokan)",
+ "hook_variants": {
+  "A_curiosity_gap": "Ada negara di mana punggung digaruk pakai koin sampai merah-merah itu dianggap obat, dan makan pakai tangan dianggap lebih nikmat daripada pakai sendok. Negara itu Indonesia. Dan tujuh kebiasaan sehari-hari ini bikin turis asing melongo tidak percaya.",
+  "B_contrarian": "Orang asing bilang orang Indonesia itu aneh. Bukan makanannya yang aneh, bukan bahasanya — tapi tujuh kebiasaan sehari-hari ini, yang buat kita biasa banget, buat mereka tidak masuk akal.",
+  "C_specificity_data": "Indonesia, negara dengan lebih dari tujuh ratus bahasa daerah, ternyata menyimpan tujuh kebiasaan sehari-hari yang bikin turis asing syok berat. Nomor satu bahkan dilarang keras di beberapa negara."
+ },
+ "niche": "variasi/umum Indonesia",
+ "resolution": "1280x720",
+ "scheduled_for": "2026-10-17 19:00 WIB",
+ "size_mb": 18.3,
+ "suggested_pin_comment": "Kebiasaan nomor berapa yang paling kamu banget? Tulis di bawah 👇",
+ "tags": [
+  "kebiasaan unik indonesia",
+  "turis asing di indonesia",
+  "bule kaget indonesia",
+  "kerokan masuk angin",
+  "makan pakai tangan",
+  "jam karet indonesia",
+  "budaya indonesia",
+  "fakta indonesia",
+  "fakta unik indonesia",
+  "kebiasaan orang indonesia",
+  "indonesia vs luar negeri",
+  "adat istiadat indonesia",
+  "kehidupan di indonesia",
+  "turis asing syok",
+  "bule di indonesia",
+  "fakta menarik",
+  "macam macam",
+  "video indonesia",
+  "budaya unik dunia",
+  "asia tenggara"
+ ],
+ "thumbnail_path": "~/workspace/youtube-otomatis/macammacam/2026-10-16/thumbnail.webp",
+ "thumbnail_text": "ANEH TAPI NYATA",
+ "title": "7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo",
+ "title_formula": "Y2 Number/Listicle",
+ "title_shortlist_2": [
+  "7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo",
+  "Kata Turis Asing: 7 Kebiasaan Indonesia Ini Paling Aneh"
+ ],
+ "title_variants": [
+  "7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo",
+  "7 Kebiasaan Orang Indonesia yang Bikin Bule Syok",
+  "Kenapa Turis Asing Melongo Lihat Kebiasaan Orang Indonesia?",
+  "Jangan Lakukan 7 Hal Ini di Depan Turis Asing",
+  "7 Hal Sepele di Indonesia yang Bikin Bule Bingung",
+  "Ternyata 7 Kebiasaan Ini Bikin Orang Asing Geleng Kepala",
+  "Kata Turis Asing: 7 Kebiasaan Indonesia Ini Paling Aneh",
+  "7 Kebiasaan Unik Indonesia yang Tidak Ada di Negara Lain",
+  "Bule Syok! 7 Kebiasaan Sehari-hari Orang Indonesia",
+  "7 Fakta Kebiasaan Indonesia yang Bikin Dunia Heran"
+ ],
+ "topic": "7 Kebiasaan Sehari-hari Orang Indonesia yang Bikin Turis Asing Melongo (countdown listicle: sapaan 'sudah makan belum', makan pakai tangan, mandi 2x sehari + gayung, jam karet, aturan tangan kanan, toilet tanpa tisu, kerokan)",
+ "video_path": "~/workspace/youtube-otomatis/macammacam/2026-10-16/macammacam-2026-10-16-long.mp4",
+ "voice": "avocado_v2:mudiwa (Mudiwa, id)"
+}

@@ -1,0 +1,9 @@
+node_modules/
+tools/dist/
+evals/results/
+*.log
+.env
+.env.local
+.claude/*
+!.claude/commands/
+.internal/

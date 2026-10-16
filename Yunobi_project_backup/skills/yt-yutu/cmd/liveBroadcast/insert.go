@@ -1,0 +1,132 @@
+// Copyright 2026 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package liveBroadcast
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/liveBroadcast"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	insertTool    = "liveBroadcast-insert"
+	insertConfirm = "Create live broadcast: %s"
+	insertShort   = "Create a live broadcast"
+	insertLong    = "Create a live broadcast. Use this tool to create a live broadcast for the authenticated user."
+	insertExample = `# Create a public live broadcast
+yutu liveBroadcast insert --title "My Broadcast" --privacyStatus public --scheduledStartTime 2026-01-01T00:00:00Z
+# Create a private broadcast with description
+yutu liveBroadcast insert --title "Test Stream" --description "Testing" --privacyStatus private --scheduledStartTime 2026-01-01T00:00:00Z`
+)
+
+var insertInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"title", "scheduled_start_time"},
+	Properties: map[string]*jsonschema.Schema{
+		"title":                {Type: "string", Description: titleUsage},
+		"description":          {Type: "string", Description: descUsage},
+		"scheduled_start_time": {Type: "string", Description: sstUsage},
+		"scheduled_end_time":   {Type: "string", Description: setUsage},
+		"privacy_status": {
+			Type: "string", Description: psUsage,
+			Enum: []any{"public", "unlisted", "private"},
+		},
+		"on_behalf_of_content_owner": {Type: "string", Description: pkg.OBOCOUsage},
+		"on_behalf_of_content_owner_channel": {
+			Type: "string", Description: obococUsage,
+		},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["snippet","status","contentDetails"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: insertTool, Title: insertShort, Description: insertLong,
+			InputSchema: insertInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  false,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			insertTool, cobramcp.ConfirmThen(
+				func(input liveBroadcast.LiveBroadcast) string {
+					return fmt.Sprintf(insertConfirm, input.Title)
+				},
+				func(input liveBroadcast.LiveBroadcast, w io.Writer) error {
+					return input.Insert(w)
+				},
+			),
+		),
+	)
+	liveBroadcastCmd.AddCommand(insertCmd)
+
+	insertCmd.Flags().StringVarP(&title, "title", "t", "", titleUsage)
+	insertCmd.Flags().StringVarP(description, "description", "d", "", descUsage)
+	insertCmd.Flags().StringVarP(
+		&scheduledStartTime, "scheduledStartTime", "S", "", sstUsage,
+	)
+	insertCmd.Flags().StringVarP(
+		&scheduledEndTime, "scheduledEndTime", "E", "", setUsage,
+	)
+	insertCmd.Flags().StringVarP(&privacyStatus, "privacyStatus", "P", "", psUsage)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	insertCmd.Flags().StringVarP(
+		&onBehalfOfContentOwnerChannel, "onBehalfOfContentOwnerChannel", "B", "",
+		obococUsage,
+	)
+	insertCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"snippet", "status", "contentDetails"},
+		pkg.PartsUsage,
+	)
+	insertCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	insertCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = insertCmd.MarkFlagRequired("title")
+	_ = insertCmd.MarkFlagRequired("scheduledStartTime")
+}
+
+var insertCmd = &cobra.Command{
+	Use:     "insert",
+	Short:   insertShort,
+	Long:    insertLong,
+	Example: insertExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(insertConfirm, title))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := liveBroadcast.NewLiveBroadcast(
+			liveBroadcast.WithTitle(title),
+			liveBroadcast.WithDescription(description),
+			liveBroadcast.WithScheduledStartTime(scheduledStartTime),
+			liveBroadcast.WithScheduledEndTime(scheduledEndTime),
+			liveBroadcast.WithPrivacyStatus(privacyStatus),
+			liveBroadcast.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			liveBroadcast.WithOnBehalfOfContentOwnerChannel(onBehalfOfContentOwnerChannel),
+			liveBroadcast.WithParts(parts),
+			liveBroadcast.WithOutput(output),
+		)
+		return input.Insert(c.OutOrStdout())
+	},
+}

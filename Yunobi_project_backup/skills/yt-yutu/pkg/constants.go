@@ -1,0 +1,42 @@
+// Copyright 2026 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package pkg
+
+import (
+	"github.com/jedib0t/go-pretty/v6/table"
+)
+
+const (
+	PartsUsage     = "Comma separated parts"
+	MRUsage        = "The maximum number of items that should be returned, 0 for no limit"
+	TableUsage     = "json|yaml|table"
+	SilentUsage    = "json|yaml|silent"
+	JsonMIME       = "application/json"
+	PerPage        = 20
+	OBOUsage       = "ID of the YouTube account that the content owner is acting on behalf of"
+	OBOCOUsage     = "ID of the content owner, for YouTube content partners"
+	OBOCOCUsage    = "YouTube channel ID linked to the content owner"
+	ConfirmedUsage = "Confirm the operation"
+	getWdFailed    = "failed to get working directory"
+	openRootFailed = "failed to open root directory"
+)
+
+var (
+	TableStyle = table.Style{
+		Name:   "StyleLight",
+		Box:    table.StyleBoxLight,
+		Color:  table.ColorOptionsDefault,
+		Format: table.FormatOptionsDefault,
+		HTML:   table.DefaultHTMLOptions,
+		Options: table.Options{
+			DrawBorder:      false,
+			SeparateColumns: false,
+			SeparateFooter:  false,
+			SeparateHeader:  false,
+			SeparateRows:    false,
+		},
+		Size:  table.SizeOptionsDefault,
+		Title: table.TitleOptionsDefault,
+	}
+)

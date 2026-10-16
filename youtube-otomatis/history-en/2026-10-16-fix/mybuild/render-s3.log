@@ -1,0 +1,11 @@
+3 gambar, target 28.1s
+  render s002 (9.4s)...
+OK: vs3/echoes-1453-short3-walls.mp4 (28.1s)
+EXITraceback (most recent call last):
+  File "/home/hatch/workspace/youtube-otomatis/rakit_shorts.py", line 108, in <module>
+    main()
+  File "/home/hatch/workspace/youtube-otomatis/rakit_shorts.py", line 92, in main
+    subprocess.run([FQ, "-y", "-f", "concat", "-safe", "0", "-i", lst,
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/home/hatch/workspace/youtube-otomatis/ffmpeg-queue.sh', '-y', '-f', 'concat', '-safe', '0', '-i', 'vs3/_tmp_segs/list.txt', '-c', 'copy', 'vs3/_tmp_segs/concat.mp4']' returned non-zero exit status 254.

@@ -1,0 +1,28 @@
+=== pipeline start 2026-10-16T09:54:03Z ===
+running chunk build (one ffmpeg call)...
+rc: 0 
+voiceover_full.mp3: 63.76s
+durasi.json written: {'beat-001': 10.652, 'beat-002': 9.884, 'beat-003': 9.98, 'beat-004': 11.276, 'beat-005': 8.708, 'beat-006': 13.004}
+TOTAL: 63.5 s
+voiceover dur: 63.76s
+bed RMS set to -26 dBFS (peak -19.0 dBFS)
+bed.wav written
+mixing (amix, voice dominant)...
+rc: 0 
+final_audio.m4a: 63.76s (target 63.76s)
+OK: audio/final_audio.m4a
+  render s000 (10.7s)...
+  render s001 (9.9s)...
+  render s002 (10.0s)...
+  render s003 (11.3s)...
+  render s004 (8.7s)...
+  render s005 (13.0s)...
+Traceback (most recent call last):
+  File "/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short3/rakit_short3.py", line 134, in <module>
+    main()
+  File "/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short3/rakit_short3.py", line 95, in main
+    subprocess.run([FFQ, "-y", "-f", "concat", "-safe", "0", "-i", lst,
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/home/hatch/workspace/youtube-otomatis/ffmpeg-queue.sh', '-y', '-f', 'concat', '-safe', '0', '-i', '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short3/_tmp_segs/list.txt', '-c', 'copy', '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short3/_tmp_segs/concat.mp4']' returned non-zero exit status 254.
+FATAL: rakit_short3.py failed

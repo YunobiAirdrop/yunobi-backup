@@ -1,0 +1,25 @@
+{
+  "name": "whiteboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "scripts": {
+    "build": "tsx src/cli.ts",
+    "push": "tsx src/push.ts",
+    "push-file": "tsx src/push-file.ts",
+    "inspect": "tsx src/inspect.ts",
+    "copy": "tsx src/copy.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.0"
+  }
+}

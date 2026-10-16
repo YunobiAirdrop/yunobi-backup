@@ -1,0 +1,195 @@
+{
+  "generated": "story.py over the anatomy corpus",
+  "videos": 627,
+  "punctuatedVideos": 339,
+  "channels": 13,
+  "axes": {
+    "rehooksPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.34,
+      "p50": 0.84,
+      "p75": 1.91,
+      "p90": 2.88,
+      "heldIn": 7,
+      "tested": 13
+    },
+    "longestGapSeconds": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 315.7,
+      "p25": 419.6,
+      "p50": 572.7,
+      "p75": 831.2,
+      "p90": 1230.4,
+      "heldIn": 3,
+      "tested": 10
+    },
+    "medianGapSeconds": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 85.4,
+      "p25": 131.5,
+      "p50": 229.9,
+      "p75": 376.6,
+      "p90": 610.0,
+      "heldIn": 7,
+      "tested": 10
+    },
+    "seamMarkersPer10Min": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 20.8,
+      "p25": 29.83,
+      "p50": 40.06,
+      "p75": 49.47,
+      "p90": 60.62,
+      "heldIn": null,
+      "tested": null
+    },
+    "throatClearingPer1k": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.269,
+      "heldIn": 8,
+      "tested": 13
+    },
+    "emptyRehookShare": {
+      "needsPunctuation": true,
+      "n": 315,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.111,
+      "p90": 0.25,
+      "heldIn": 7,
+      "tested": 10
+    },
+    "contrastSentencePct": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 8.8,
+      "p25": 10.8,
+      "p50": 13.9,
+      "p75": 17.1,
+      "p90": 20.4,
+      "heldIn": 6,
+      "tested": 10
+    },
+    "contrastPer1k": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.19,
+      "p25": 0.38,
+      "p50": 4.91,
+      "p75": 8.6,
+      "p90": 11.06,
+      "heldIn": 5,
+      "tested": 13
+    },
+    "thoughtNarrationPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.571,
+      "heldIn": 6,
+      "tested": 13
+    },
+    "negativeFramesPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.215,
+      "heldIn": 5,
+      "tested": 12
+    },
+    "termBrandsPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.481,
+      "heldIn": 7,
+      "tested": 13
+    },
+    "hedgedInstructionsPer1k": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.66,
+      "p75": 3.23,
+      "p90": 5.74,
+      "heldIn": 9,
+      "tested": 13
+    },
+    "negationPivotsPer1k": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.178,
+      "p90": 0.47,
+      "heldIn": 8,
+      "tested": 13
+    },
+    "expectationSetPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.0,
+      "heldIn": 7,
+      "tested": 12
+    },
+    "revealsPer10Min": {
+      "needsPunctuation": false,
+      "n": 627,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.0,
+      "heldIn": 2,
+      "tested": 11
+    },
+    "stakesTriad": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.0,
+      "heldIn": 5,
+      "tested": 9
+    },
+    "openingDigits": {
+      "needsPunctuation": true,
+      "n": 339,
+      "p10": 4.0,
+      "p25": 10.0,
+      "p50": 23.0,
+      "p75": 47.0,
+      "p90": 83.0,
+      "heldIn": 7,
+      "tested": 10
+    }
+  }
+}

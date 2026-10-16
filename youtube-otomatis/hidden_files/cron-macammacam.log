@@ -1,0 +1,35 @@
+[2026-10-16 16:0x WIB] RUN 1:1 manual — LONG pertama channel ini di VM ini.
+Topik: 7 Kebiasaan Sehari-hari Orang Indonesia yang Bikin Turis Asing Melongo (countdown).
+Judul: 7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo | Hook: A curiosity-gap | Voice: Mudiwa (avocado_v2:mudiwa)
+Video: macammacam-2026-10-16-long.mp4 — 1280x720, 300.4 dtk (5.0 mnt), 18.3 MB. Thumbnail: ANEH TAPI NYATA.
+Jadwal upload: besok 2026-10-17 19:00 WIB (oleh parent via browser task). AI disclosure: true.
+GAP: SFX rekaman asli tidak dipakai (file mp3 SFX tidak ada di repo backup, hanya manifest). CATATAN: gaya-channel.md (riset 16:00 WIB) menyebut Macam Macam = 100% Shorts fakta unik tubuh — video long ini diproduksi sesuai brief run pertama (long, variasi/umum); parent putuskan saat upload.
+
+## 2026-10-16 16:16 WIB — macammacam-harian (manual 1:1, pola lama long/shorts bergantian → LONG)
+- Marker: produced-macammacam-2026-10-16.marker dibuat 15:24 WIB (idempotensi OK).
+- Topik: "7 Kebiasaan Sehari-hari Orang Indonesia yang Bikin Turis Asing Melongo" (countdown listicle, Y2 Number/Listicle).
+- Judul: "7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo" (50 karakter). Hook A (curiosity gap, cold-open kerokan) terpilih dari 3 varian.
+- Video: macammacam/2026-10-16/macammacam-2026-10-16-long.mp4 — 1280x720 h264+aac, 300.4 dtk (5:01), 18.3 MB (<100MB OK). Voice Mudiwa (avocado_v2:mudiwa), 11 beat, 12 gambar literal, grain/grading via rakit_light.py + ffmpeg-queue.sh.
+- Gap produksi: tanpa SFX rekaman asli (aset mp3 tidak ada di repo backup; tidak dikarang sintetis).
+- Upload via browser task: BERHASIL. Channel "Macam Macam" (@MacamMacamID, UC5ld2qCo0wKeuRKCA1-dbow) terverifikasi sebelum upload. Video https://youtu.be/9BRVEab044E (ID 9BRVEab044E) status DIJADWALKAN 17 Okt 2026 19:00 WIB (terkonfirmasi dialog Studio + daftar Konten). AI disclosure = YA. Copyright check bersih. 20 tag + deskripsi + chapter terisi.
+- Thumbnail kustom BELUM terpasang: channel belum verifikasi nomor telepon → YouTube memblokir upload thumbnail. Perlu tindakan user (nomor HP + kode SMS, atau layanan virtual-number setelah provider diketahui). File siap: macammacam/2026-10-16/thumbnail.webp ("ANEH TAPI NYATA").
+- Tidak ada batas/kuota upload yang terpicu → retry-queue tidak diperlukan.
+- Catatan gaya: gaya-channel.md mencatat Macam Macam = 100% Shorts fakta unik tubuh Indonesia; run ini (pola lama, variasi/umum, LONG) selesai as-is sesuai body. Pola baru (3 shorts + 1 long) mulai besok — shorts sebaiknya ikut gaya channel (fakta tubuh).
+
+## 2026-10-16 16:11 WIB — macammacam-harian (jadwal, pola baru 3 shorts + 1 long)
+- Marker produced-macammacam-2026-10-16.marker sudah ada (dibuat 15:25 WIB oleh run manual 1:1 15:24 WIB) → IDEMPOTENSI: produksi hari ini DILEWATI sesuai body langkah 0.
+- Status run manual: long "7 Kebiasaan Indonesia yang Bikin Turis Asing Melongo" (macammacam-2026-10-16-long.mp4, 18,3 MB, 300,4 dtk) sudah TERUPLOAD ke @MacamMacamID, video 9BRVEab044E, DIJADWALKAN 17 Okt 2026 19:00 WIB, AI disclosure YA, copyright bersih.
+- Gap terbuka: thumbnail kustom "ANEH TAPI NYATA" belum terpasang (channel belum verifikasi nomor telepon → perlu tindakan user).
+- Retry-queue: tidak ada entri macammacam hari ini. File produksi lengkap di macammacam/2026-10-16/.
+- Catatan: pola baru (3 shorts + 1 long, gaya 100% shorts fakta tubuh per gaya-channel.md) berlaku mulai jadwal besok 16:11 WIB.
+
+## 2026-10-16 — 3 SHORTS (subagent, pola baru 3 shorts + 1 long)
+- Marker harian TIDAK dihapus (long sudah jadi & terjadwal).
+- 3 shorts fakta unik tubuh Indonesia, gaya channel 100% (hook 3 varian per shorts, voice Mudiwa avocado_v2:mudiwa):
+  1. "Otakmu Makan 20% Energi Tubuhmu!" — shorts/shorts1/macammacam-shorts1-otak.mp4 — 720x1280, 51.3 dtk, 3.6 MB. Hook on-screen: "20% ENERGIMU|HABIS DI SINI".
+  2. "Jantungmu Berdetak 100 Ribu Kali Sehari!" — shorts/shorts2/macammacam-shorts2-jantung.mp4 — 720x1280, 51.2 dtk, 3.9 MB. Hook on-screen: "100.000x SEHARI".
+  3. "Bayi Punya 300 Tulang, Kamu Cuma 206!" — shorts/shorts3/macammacam-shorts3-tulang.mp4 — 720x1280, 53.4 dtk, 3.3 MB. Hook on-screen: "300 vs 206".
+- Topik tidak mengulang video lama (asam lambung, pembuluh darah, hidung) maupun long hari ini (7 kebiasaan).
+- Visual: 9 gambar AI literal + Ken Burns vertikal + film grain + SFX ambient via rakit_shorts.py + ffmpeg-queue.sh.
+- Paket upload: shorts/upload-meta.txt (jadwal 17 Okt: 09:00 / 14:00 / 21:00 WIB). TIDAK diupload — menunggu ketukan user 20:00-23:00 WIB via browser task parent.
+- Catatan: concat audio 3 shorts dikerjakan via ffmpeg langsung (bukan antrean) karena antrean video penuh 20+ channel; SEMUA render video tetap via ffmpeg-queue.sh.

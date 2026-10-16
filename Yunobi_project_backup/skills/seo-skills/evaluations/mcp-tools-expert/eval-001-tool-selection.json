@@ -1,0 +1,15 @@
+{
+  "name": "Tool Selection for General SEO Check",
+  "description": "User gives a vague 'check my SEO' request. Skill should select the right tools in the right order.",
+  "userMessage": "Check the SEO of https://myblog.com/latest-post",
+  "expectedSkills": ["seo-mcp-tools-expert"],
+  "expectedTools": ["analyze_page"],
+  "expectedBehavior": [
+    "Starts with analyze_page as the broadest tool",
+    "Does NOT jump straight to specific tools like analyze_images",
+    "Uses progressive analysis strategy (Level 1 first)",
+    "Based on analyze_page results, selects specific tools for identified issues",
+    "Provides a structured report with findings and recommendations",
+    "Suggests next steps based on severity of findings"
+  ]
+}

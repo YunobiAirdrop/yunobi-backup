@@ -1,0 +1,15 @@
+{
+  "name": "Poor Core Web Vitals",
+  "description": "Page has failing Core Web Vitals scores affecting rankings.",
+  "userMessage": "My page loads really slowly on mobile. Can you check https://example.com and tell me what's wrong?",
+  "expectedSkills": ["seo-technical-audit", "seo-mcp-tools-expert"],
+  "expectedTools": ["check_core_web_vitals", "check_mobile_friendly"],
+  "expectedBehavior": [
+    "Runs check_core_web_vitals with strategy: mobile",
+    "Identifies specific failing metrics (LCP, INP, CLS)",
+    "Provides metric-specific optimization recommendations",
+    "Prioritizes fixes by impact (LCP first)",
+    "Runs check_mobile_friendly for additional mobile issues",
+    "Distinguishes between field data and lab data if available"
+  ]
+}

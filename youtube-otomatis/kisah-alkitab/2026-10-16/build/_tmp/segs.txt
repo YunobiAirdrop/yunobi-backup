@@ -1,0 +1,8 @@
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg00.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg01.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg02.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg03.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg04.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg05.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg06.mp4'
+file '/home/hatch/workspace/youtube-otomatis/kisah-alkitab/2026-10-16/build/_tmp/seg07.mp4'

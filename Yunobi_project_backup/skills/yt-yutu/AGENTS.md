@@ -1,0 +1,50 @@
+# Yutu
+
+Go CLI + MCP server + Agent for YouTube.
+
+## Quick Reference
+
+- **Build**: `go build -o yutu .` or `bazel build //...`
+- **Test**: `go test ./...` or `bazel test //...`
+- **Smoke Tests**: `./scripts/command-test.sh`
+- **Entry Point**: `main.go`
+
+## Directory Index
+
+| Directory | Description |
+|-----------|-------------|
+| [cmd/](cmd/AGENTS.md) | CLI command definitions and MCP tool bindings |
+| [pkg/](pkg/AGENTS.md) | Core domain logic and shared infrastructure |
+| [internal/](internal/AGENTS.md) | Internal tools (cmdtestgen, skillgen) |
+| [scripts/](scripts/AGENTS.md) | Utility scripts and smoke tests |
+| [docs/](docs) | Project documentation |
+
+## Documentation
+
+- [docs/FEATURES.md](docs/FEATURES.md) — Feature overview
+- [docs/HOW_TO_TEST.md](docs/HOW_TO_TEST.md) — Testing guide
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) — Contribution guidelines
+- [docs/BEFORE_RELEASE.md](docs/BEFORE_RELEASE.md) — Pre-release checklist
+- [docs/CODE_OF_CONDUCT.md](docs/CODE_OF_CONDUCT.md) — Code of conduct
+
+## Conventions
+
+- **Secrets**: `client_secret.json` and `youtube.token.json` in root (standard for this project).
+- **Build System**: Bazel is primary, standard Go tools also work.
+- **BUILD.bazel files are auto-generated** — do NOT create or edit them manually. Run `bazel run //:gazelle` to regenerate.
+- After changing dependencies: `bazel run @rules_go//go -- mod tidy -v && bazel mod tidy`.
+- See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full list of useful build/test/release commands.
+
+## Adding a New YouTube Resource
+
+Every new resource package under `pkg/` and `cmd/` must also be registered in:
+
+1. **`main.go`** — add a blank import (`_ "github.com/eat-pray-ai/yutu/cmd/<resource>"`).
+2. **`internal/tools/skillgen/main.go`** — add a blank import (`_ "github.com/eat-pray-ai/yutu/cmd/<resource>"`).
+3. **`internal/tools/cmdtestgen/main.go`** — add a blank import (`_ "github.com/eat-pray-ai/yutu/cmd/<resource>"`).
+
+Then regenerate generated files and build definitions:
+
+- Run `go run ./internal/tools/skillgen` (or `bazel run //internal/tools/skillgen`) to regenerate agent instruction and skill.
+- Run `go run ./internal/tools/cmdtestgen` (or `bazel run //internal/tools/cmdtestgen`) to regenerate smoke tests (`scripts/command-test.sh`).
+- Run `bazel run //:gazelle` to regenerate `BUILD.bazel` files.

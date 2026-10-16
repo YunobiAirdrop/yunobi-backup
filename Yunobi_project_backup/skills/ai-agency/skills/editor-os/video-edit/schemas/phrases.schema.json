@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "*.phrases.json: a cut list resolve.py turns into token indices. sequence.py plan writes the jump cuts; an agent may write more.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["text"],
+    "additionalProperties": false,
+    "properties": {
+      "text": { "type": "string", "pattern": "\\S" },
+      "nth": { "type": "integer", "minimum": 1 },
+      "pre": { "type": "string" },
+      "post": { "type": "string" },
+      "pass": { "type": "integer", "minimum": 1 },
+      "reason": { "type": "string" }
+    }
+  }
+}

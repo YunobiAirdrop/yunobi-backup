@@ -1,0 +1,18 @@
+[2026-10-16] RUN jejakislami-harian (manual 1:1, pola LONG — run berikut: shorts)
+Topik: Kisah Bilal bin Rabah — dari budak menjadi muadzin pertama
+- Marker: produced-jejakislami-2026-10-16.marker dibuat 15:24 WIB
+- Naskah: 18 beat, hook A/B/C -> dipakai Hook A (cold-open "Ahad, Ahad")
+- Judul (56 char): "Disiksa di Gurun, Mulutnya Justru Mengucap: Ahad, Ahad!"
+- Voiceover: 18/18 beat OK via tts voice avocado_v2:mudiwa (id), total 356.5 dtk
+- Visual: 16 klip Pexels landscape >=1080p (keyword: gurun/langit/lilin), 1 frame per klip diverifikasi via contact sheet — bersih (tanpa wajah/teks/watermark); 4 klip dipakai 2x (f01,f02,f04,f11)
+- Assembly: rakit_jejakislami.py via ffmpeg-queue.sh; 2x runtime restart -> resume idempoten; bug apad infinite di concat ambience -> diperbaiki (hapus apad)
+- Final: jejak-islami-bilal-2026-10-16.mp4 — 6.0 mnt, 97.5 MB (<100MB OK), 1280x720 h264+aac, grain+ambience asli tersinkron+title card
+- Upload: browser task di-spawn, terjadwal 2026-10-17 19:00 WIB; STATUS: menunggu hasil (approval tap user 20:00-23:00 WIB)
+- Catatan: channel @JejakIslami-h3d BELUM verifikasi nomor HP -> custom thumbnail tidak didukung (pakai auto-thumbnail)
+- Upload 20:38 WIB: browser task submit file ke YouTube Studio (1 file, 97.5MB terupload) lalu handoff + reported failure — ALASAN TIDAK DIKETAHUI (isi laporan tidak terkirim ke run ini).
+- Verifikasi ulang 20:46 & 20:53 WIB (read-only check, filter judul di Content): hasil tidak terverifikasi — status tayang/terjadwal BELUM bisa dipastikan.
+- Keputusan: TIDAK tulis retry-queue (bukan terbukti limit harian); TIDAK re-upload buta (risiko duplikat draft + ketukan tap terbuang). Diserahkan ke agen utama: cek draft YouTube Studio pada window tap 20:00-23:00 WIB, selesaikan penjadwalan 2026-10-17 19:00 WIB, atau ulangi upload dengan tap user.
+- File siap: build/jejak-islami-bilal-2026-10-16.mp4 | Manifest: upload-manifest.json | Naskah: naskah.md | Metadata: metadata.md
+- 20:56 WIB: ALASAN GAGAL TERKONFIRMASI — "Batas upload harian telah tercapai" (channel belum verifikasi nomor HP). Sesuai aturan anti-mogok: ditulis ke retry-queue/jejakislami-2026-10-16.json, TIDAK retry langsung. Watchdog 20:00 WIB akan memproses setelah umur >=23 jam (2026-10-17). Alternatif: verifikasi nomor HP channel -> limit naik, upload bisa segera.
+- 20:56 WIB (konfirmasi susulan): 2x cek read-only memastikan video TIDAK masuk daftar Konten (hanya 3 video lama: 15/13/9 Okt) — proses berhenti di dialog upload awal karena error limit, file tidak pernah masuk antrean. Tidak ada upload tertunda/duplikat.
+[2026-10-16] RUN jejakislami-harian (16:11 terjadwal) -> IDEMPOTENSI: marker produced-jejakislami-2026-10-16.marker ada. Produksi DILEWATI (run manual 15:24 sudah produksi video hari ini). Status: video long Bilal 6.0 mnt siap di build/, upload GAGAL limit harian -> tercatat di retry-queue/jejakislami-2026-10-16.json, eligible watchdog 2026-10-17 20:00 WIB. Pola baru 3 shorts+1 long berlaku mulai besok.

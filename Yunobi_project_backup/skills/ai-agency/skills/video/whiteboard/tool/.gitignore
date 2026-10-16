@@ -1,0 +1,4 @@
+# The room link carries the AES key in its fragment, so .env is never committed.
+.env
+node_modules
+out

@@ -1,0 +1,16 @@
+f01_dunes.mp4|https://videos.pexels.com/video-files/28782169/12476649_2560_1440_50fps.mp4
+f02_nightsky.mp4|https://videos.pexels.com/video-files/29434738/12671592_2560_1440_24fps.mp4
+f03_candle.mp4|https://videos.pexels.com/video-files/7033615/7033615-uhd_2560_1440_25fps.mp4
+f04_sunrise.mp4|https://videos.pexels.com/video-files/16867575/16867575-hd_1920_1080_30fps.mp4
+f05_sandstorm.mp4|https://videos.pexels.com/video-files/31761652/13531369_2560_1440_60fps.mp4
+f06_caravan.mp4|https://videos.pexels.com/video-files/38732755/16455675_2560_1440_30fps.mp4
+f07_oasis.mp4|https://videos.pexels.com/video-files/16442970/16442970-uhd_2560_1440_24fps.mp4
+f08_darkclouds.mp4|https://videos.pexels.com/video-files/13070171/13070171-uhd_2560_1440_30fps.mp4
+f09_torch.mp4|https://videos.pexels.com/video-files/31206562/13329333_2560_1440_60fps.mp4
+f10_moon.mp4|https://videos.pexels.com/video-files/11505611/11505611-uhd_2560_1440_50fps.mp4
+f11_desertroad.mp4|https://videos.pexels.com/video-files/34162365/14483431_2560_1440_30fps.mp4
+f12_birds.mp4|https://videos.pexels.com/video-files/29704021/12772676_2560_1440_25fps.mp4
+f13_waterfall.mp4|https://videos.pexels.com/video-files/29509122/12702377_2560_1440_30fps.mp4
+f14_lightning.mp4|https://videos.pexels.com/video-files/32943917/14040735_2560_1440_60fps.mp4
+f15_ruins.mp4|https://videos.pexels.com/video-files/29089387/12569699_2560_1440_25fps.mp4
+f16_prayhands.mp4|https://videos.pexels.com/video-files/9465399/9465399-uhd_2560_1440_25fps.mp4

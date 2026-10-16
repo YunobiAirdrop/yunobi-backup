@@ -1,0 +1,16 @@
+{
+  "name": "API Key Awareness",
+  "description": "User asks for keyword data but has no DataForSEO API key configured.",
+  "userMessage": "What are the best keywords for 'vegan meal prep'? Show me search volumes and difficulty scores.",
+  "expectedSkills": ["seo-content-strategy", "seo-mcp-tools-expert"],
+  "expectedTools": ["research_keywords"],
+  "expectedBehavior": [
+    "Attempts research_keywords tool",
+    "When tool fails due to missing API key, handles gracefully",
+    "Explains that keyword data requires a DataForSEO API key",
+    "Provides setup instructions for the API key",
+    "Falls back to manual keyword research methodology",
+    "Still provides useful keyword suggestions based on SEO expertise",
+    "Does NOT pretend to have data it doesn't have"
+  ]
+}

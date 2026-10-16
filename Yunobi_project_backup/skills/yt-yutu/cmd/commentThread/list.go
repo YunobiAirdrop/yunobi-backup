@@ -1,0 +1,137 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package commentThread
+
+import (
+	"encoding/json/jsontext"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/commentThread"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	listTool     = "commentThread-list"
+	listVidUsage = "Returns the comment threads of the specified video"
+	listShort    = "List comment threads"
+	listLong     = "List comment threads. Use this tool to list comment threads."
+	listExample  = `# List comment threads on a video
+yutu commentThread list --videoId dQw4w9WgXcQ --maxResults 10
+# Search comment threads by terms
+yutu commentThread list --channelId UC_x5XG1OV2P6uZZ5FSM9Ttw --searchTerms 'hello'
+# List specific comment threads in JSON format
+yutu commentThread list --ids abc123,def456 --output json`
+)
+
+var listInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: idsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+		"all_threads_related_to_channel_id": {
+			Type:        "string",
+			Description: atrtcidUsage,
+		},
+		"channel_id": {Type: "string", Description: cidUsage},
+		"max_results": {
+			Type: "number", Description: pkg.MRUsage,
+			Default: jsontext.Value("5"),
+			Minimum: new(float64(0)),
+		},
+		"moderation_status": {
+			Type:        "string",
+			Enum:        []any{"published", "heldForReview", "likelySpam", "rejected"},
+			Description: msUsage, Default: jsontext.Value(`"published"`),
+		},
+		"order": {
+			Type: "string", Enum: []any{"orderUnspecified", "time", "relevance"},
+			Description: orderUsage, Default: jsontext.Value(`"time"`),
+		},
+		"search_terms": {Type: "string", Description: stUsage},
+		"text_format": {
+			Type: "string", Enum: []any{"textFormatUnspecified", "html"},
+			Description: tfUsage, Default: jsontext.Value(`"html"`),
+		},
+		"video_id": {Type: "string", Description: listVidUsage},
+		"parts": {
+			Type: "array", Description: pkg.PartsUsage,
+			Items:   &jsonschema.Schema{Type: "string"},
+			Default: jsontext.Value(`["id","snippet"]`),
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "table"},
+			Description: pkg.TableUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: listTool, Title: listShort, Description: listLong,
+			InputSchema: listInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    true,
+			},
+		}, cobramcp.GenToolHandler(
+			listTool, func(input commentThread.CommentThread, writer io.Writer) error {
+				return input.List(writer)
+			},
+		),
+	)
+	commentThreadCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, idsUsage)
+	listCmd.Flags().StringVarP(
+		&allThreadsRelatedToChannelId, "allThreadsRelatedToChannelId", "a", "",
+		atrtcidUsage,
+	)
+	listCmd.Flags().StringVarP(&channelId, "channelId", "c", "", cidUsage)
+	listCmd.Flags().Int64VarP(&maxResults, "maxResults", "n", 5, pkg.MRUsage)
+	listCmd.Flags().StringVarP(
+		&moderationStatus, "moderationStatus", "m", "published", msUsage,
+	)
+	listCmd.Flags().StringVarP(&order, "order", "O", "time", orderUsage)
+	listCmd.Flags().StringVarP(&searchTerms, "searchTerms", "s", "", stUsage)
+	listCmd.Flags().StringVarP(&textFormat, "textFormat", "t", "html", tfUsage)
+	listCmd.Flags().StringVarP(&videoId, "videoId", "v", "", listVidUsage)
+	listCmd.Flags().StringSliceVarP(
+		&parts, "parts", "p", []string{"id", "snippet"}, pkg.PartsUsage,
+	)
+	listCmd.Flags().StringP("output", "o", "table", pkg.TableUsage)
+}
+
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   listShort,
+	Long:    listLong,
+	Example: listExample,
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		output, _ := cmd.Flags().GetString("output")
+		input := commentThread.NewCommentThread(
+			commentThread.WithIds(ids),
+			commentThread.WithAllThreadsRelatedToChannelId(allThreadsRelatedToChannelId),
+			commentThread.WithChannelId(channelId),
+			commentThread.WithMaxResults(maxResults),
+			commentThread.WithModerationStatus(moderationStatus),
+			commentThread.WithOrder(order),
+			commentThread.WithSearchTerms(searchTerms),
+			commentThread.WithTextFormat(textFormat),
+			commentThread.WithVideoId(videoId),
+			commentThread.WithParts(parts),
+			commentThread.WithOutput(output),
+		)
+		return input.List(cmd.OutOrStdout())
+	},
+}

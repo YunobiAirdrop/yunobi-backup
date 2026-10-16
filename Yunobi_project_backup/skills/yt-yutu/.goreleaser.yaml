@@ -1,0 +1,124 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 2
+project_name: yutu
+
+env:
+  - MODULE_PATH=github.com/{{ if index .Env "GITHUB_REPOSITORY"  }}{{ .Env.GITHUB_REPOSITORY }}{{ else }}eat-pray-ai/yutu{{ end }}
+  - Builder={{ if index .Env "GITHUB_ACTOR"  }}{{ .Env.GITHUB_ACTOR }}{{ else }}Gopher{{ end }}
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+gomod:
+  proxy: true
+
+report_sizes: true
+
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
+
+builds:
+  - id: yutu
+    binary: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+    env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    goamd64:
+      - v1
+    goarm64:
+      - v8.0
+    flags:
+      - -trimpath
+      - -tags=netgo
+    ldflags:
+      - -s -w
+      - -X {{ .Env.MODULE_PATH }}/cmd.Version={{ .Version }}
+      - -X {{ .Env.MODULE_PATH }}/cmd.Commit={{ .ShortCommit }}
+      - -X {{ .Env.MODULE_PATH }}/cmd.CommitDate={{ .CommitDate }}
+      - -X {{ .Env.MODULE_PATH }}/cmd.Os={{ .Os }}
+      - -X {{ .Env.MODULE_PATH }}/cmd.Arch={{ .Arch }}
+      - -X {{ .Env.MODULE_PATH }}/cmd.Builder={{ .Env.Builder }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - formats: [ "binary" ]
+    ids:
+      - yutu
+    name_template: "{{ .Binary }}"
+
+source:
+  enabled: true
+  name_template: "{{ .ProjectName }}"
+
+checksum:
+  algorithm: blake2b
+  split: true
+  ids:
+    - source
+
+changelog:
+  use: github
+  sort: ""
+  abbrev: 0
+  groups:
+    - title: "Breaking Changes"
+      regexp: "^.*?:boom:.+"
+      order: 0
+    - title: "Features"
+      regexp: "^.*?:(sparkles|tada|alien|egg):.+"
+      order: 1
+    - title: "Bug Fixes"
+      regexp: "^.*?:(bug|ambulance|lock|adhesive_bandage|goal_net):.+"
+      order: 2
+    - title: "Refactor & Improvements"
+      regexp: "^.*?:(recycle|zap|art|children_crossing|wheelchair|fire|coffin|truck|lipstick|bento|loud_sound|mute|necktie|passport_control):.+"
+      order: 3
+    - title: "Documentation"
+      regexp: "^.*?:(memo|pencil2|page_facing_up|speech_balloon|bulb|mag):.+"
+      order: 4
+    - title: "Tests"
+      regexp: "^.*?:(white_check_mark|test_tube|rotating_light|safety_vest):.+"
+      order: 5
+    - title: "Build & CI/CD"
+      regexp: "^.*?:(green_heart|construction_worker|rocket|wrench|hammer|building_construction|technologist|see_no_evil|package|heavy_plus_sign|heavy_minus_sign):.+"
+      order: 6
+    - title: "Others"
+      order: 999
+  filters:
+    exclude:
+      - "^.*?:(arrow_up|arrow_down|pushpin|bookmark):.+"
+
+release:
+  replace_existing_draft: true
+  discussion_category_name: General
+  prerelease: auto
+  make_latest: "{{ if .Prerelease }}false{{ else }}true{{ end }}"
+  header: |
+    ## Install
+
+    ```shell
+    npm i -g @eat-pray-ai/yutu@{{ .Version }}
+    ```
+
+#git:
+#  ignore_tags:
+#    - ".*-rc.*"
+#    - ".*-beta.*"
+#    - ".*-alpha.*"
+#    - ".*-dev.*"

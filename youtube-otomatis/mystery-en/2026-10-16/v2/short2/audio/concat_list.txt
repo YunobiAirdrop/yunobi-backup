@@ -1,0 +1,6 @@
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-001_chunk.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-002_chunk.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-003_chunk.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-004_chunk.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-005_chunk.mp3'
+file '/home/hatch/workspace/youtube-otomatis/mystery-en/2026-10-16/v2/short2/audio/beat-006_chunk.mp3'

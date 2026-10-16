@@ -1,0 +1,13 @@
+# One maintainer for now. When the vidmoat organisation has teams, split this
+# by domain: community reviewers for /skills/community/, a team per core
+# domain, and a security team on anything that executes (scripts, tools,
+# workflows, the plugin manifest). The last matching pattern wins.
+
+*                                   @fredabila
+/skills/community/                  @fredabila
+/skills/vidmoat/                    @fredabila
+/skills/**/scripts/                 @fredabila
+/tools/                             @fredabila
+/.github/                           @fredabila
+/.claude-plugin/                    @fredabila
+/SECURITY.md                        @fredabila

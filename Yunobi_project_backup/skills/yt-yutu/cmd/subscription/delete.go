@@ -1,0 +1,88 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package subscription
+
+import (
+	"fmt"
+	"io"
+	"strings"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/subscription"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	deleteTool     = "subscription-delete"
+	deleteIdsUsage = "IDs of the subscriptions to delete"
+	deleteConfirm  = "Delete subscription(s): %s"
+	deleteShort    = "Delete subscriptions"
+	deleteLong     = "Delete subscriptions. Use this tool to delete subscriptions by IDs."
+	deleteExample  = `# Delete a subscription by ID
+yutu subscription delete --ids abc123
+# Delete multiple subscriptions
+yutu subscription delete --ids abc123,def456`
+)
+
+var deleteInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"ids"},
+	Properties: map[string]*jsonschema.Schema{
+		"ids": {
+			Type: "array", Description: deleteIdsUsage,
+			Items: &jsonschema.Schema{Type: "string"},
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: deleteTool, Title: deleteShort, Description: deleteLong,
+			InputSchema: deleteInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(true),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			deleteTool, cobramcp.ConfirmThen(
+				func(input subscription.Subscription) string {
+					return fmt.Sprintf(deleteConfirm, strings.Join(input.Ids, ", "))
+				},
+				func(input subscription.Subscription, w io.Writer) error {
+					return input.Delete(w)
+				},
+			),
+		),
+	)
+	subscriptionCmd.AddCommand(deleteCmd)
+
+	deleteCmd.Flags().StringSliceVarP(&ids, "ids", "i", []string{}, deleteIdsUsage)
+	deleteCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = deleteCmd.MarkFlagRequired("ids")
+}
+
+var deleteCmd = &cobra.Command{
+	Use:     "delete",
+	Short:   deleteShort,
+	Long:    deleteLong,
+	Example: deleteExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(
+			c, fmt.Sprintf(deleteConfirm, strings.Join(ids, ", ")),
+		)
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		input := subscription.NewSubscription(
+			subscription.WithIds(ids),
+		)
+		return input.Delete(c.OutOrStdout())
+	},
+}

@@ -1,0 +1,633 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package comment
+
+import (
+	"bytes"
+	"io"
+	"math"
+	"net/http"
+	"reflect"
+	"testing"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"google.golang.org/api/youtube/v3"
+)
+
+func TestNewComment(t *testing.T) {
+	type args struct {
+		opts []Option
+	}
+
+	canRateTrue := true
+	canRateFalse := false
+	banAuthorTrue := true
+	banAuthorFalse := false
+	svc := &youtube.Service{}
+
+	tests := []struct {
+		name string
+		args args
+		want IComment[youtube.Comment]
+	}{
+		{
+			name: "with all options",
+			args: args{
+				opts: []Option{
+					WithIds([]string{"comment1", "comment2"}),
+					WithAuthorChannelId("author123"),
+					WithCanRate(&canRateTrue),
+					WithChannelId("channel123"),
+					WithMaxResults(50),
+					WithParentId("parent123"),
+					WithTextFormat("html"),
+					WithTextOriginal("This is a comment"),
+					WithModerationStatus("published"),
+					WithBanAuthor(&banAuthorTrue),
+					WithVideoId("video123"),
+					WithViewerRating("like"),
+					WithParts([]string{"id", "snippet"}),
+					WithOutput("json"),
+					WithService(svc),
+				},
+			},
+			want: &Comment{
+				Service:          svc,
+				Parts:            []string{"id", "snippet"},
+				Output:           "json",
+				Ids:              []string{"comment1", "comment2"},
+				MaxResults:       50,
+				ChannelId:        "channel123",
+				AuthorChannelId:  "author123",
+				CanRate:          &canRateTrue,
+				ParentId:         "parent123",
+				TextFormat:       "html",
+				TextOriginal:     "This is a comment",
+				ModerationStatus: "published",
+				BanAuthor:        &banAuthorTrue,
+				VideoId:          "video123",
+				ViewerRating:     "like",
+			},
+		},
+		{
+			name: "with no options",
+			args: args{
+				opts: []Option{},
+			},
+			want: &Comment{Fields: common.Fields{}},
+		},
+		{
+			name: "with nil boolean options",
+			args: args{
+				opts: []Option{
+					WithCanRate(nil),
+					WithBanAuthor(nil),
+				},
+			},
+			want: &Comment{Fields: common.Fields{}},
+		},
+		{
+			name: "with false boolean options",
+			args: args{
+				opts: []Option{
+					WithCanRate(&canRateFalse),
+					WithBanAuthor(&banAuthorFalse),
+				},
+			},
+			want: &Comment{
+				Fields:    common.Fields{},
+				CanRate:   &canRateFalse,
+				BanAuthor: &banAuthorFalse,
+			},
+		},
+		{
+			name: "with zero max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(0),
+				},
+			},
+			want: &Comment{
+				MaxResults: math.MaxInt64,
+			},
+		},
+		{
+			name: "with negative max results",
+			args: args{
+				opts: []Option{
+					WithMaxResults(-10),
+				},
+			},
+			want: &Comment{
+				MaxResults: 1,
+			},
+		},
+		{
+			name: "with empty string values",
+			args: args{
+				opts: []Option{
+					WithAuthorChannelId(""),
+					WithChannelId(""),
+					WithParentId(""),
+					WithTextFormat(""),
+					WithTextOriginal(""),
+					WithModerationStatus(""),
+					WithVideoId(""),
+					WithViewerRating(""),
+				},
+			},
+			want: &Comment{
+				Fields:           common.Fields{},
+				AuthorChannelId:  "",
+				ParentId:         "",
+				TextFormat:       "",
+				TextOriginal:     "",
+				ModerationStatus: "",
+				VideoId:          "",
+				ViewerRating:     "",
+			},
+		},
+		{
+			name: "with partial options",
+			args: args{
+				opts: []Option{
+					WithIds([]string{"comment1"}),
+					WithTextOriginal("Partial comment"),
+					WithVideoId("video456"),
+					WithMaxResults(25),
+					WithService(svc),
+				},
+			},
+			want: &Comment{
+				Service: svc, Ids: []string{"comment1"}, MaxResults: 25,
+				TextOriginal: "Partial comment",
+				VideoId:      "video456",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				got := NewComment(tt.args.opts...)
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("%s\nNewComment() = %v\nwant %v", tt.name, got, tt.want)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_Get(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantLen int
+		wantErr bool
+	}{
+		{
+			name: "get comments by id",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("id") != "comment-id" {
+					t.Errorf("expected id=comment-id, got %s", r.URL.Query().Get("id"))
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get comments by parentId",
+			opts: []Option{
+				WithParentId("parent-id"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("parentId") != "parent-id" {
+					t.Errorf(
+						"expected parentId=parent-id, got %s", r.URL.Query().Get("parentId"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+		{
+			name: "get comments with textFormat",
+			opts: []Option{
+				WithTextFormat("plainText"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("textFormat") != "plainText" {
+					t.Errorf(
+						"expected textFormat=plainText, got %s",
+						r.URL.Query().Get("textFormat"),
+					)
+				}
+			},
+			wantLen: 1,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write(
+								[]byte(`{
+					"items": [
+						{"id": "comment-1", "snippet": {"textOriginal": "Comment 1"}}
+					]
+				}`),
+							)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				got, err := c.Get()
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Comment.Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if len(got) != tt.wantLen {
+					t.Errorf(
+						"Comment.Get() got length = %v, want %v", len(got), tt.wantLen,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_Get_Pagination(t *testing.T) {
+	svc := common.NewTestService(t, common.PaginationHandler("comment"))
+	c := NewComment(
+		WithService(svc),
+		WithMaxResults(22),
+	)
+	got, err := c.Get()
+	if err != nil {
+		t.Errorf("Comment.Get() error = %v", err)
+	}
+	if len(got) != 22 {
+		t.Errorf("Comment.Get() got length = %v, want 22", len(got))
+	}
+}
+
+func TestComment_List(t *testing.T) {
+	common.RunListTest(
+		t,
+		`{
+			"items": [
+				{
+					"id": "comment-1",
+					"snippet": {
+						"authorDisplayName": "User",
+						"videoId": "video-1",
+						"textDisplay": "Comment"
+					}
+				}
+			]
+		}`,
+		func(svc *youtube.Service, output string) func(io.Writer) error {
+			c := NewComment(
+				WithService(svc),
+				WithOutput(output),
+				WithIds([]string{"comment-1"}),
+				WithMaxResults(1),
+			)
+			return c.List
+		},
+	)
+}
+
+func TestComment_Insert(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "insert comment",
+			opts: []Option{
+				WithParentId("parent-id"),
+				WithTextOriginal("New comment"),
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "POST" {
+					t.Errorf("expected POST, got %s", r.Method)
+				}
+			},
+			wantErr: false,
+		},
+		{
+			name: "insert comment full",
+			opts: []Option{
+				WithParentId("parent-id"),
+				WithTextOriginal("New comment"),
+				WithAuthorChannelId("author-id"),
+				WithChannelId("channel-id"),
+				WithVideoId("video-id"),
+				func(c *Comment) {
+					b := true
+					c.CanRate = &b
+				},
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "POST" {
+					t.Errorf("expected POST, got %s", r.Method)
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							_, _ = w.Write([]byte(`{"id": "new-comment-id"}`))
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				var buf bytes.Buffer
+				if err := c.Insert(&buf); (err != nil) != tt.wantErr {
+					t.Errorf("Comment.Insert() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_Update(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "update comment",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+				WithTextOriginal("Updated text"),
+				WithMaxResults(1),
+			},
+			verify: func(r *http.Request) {
+				switch r.Method {
+				case "PUT":
+					if r.URL.Query().Get("part") != "snippet" {
+						t.Errorf("expected part=snippet, got %s", r.URL.Query().Get("part"))
+					}
+				case "GET":
+				default:
+					t.Errorf("unexpected method %s", r.Method)
+				}
+			},
+			wantErr: false,
+		},
+		{
+			name: "update comment with canRate and viewerRating",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+				func(c *Comment) {
+					b := true
+					c.CanRate = &b
+				},
+				WithViewerRating("like"),
+				WithMaxResults(1),
+			},
+			verify:  func(_ *http.Request) {},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.Header().Set("Content-Type", "application/json")
+							if r.Method == "GET" {
+								_, _ = w.Write(
+									[]byte(`{"items": [{"id": "comment-id", "snippet": {"textOriginal": "Old Text"}}]}`),
+								)
+							} else {
+								_, _ = w.Write([]byte(`{"id": "comment-id", "snippet": {"textOriginal": "Updated Text"}}`))
+							}
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				var buf bytes.Buffer
+				if err := c.Update(&buf); (err != nil) != tt.wantErr {
+					t.Errorf("Comment.Update() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_Delete(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "delete comment",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "DELETE" {
+					t.Errorf("expected DELETE, got %s", r.Method)
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.WriteHeader(http.StatusNoContent)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				var buf bytes.Buffer
+				if err := c.Delete(&buf); (err != nil) != tt.wantErr {
+					t.Errorf("Comment.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_MarkAsSpam(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "mark comment as spam",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "POST" {
+					t.Errorf("expected POST, got %s", r.Method)
+				}
+				if r.URL.Query().Get("id") != "comment-id" {
+					t.Errorf("expected id=comment-id, got %s", r.URL.Query().Get("id"))
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.WriteHeader(http.StatusNoContent)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				var buf bytes.Buffer
+				if err := c.MarkAsSpam(&buf); (err != nil) != tt.wantErr {
+					t.Errorf(
+						"Comment.MarkAsSpam() error = %v, wantErr %v", err, tt.wantErr,
+					)
+				}
+			},
+		)
+	}
+}
+
+func TestComment_SetModerationStatus(t *testing.T) {
+	banAuthorTrue := true
+	tests := []struct {
+		name    string
+		opts    []Option
+		verify  func(*http.Request)
+		wantErr bool
+	}{
+		{
+			name: "set moderation status",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+				WithModerationStatus("published"),
+			},
+			verify: func(r *http.Request) {
+				if r.Method != "POST" {
+					t.Errorf("expected POST, got %s", r.Method)
+				}
+				if r.URL.Query().Get("id") != "comment-id" {
+					t.Errorf("expected id=comment-id, got %s", r.URL.Query().Get("id"))
+				}
+				if r.URL.Query().Get("moderationStatus") != "published" {
+					t.Errorf(
+						"expected moderationStatus=published, got %s",
+						r.URL.Query().Get("moderationStatus"),
+					)
+				}
+			},
+			wantErr: false,
+		},
+		{
+			name: "set moderation status with banAuthor",
+			opts: []Option{
+				WithIds([]string{"comment-id"}),
+				WithModerationStatus("published"),
+				WithBanAuthor(&banAuthorTrue),
+			},
+			verify: func(r *http.Request) {
+				if r.URL.Query().Get("banAuthor") != "true" {
+					t.Errorf(
+						"expected banAuthor=true, got %s", r.URL.Query().Get("banAuthor"),
+					)
+				}
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				svc := common.NewTestService(
+					t, http.HandlerFunc(
+						func(w http.ResponseWriter, r *http.Request) {
+							if tt.verify != nil {
+								tt.verify(r)
+							}
+							w.WriteHeader(http.StatusNoContent)
+						},
+					),
+				)
+
+				opts := append([]Option{WithService(svc)}, tt.opts...)
+				c := NewComment(opts...)
+				var buf bytes.Buffer
+				if err := c.SetModerationStatus(&buf); (err != nil) != tt.wantErr {
+					t.Errorf(
+						"Comment.SetModerationStatus() error = %v, wantErr %v", err,
+						tt.wantErr,
+					)
+				}
+			},
+		)
+	}
+}

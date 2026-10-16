@@ -1,0 +1,120 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package playlistImage
+
+import (
+	"encoding/json/jsontext"
+	"fmt"
+	"io"
+
+	cobramcp "github.com/eat-pray-ai/cobra-mcp"
+	"github.com/eat-pray-ai/yutu/cmd"
+	"github.com/eat-pray-ai/yutu/pkg"
+	"github.com/eat-pray-ai/yutu/pkg/playlistImage"
+	"github.com/eat-pray-ai/yutu/pkg/utils"
+	"github.com/google/jsonschema-go/jsonschema"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/spf13/cobra"
+)
+
+const (
+	updateTool    = "playlistImage-update"
+	updateConfirm = "Update playlist image: %s"
+	updateShort   = "Update a playlist image"
+	updateLong    = "Update a playlist image. Use this tool to update a playlist image."
+	updateExample = `# Update a playlist image
+yutu playlistImage update --playlistId PLxxx --type hero --width 2048 --height 1152`
+)
+
+var updateInSchema = &jsonschema.Schema{
+	Type:     "object",
+	Required: []string{"playlist_id"},
+	Properties: map[string]*jsonschema.Schema{
+		"playlist_id": {Type: "string", Description: pidUsage},
+		"type":        {Type: "string", Description: typeUsage},
+		"height": {
+			Type: "number", Description: heightUsage,
+			Minimum: new(float64(0)),
+		},
+		"width": {
+			Type: "number", Description: widthUsage,
+			Minimum: new(float64(0)),
+		},
+		"on_behalf_of_content_owner": {
+			Type:        "string",
+			Description: pkg.OBOCOUsage,
+		},
+		"on_behalf_of_content_owner_channel": {
+			Type:        "string",
+			Description: pkg.OBOCOCUsage,
+		},
+		"output": {
+			Type: "string", Enum: []any{"json", "yaml", "silent"},
+			Description: pkg.SilentUsage, Default: jsontext.Value(`"json"`),
+		},
+	},
+}
+
+func init() {
+	mcp.AddTool(
+		cmd.Server, &mcp.Tool{
+			Name: updateTool, Title: updateShort, Description: updateLong,
+			InputSchema: updateInSchema, Annotations: &mcp.ToolAnnotations{
+				DestructiveHint: new(false),
+				IdempotentHint:  true,
+				OpenWorldHint:   new(true),
+				ReadOnlyHint:    false,
+			},
+		}, cobramcp.GenToolHandlerWithMRTR(
+			updateTool, cobramcp.ConfirmThen(
+				func(input playlistImage.PlaylistImage) string {
+					return fmt.Sprintf(updateConfirm, input.PlaylistId)
+				},
+				func(input playlistImage.PlaylistImage, w io.Writer) error {
+					return input.Update(w)
+				},
+			),
+		),
+	)
+	playlistImageCmd.AddCommand(updateCmd)
+
+	updateCmd.Flags().StringVarP(&playlistId, "playlistId", "p", "", pidUsage)
+	updateCmd.Flags().StringVarP(&type_, "type", "t", "", typeUsage)
+	updateCmd.Flags().Int64VarP(&height, "height", "H", 0, heightUsage)
+	updateCmd.Flags().Int64VarP(&width, "width", "W", 0, widthUsage)
+	updateCmd.Flags().StringP("output", "o", "", pkg.SilentUsage)
+	updateCmd.Flags().StringVarP(
+		&onBehalfOfContentOwner, "onBehalfOfContentOwner", "b", "", pkg.OBOCOUsage,
+	)
+	updateCmd.Flags().StringVarP(
+		&onBehalfOfContentOwnerChannel, "onBehalfOfContentOwnerChannel", "B", "",
+		pkg.OBOCOCUsage,
+	)
+	updateCmd.Flags().Bool("yes", false, pkg.ConfirmedUsage)
+	_ = updateCmd.MarkFlagRequired("playlistId")
+}
+
+var updateCmd = &cobra.Command{
+	Use:     "update",
+	Short:   updateShort,
+	Long:    updateLong,
+	Example: updateExample,
+	PreRunE: func(c *cobra.Command, _ []string) error {
+		return utils.ConfirmPreRun(c, fmt.Sprintf(updateConfirm, playlistId))
+	},
+	RunE: func(c *cobra.Command, _ []string) error {
+		output, _ := c.Flags().GetString("output")
+		input := playlistImage.NewPlaylistImage(
+			playlistImage.WithPlaylistId(playlistId),
+			playlistImage.WithType(type_),
+			playlistImage.WithHeight(height),
+			playlistImage.WithWidth(width),
+			playlistImage.WithMaxResults(1),
+			playlistImage.WithOutput(output),
+			playlistImage.WithOnBehalfOfContentOwner(onBehalfOfContentOwner),
+			playlistImage.WithOnBehalfOfContentOwnerChannel(onBehalfOfContentOwnerChannel),
+		)
+		return input.Update(c.OutOrStdout())
+	},
+}

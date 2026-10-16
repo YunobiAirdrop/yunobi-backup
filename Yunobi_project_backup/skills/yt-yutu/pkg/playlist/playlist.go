@@ -1,0 +1,265 @@
+// Copyright 2025 eat-pray-ai & OpenWaygate
+// SPDX-License-Identifier: Apache-2.0
+
+package playlist
+
+import (
+	"errors"
+	"fmt"
+	"io"
+
+	"github.com/eat-pray-ai/yutu/pkg/common"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"google.golang.org/api/youtube/v3"
+)
+
+var (
+	errGetPlaylist    = errors.New("failed to get playlist")
+	errInsertPlaylist = errors.New("failed to insert playlist")
+	errUpdatePlaylist = errors.New("failed to update playlist")
+	errDeletePlaylist = errors.New("failed to delete playlist")
+)
+
+type Playlist struct {
+	common.Fields
+	Title       string   `yaml:"title" json:"title,omitempty"`
+	Description *string  `yaml:"description" json:"description,omitzero"`
+	Mine        *bool    `yaml:"mine" json:"mine,omitzero"`
+	Tags        []string `yaml:"tags" json:"tags,omitempty"`
+	Language    *string  `yaml:"language" json:"language,omitzero"`
+	Privacy     string   `yaml:"privacy" json:"privacy,omitempty"`
+
+	OnBehalfOfContentOwnerChannel string `yaml:"on_behalf_of_content_owner_channel" json:"on_behalf_of_content_owner_channel,omitempty"`
+}
+
+type IPlaylist[T any] interface {
+	List(io.Writer) error
+	Insert(io.Writer) error
+	Update(io.Writer) error
+	Delete(io.Writer) error
+	Get() ([]*T, error)
+}
+
+type Option func(*Playlist)
+
+func NewPlaylist(opts ...Option) IPlaylist[youtube.Playlist] {
+	p := &Playlist{Fields: common.Fields{}}
+	for _, opt := range opts {
+		opt(p)
+	}
+	return p
+}
+
+func (p *Playlist) Get() ([]*youtube.Playlist, error) {
+	if err := p.EnsureService(); err != nil {
+		return nil, err
+	}
+	call := p.Service.Playlists.List(p.Parts)
+
+	if len(p.Ids) > 0 {
+		call = call.Id(p.Ids...)
+	}
+	if p.ChannelId != "" {
+		call = call.ChannelId(p.ChannelId)
+	}
+	if p.Hl != "" {
+		call = call.Hl(p.Hl)
+	}
+	if p.Mine != nil {
+		call = call.Mine(*p.Mine)
+	}
+	if p.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(p.OnBehalfOfContentOwner)
+	}
+	if p.OnBehalfOfContentOwnerChannel != "" {
+		call = call.OnBehalfOfContentOwnerChannel(p.OnBehalfOfContentOwnerChannel)
+	}
+
+	return common.Paginate(
+		&p.Fields, call,
+		func(r *youtube.PlaylistListResponse) ([]*youtube.Playlist, string) {
+			return r.Items, r.NextPageToken
+		}, errGetPlaylist,
+	)
+}
+
+func (p *Playlist) List(writer io.Writer) error {
+	playlists, err := p.Get()
+	if err != nil && playlists == nil {
+		return err
+	}
+
+	return errors.Join(
+		err,
+		common.PrintList(
+			p.Output, playlists, writer, table.Row{"ID", "Channel ID", "Title"},
+			func(pl *youtube.Playlist) table.Row {
+				channelId := ""
+				title := ""
+				if pl.Snippet != nil {
+					channelId = pl.Snippet.ChannelId
+					title = pl.Snippet.Title
+				}
+				return table.Row{pl.Id, channelId, title}
+			},
+		),
+	)
+}
+
+func (p *Playlist) Insert(writer io.Writer) error {
+	if err := p.EnsureService(); err != nil {
+		return err
+	}
+	upload := &youtube.Playlist{
+		Snippet: &youtube.PlaylistSnippet{
+			Title:     p.Title,
+			Tags:      p.Tags,
+			ChannelId: p.ChannelId,
+		},
+		Status: &youtube.PlaylistStatus{
+			PrivacyStatus: p.Privacy,
+		},
+	}
+	if p.Description != nil {
+		upload.Snippet.Description = *p.Description
+	}
+	if p.Language != nil {
+		upload.Snippet.DefaultLanguage = *p.Language
+	}
+
+	call := p.Service.Playlists.Insert([]string{"snippet", "status"}, upload)
+	if p.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(p.OnBehalfOfContentOwner)
+	}
+	if p.OnBehalfOfContentOwnerChannel != "" {
+		call = call.OnBehalfOfContentOwnerChannel(p.OnBehalfOfContentOwnerChannel)
+	}
+	res, err := call.Do()
+	if err != nil {
+		return errors.Join(errInsertPlaylist, err)
+	}
+
+	return common.PrintResult(
+		p.Output, res, writer, "Playlist inserted: %s\n", res.Id,
+	)
+}
+
+func (p *Playlist) Update(writer io.Writer) error {
+	if err := p.EnsureService(); err != nil {
+		return err
+	}
+	playlists, err := p.Get()
+	if err != nil {
+		return errors.Join(errUpdatePlaylist, err)
+	}
+	if len(playlists) == 0 {
+		return errGetPlaylist
+	}
+
+	playlist := playlists[0]
+	if p.Title != "" {
+		playlist.Snippet.Title = p.Title
+	}
+	if p.Description != nil {
+		playlist.Snippet.Description = *p.Description
+	}
+	if p.Tags != nil {
+		playlist.Snippet.Tags = p.Tags
+	}
+	if p.Language != nil {
+		playlist.Snippet.DefaultLanguage = *p.Language
+	}
+	if p.Privacy != "" {
+		playlist.Status.PrivacyStatus = p.Privacy
+	}
+
+	call := p.Service.Playlists.Update([]string{"snippet", "status"}, playlist)
+	if p.OnBehalfOfContentOwner != "" {
+		call = call.OnBehalfOfContentOwner(p.OnBehalfOfContentOwner)
+	}
+	res, err := call.Do()
+	if err != nil {
+		return errors.Join(errUpdatePlaylist, err)
+	}
+
+	return common.PrintResult(
+		p.Output, res, writer, "Playlist updated: %s\n", res.Id,
+	)
+}
+
+func (p *Playlist) Delete(writer io.Writer) (errs error) {
+	if errs = p.EnsureService(); errs != nil {
+		return errs
+	}
+	for _, id := range p.Ids {
+		call := p.Service.Playlists.Delete(id)
+		if p.OnBehalfOfContentOwner != "" {
+			call = call.OnBehalfOfContentOwner(p.OnBehalfOfContentOwner)
+		}
+
+		err := call.Do()
+		if err != nil {
+			errs = errors.Join(errs, errDeletePlaylist, err)
+			continue
+		}
+		_, err = fmt.Fprintf(writer, "Playlist %s deleted", id)
+		errs = errors.Join(errs, err)
+	}
+	return errs
+}
+
+func WithTitle(title string) Option {
+	return func(p *Playlist) {
+		p.Title = title
+	}
+}
+
+func WithDescription(description *string) Option {
+	return func(p *Playlist) {
+		p.Description = description
+	}
+}
+
+func WithTags(tags []string) Option {
+	return func(p *Playlist) {
+		p.Tags = tags
+	}
+}
+
+func WithLanguage(language *string) Option {
+	return func(p *Playlist) {
+		p.Language = language
+	}
+}
+
+func WithPrivacy(privacy string) Option {
+	return func(p *Playlist) {
+		p.Privacy = privacy
+	}
+}
+
+func WithMine(mine *bool) Option {
+	return func(p *Playlist) {
+		if mine != nil {
+			p.Mine = mine
+		}
+	}
+}
+
+func WithOnBehalfOfContentOwnerChannel(channel string) Option {
+	return func(p *Playlist) {
+		p.OnBehalfOfContentOwnerChannel = channel
+	}
+}
+
+var (
+	WithParts      = common.WithParts[*Playlist]
+	WithOutput     = common.WithOutput[*Playlist]
+	WithService    = common.WithService[*Playlist]
+	WithIds        = common.WithIds[*Playlist]
+	WithMaxResults = common.WithMaxResults[*Playlist]
+	WithHl         = common.WithHl[*Playlist]
+	WithChannelId  = common.WithChannelId[*Playlist]
+
+	WithOnBehalfOfContentOwner = common.WithOnBehalfOfContentOwner[*Playlist]
+)
