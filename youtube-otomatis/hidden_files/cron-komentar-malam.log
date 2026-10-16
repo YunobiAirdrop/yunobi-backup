@@ -1,0 +1,75 @@
+====================================================================
+RUN: 2026-10-16 21:11 WIB (balas-komentar-youtube-malam, attempt 1)
+HASIL: 1 komentar dibalas, 21 seed dibuat — RUN BERHASIL
+====================================================================
+
+Login: studio.youtube.com login sebagai khususstokyunobi@gmail.com —
+sesi browser masih aktif, TIDAK ada 2FA. Pin komentar TIDAK dicoba.
+
+1. Jejak Islami (@JejakIslami-h3d) — OK
+   Video dicek: 3 terbaru (15/13/9 Okt), semua 0 komentar. Dibalas: 0.
+   Seed: 1 di "Laut Terbelah Dua, Pasukan Fir'aun Tenggelam" (pertanyaan
+   terbuka soal perasaan berdiri di tepi laut bersama Nabi Musa).
+2. Kisah Horor (@KisahPOV) — OK
+   Video dicek: 10 terbaru (15 Okt s/d 4 Okt). Dibalas: 0 (5 komentar
+   terbaru milik channel sendiri/seed lama). Seed: 2 (Shorts "4 Satpam
+   Tewas di Pos Ini..." dan "Mereka Bilang: Sekarang Giliranmu Patroli!").
+   CATATAN: video long terbaru "CCTV Apartemen Ini Rekam Sosok Aneh Tiap
+   Jam 02.47" (15 Okt, status Publik, 0 komentar) tidak bisa dibuka di
+   halaman tonton ("Video ini sudah tidak tersedia") — seed tidak bisa
+   diposting di sana. Kemungkinan video bermasalah/masih diproses.
+3. Yunobi BerCERITA RAKYAT (@ceritarakyat862) — OK (catatan)
+   Video dicek: 5 terbaru (13–15 Okt). Dibalas: 0 (1 komentar milik
+   channel sendiri). Seed: 0. CATATAN: kolom komentar DINONAKTIFKAN di
+   video-video POV terbaru (Pattimura, Viking, Sparta) — seed tidak bisa
+   diposting. Channel tampaknya menonaktifkan komentar di video terbaru.
+4. Lima Misteri (@LimaMisteri) — OK
+   Video dicek: 7 terbaru (8–15 Okt; 1 video terjadwal 17 Okt dilewati).
+   Dibalas: 0 (7 komentar milik channel sendiri/seed lama). Seed: 2
+   ("Kapal Berhantu..." dan "5 Misteri Ini Bikin Saya Merinding...").
+5. Kisah Dharma (@KisahDharma) — OK
+   Video dicek: 8 (2 long + 6 Shorts, 13 Okt), semua 0 komentar.
+   Dibalas: 0. Seed: 2 (Shorts "Burung Tua Ini Berani Lawan Raja
+   Raksasa!" dan "Rama Memakamkan Burung Ini Seperti Ayahnya").
+6. Kisah Alkitab (@KisahAlkitab-k9j) — OK
+   Video dicek: 12 Shorts (13–15 Okt), semua 0 komentar. Dibalas: 0.
+   Seed: 2 (Shorts "TERJEPIT! Laut di Depan..." dan "Laut Berdiri
+   Seperti Tembok di Kanan dan Kiri!").
+7. Jejak Buddha (@JejakBuddha) — OK
+   Video dicek: 5 (14–15 Okt), semua 0 komentar. Dibalas: 0. Seed: 2
+   ("Ternyata Menyiksa Diri Tak Membawa Pencerahan" dan Shorts
+   "Berdiri di Ambang Pintu, Tak Sanggup Berpamitan").
+8. Tiny Builders (@tinybuilders-d5z) — OK
+   Video dicek: 8 (7 Shorts + 1 long, 9–13 Okt). Dibalas: 0 (5 komentar
+   milik channel sendiri). Seed: 2 ("This Bamboo Pump Moves REAL Water!"
+   dan "Water GUSHING From a Miniature Pump!").
+9. Strange Tales (@StrangeTales-g6n) — OK
+   Video dicek: ~10 Shorts (15 Okt). Dibalas: 0 (7 komentar milik channel
+   sendiri). Seed: 2 (EN: "This Crab's Claw Beats a Lion's Bite..." dan
+   "This River Carved a PERFECT Ice Circle...").
+10. Lost Empires (@AncientEmpiresTV) — OK
+    Video dicek: 8 (3 long + 5 Shorts, 7–15 Okt). Dibalas: 0 — satu
+    komentar viewer (@char1194-smc, "Amazing! They also built Petra.",
+    9 hari lalu) SUDAH dibalas channel 8 hari lalu (sebelum run ini).
+    Seed: 2 (EN: "60 Maya Cities Died in One Lifetime" dan "Only 4 Maya
+    Books Survived the Fire").
+11. Echoes of History (@EchoesOfThePast-e9m) — OK
+    Video dicek: 6 (8–15 Okt). DIBALAS: 1 — balasan lanjutan ke viewer
+    @benbiddle1373 di thread "A Volcano Invented Frankenstein #shorts":
+    viewer mengeluh soal kualitas konten AI/clickbait; dibalas dengan
+    nada terbuka: mengakui kritiknya valid, menjelaskan channel lahir
+    dari kecintaan pada sejarah, dan berkomitmen meningkatkan kualitas
+    visual/narasi. (Komentar pertamanya soal kata "Narrator" sudah dibalas
+    channel 2 hari lalu, sebelum run ini.) Seed: 2 (EN: "D-Day 1944..." dan
+    "The Fall of Tenochtitlan...").
+12. Midnight Dread Tales (@TalesOfDreadTV) — OK
+    Video dicek: 14 (9 Shorts + 5 long, 6–15 Okt). Dibalas: 0 (2 komentar
+    milik channel sendiri). Seed: 2 (EN: "The Man Getting Out Was Me" dan
+    "Two Weeks Later, It Rang Again").
+
+Per channel (12): semua OK, tidak ada yang gagal. Diabaikan: 0
+(tidak ada spam/hate/phishing ditemukan). Tertunda: 0.
+Tindak lanjut untuk user: (a) periksa video long Kisah Horor 15 Okt yang
+"tidak tersedia" di halaman tonton; (b) pertimbangkan aktifkan kembali
+komentar di video POV terbaru @ceritarakyat862 jika engagement diinginkan.
+====================================================================
