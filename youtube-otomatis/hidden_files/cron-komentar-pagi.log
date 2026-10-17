@@ -30,3 +30,74 @@ Tiny Builders, Strange Tales, Ancient Empires, Echoes of the Past,
 Tales of Dread.
 Catatan: pin komentar tetap TIDAK dicoba (butuh verifikasi HP, ditolak user).
 ====================================================================
+====================================================================
+RUN: 2026-10-17 09:11 WIB (balas-komentar-youtube-pagi, attempt 1)
+HASIL: 0 komentar dibalas, 2 seed dibuat — RUN BERHASIL (12/12 channel)
+====================================================================
+
+Login: studio.youtube.com login sebagai khususstokyunobi@gmail.com —
+sesi browser masih aktif, TIDAK ada 2FA. Pin komentar TIDAK dicoba.
+
+1. Kisah Horor (@KisahPOV) — OK
+   Dicek: 3 video terbaru (15–16 Okt). Komentar: 7, semuanya seed milik
+   channel sendiri. Tidak ada komentar viewer. Dibalas: 0. Seed: 0
+   (video terbaru sudah di-seed run malam).
+2. Cerita Rakyat (@ceritarakyat862) — OK (catatan)
+   Dicek: "POV: Kamu Jadi Prajurit Pattimura" dan "POV: Kamu Jadi Pelaut
+   Viking" (15 Okt). Kolom komentar MASIH DINONAKTIFKAN di video POV
+   terbaru (terverifikasi: kotak komentar disabled, "Akun ini tidak
+   memiliki izin untuk membuat komentar"). Seed dilewati. Dibalas: 0.
+3. Lima Misteri (@LimaMisteri) — OK
+   Dicek: 7 video terbaru. Komentar: 3, semuanya seed channel sendiri.
+   Dibalas: 0. Seed: 0 (video terbaru 15 Okt sudah di-seed). Catatan:
+   1 video "5 Misteri Gunung Indonesia" terjadwal tayang 17 Okt (hari
+   ini) — belum publik saat dicek.
+4. Kisah Dharma (@KisahDharma) — OK
+   Dicek: video + Shorts terbaru (13–14 Okt). Komentar: 1 (seed channel
+   sendiri, 11 jam lalu). Dibalas: 0. Seed: 0.
+5. Jejak Islami (@JejakIslami-h3d) — OK
+   Komentar: 1 (seed channel sendiri, 12 jam lalu, di "Laut Terbelah
+   Dua, Pasukan Fir'aun Tenggelam" 15 Okt). Dibalas: 0. Seed: 0.
+6. Kisah Alkitab (@KisahAlkitab-k9j) — OK
+   Komentar: 2, keduanya seed channel sendiri (11 jam lalu). Dibalas: 0.
+   Seed: 0.
+7. Jejak Buddha (@JejakBuddha) — OK (setelah retry metode alternatif)
+   Awalnya BLOCKED: panel pengalih akun YouTube Studio gagal menemukan
+   entri "Jejak Buddha" (15+ percobaan). Berhasil diakses via
+   youtube.com → menu akun → "Lihat semua channel". Komentar: 2,
+   keduanya seed channel sendiri (11–12 jam lalu). Dibalas: 0. Seed: 0.
+8. Tiny Builders (@tinybuilders-d5z) — OK
+   Komentar: 7, semuanya seed channel sendiri (11 jam lalu). Dibalas: 0.
+   Seed: 0.
+9. Strange Tales (@StrangeTales-g6n) — OK
+   Komentar: 8, semuanya seed channel sendiri (11 jam lalu). Dibalas: 0.
+   Seed: 0.
+10. Ancient Empires (@AncientEmpiresTV, tampil "Lost Empires") — OK
+    (setelah retry metode alternatif)
+    Awalnya BLOCKED: panel pengalih Studio gagal (10+ percobaan, sempat
+    salah klik "Lima Misteri"). Berhasil via youtube.com → "Lihat semua
+    channel". Komentar: 10 (9 seed channel sendiri + 1 viewer
+    @char1194-smc 10 hari lalu yang SUDAH dibalas channel 9 hari lalu).
+    Dibalas: 0. Seed: 0 (video terbaru sudah di-seed).
+11. Echoes of the Past (@EchoesOfThePast-e9m) — OK
+    Thread viewer @benbiddle1373 (soal kata "Narrator") SUDAH dibalas
+    tuntas channel 11 jam lalu. Dibalas: 0. SEED: 2 —
+    (a) "They Dragged 70 Warships Over a Hill — In ONE Night" (17 Okt,
+    0 komentar): pertanyaan terbuka soal mana yang paling menakjubkan
+    (engineering / manpower / kerahasiaan operasi);
+    (b) "The Greatest City on Earth Vanished in 93 Days" (15 Okt,
+    0 komentar): pertanyaan terbuka soal penyebab kejatuhan Tenochtitlan
+    (Spanish steel / smallpox / rival warriors). Keduanya terkonfirmasi
+    "Komentar ditambahkan".
+12. Tales of Dread (@TalesOfDreadTV) — OK
+    Komentar: 4, semuanya seed channel sendiri (11 jam lalu). Dibalas: 0.
+    Seed: 0.
+
+Per channel (12): semua OK, tidak ada yang gagal. Diabaikan: 0
+(tidak ada spam/hate/phishing ditemukan). Tertunda: 0.
+Tindak lanjut untuk user: (a) pertimbangkan aktifkan kembali komentar di
+video POV terbaru @ceritarakyat862 jika engagement diinginkan; (b) run
+berikutnya bisa memakai youtube.com → "Lihat semua channel" sebagai
+cadangan bila panel pengalih Studio gagal.
+Catatan: pin komentar tetap TIDAK dicoba (butuh verifikasi HP, ditolak user).
+====================================================================
