@@ -135,23 +135,29 @@ def load_queue():
         try:
             with open(f, encoding="utf-8") as fh:
                 d = json.load(fh)
-            gagal = parse_dt(d.get("gagal_pada"))
+            # Dukung berbagai format field tanggal (gagal_pada/blocked_at/queued_at_wib/date)
+            gagal = (parse_dt(d.get("gagal_pada")) or parse_dt(d.get("blocked_at"))
+                     or parse_dt(d.get("queued_at_wib")) or parse_dt(d.get("date")))
             if gagal is None:
-                continue
+                # Fallback: pakai waktu modifikasi file
+                try:
+                    gagal = datetime.fromtimestamp(os.path.getmtime(f), tz=WIB)
+                except Exception:
+                    continue
             siap_pada = gagal + timedelta(hours=23)
             # Tipe + durasi: ffprobe dulu, fallback tebak dari nama file
-            vp = d.get("video_path", "") or ""
+            vp = d.get("video_path") or d.get("video") or d.get("video_file") or ""
             tipe, dur = (None, None)
             if vp and os.path.isfile(vp):
                 tipe, dur = probe_video(vp)
             if not tipe:
                 tipe = tebak_tipe_dari_nama(os.path.basename(vp))
             items.append({
-                "channel": d.get("channel", "?"),
-                "slot": d.get("slot_target", "-"),
+                "channel": d.get("channel") or d.get("channel_handle") or "?",
+                "slot": d.get("slot_target") or d.get("schedule") or d.get("schedule_target") or d.get("scheduled_publish") or "-",
                 "gagal_pada": gagal,
                 "siap_pada": siap_pada,
-                "sebab": d.get("sebab", "-"),
+                "sebab": d.get("sebab") or d.get("reason") or d.get("note") or "-",
                 "file": os.path.basename(f),
                 "tipe": tipe or "-",
                 "durasi": dur or "-",
